@@ -1,0 +1,905 @@
+[2024-07-12 15:13:37,738] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:14:22,789] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:15:56,779] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:15:57,119] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:17:44,199] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-12 15:17:44,646] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:20:53,589] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:20:53,871] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:21:02,600] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:21:02,901] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:21:10,700] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:21:10,998] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:21:12,220] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:21:12,441] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:21:13,622] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:21:13,819] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:21:15,000] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:21:15,194] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:21:23,519] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:21:23,782] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:21:24,944] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:21:25,135] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:21:35,514] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:21:35,844] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:22:19,197] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-12 15:22:19,554] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:22:40,540] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8100/api/login/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+[2024-07-12 15:22:40,543] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login HTTP/1.1" 500 71408
+[2024-07-12 15:23:37,298] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8100/api/login/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+[2024-07-12 15:23:37,300] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login HTTP/1.1" 500 71558
+[2024-07-12 15:28:50,648] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8100/api/login/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+[2024-07-12 15:28:50,652] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login HTTP/1.1" 500 71415
+[2024-07-12 15:30:40,416] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8100/api/login/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+[2024-07-12 15:30:40,417] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login HTTP/1.1" 500 71415
+[2024-07-12 15:33:05,771] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-12 15:33:05,773] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-12 15:33:16,078] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-12 15:33:16,080] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-12 15:35:31,798] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 15:35:32,214] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:35:38,153] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-12 15:35:38,153] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-12 15:35:45,591] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login
+[2024-07-12 15:35:45,591] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login HTTP/1.1" 404 2124
+[2024-07-12 15:36:02,175] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-12 15:36:02,176] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-12 15:37:59,368] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 15:37:59,669] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:38:00,896] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 15:38:01,136] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 15:38:07,578] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-12 15:38:07,579] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-12 15:41:45,633] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-12 15:41:45,634] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-12 16:48:48,914] [log.py:241] [log:log_response] [WARNING]- Not Found: /login
+[2024-07-12 16:48:48,914] [basehttp.py:212] [basehttp:log_message] [WARNING]- "OPTIONS /login HTTP/1.1" 404 2115
+[2024-07-12 16:49:08,506] [log.py:241] [log:log_response] [WARNING]- Not Found: /login
+[2024-07-12 16:49:08,509] [basehttp.py:212] [basehttp:log_message] [WARNING]- "OPTIONS /login HTTP/1.1" 404 2115
+[2024-07-12 16:49:12,027] [log.py:241] [log:log_response] [WARNING]- Not Found: /login
+[2024-07-12 16:49:12,027] [basehttp.py:212] [basehttp:log_message] [WARNING]- "OPTIONS /login HTTP/1.1" 404 2115
+[2024-07-12 16:56:30,952] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 16:56:31,338] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 16:56:36,322] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /login HTTP/1.1" 200 0
+[2024-07-12 16:59:24,477] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 16:59:24,864] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 16:59:31,793] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /login HTTP/1.1" 200 0
+[2024-07-12 16:59:31,842] [log.py:241] [log:log_response] [WARNING]- Not Found: /login
+[2024-07-12 16:59:31,843] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /login HTTP/1.1" 404 2112
+[2024-07-12 16:59:46,476] [log.py:241] [log:log_response] [WARNING]- Not Found: /login
+[2024-07-12 16:59:46,476] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /login HTTP/1.1" 404 2112
+[2024-07-12 17:03:05,735] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:03:06,101] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:03:17,534] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:03:18,271] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:03:28,694] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:03:28,984] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:03:54,224] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:03:54,598] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:04:09,201] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:04:09,579] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:04:28,056] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:04:28,402] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:04:30,637] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:04:30,868] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:05:08,398] [log.py:241] [log:log_response] [WARNING]- Not Found: /login
+[2024-07-12 17:05:08,398] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /login HTTP/1.1" 404 2112
+[2024-07-12 17:13:38,036] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-12 17:13:38,044] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-12 17:13:38,046] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-12 17:14:07,281] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-12 17:14:07,282] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-12 17:14:16,147] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-12 17:14:16,148] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-12 17:15:39,179] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-12 17:15:39,183] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-12 17:15:39,183] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-12 17:17:16,355] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-12 17:17:16,356] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-12 17:26:07,683] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:26:09,386] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:26:24,232] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:26:24,531] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:35:38,833] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-12 17:35:39,189] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-12 17:35:45,474] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-12 17:35:45,476] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-12 17:35:59,148] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-12 17:35:59,149] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-12 17:36:23,471] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-12 17:36:23,472] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-15 11:15:36,397] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-15 11:15:36,404] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-15 11:15:36,405] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-15 13:29:34,843] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:29:35,323] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:29:56,944] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:33:41,915] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:33:56,957] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-15 13:34:28,401] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:34:28,681] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:34:30,899] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:34:31,129] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:34:32,369] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:34:32,628] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:34:38,187] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-15 13:36:50,197] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:36:50,507] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:37:16,161] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:37:16,467] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:52:30,761] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:52:31,113] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:52:34,347] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:52:34,590] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:52:37,782] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:52:37,993] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:52:51,671] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:52:52,013] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:52:55,280] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:52:55,496] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:52:56,671] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:52:56,920] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:53:02,170] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:53:02,407] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:53:03,612] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 13:53:03,844] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 13:53:07,362] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-15 13:53:07,378] [log.py:241] [log:log_response] [WARNING]- Forbidden (Origin checking failed - http://localhost:8080 does not match any trusted origins.): /api/login/
+[2024-07-15 13:53:07,378] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2569
+[2024-07-15 14:07:11,080] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 14:07:11,579] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 14:07:13,829] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 14:07:14,030] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 14:07:15,301] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 14:07:15,645] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 14:07:17,730] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-15 14:07:17,731] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-15 14:46:50,708] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-15 14:46:50,710] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-15 14:46:56,417] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-15 14:46:56,418] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-15 14:52:34,885] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 14:52:47,958] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 14:52:51,830] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-15 14:52:51,831] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-15 14:53:13,785] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 14:53:14,237] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:31:44,354] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:31:44,803] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:31:49,087] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:31:49,320] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:32:21,001] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:32:21,316] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:32:29,671] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:32:29,987] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:32:42,419] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:32:42,712] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:33:02,234] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:33:02,534] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:33:05,968] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:33:06,434] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:33:11,804] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:33:11,994] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:33:15,150] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:33:15,344] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:33:19,504] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:33:19,717] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:33:21,939] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:33:22,155] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:35:47,787] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:35:48,113] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:35:51,325] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:35:51,520] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:35:52,621] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:35:52,821] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:36:05,193] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:36:05,484] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:36:06,622] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:36:06,835] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:37:12,495] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:37:12,809] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:37:15,014] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:37:15,217] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:37:28,598] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:37:28,892] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:37:35,173] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:37:35,658] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:39:25,758] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:39:26,149] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:39:32,426] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:39:32,721] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:41:05,297] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 15:41:05,589] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:41:33,249] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 15:41:33,545] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:46:41,811] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:46:42,150] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:46:48,399] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:46:48,672] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:46:50,832] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:46:51,244] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:47:06,610] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:47:06,893] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:47:09,101] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:47:09,305] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:47:39,142] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:47:39,477] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:47:41,687] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:47:41,881] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:47:52,139] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:47:52,421] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:48:18,260] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 15:48:18,568] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 15:48:21,825] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 15:48:22,048] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 16:13:54,510] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 16:13:54,923] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 16:13:59,154] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 16:13:59,368] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 16:14:00,504] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 16:14:00,736] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 16:14:25,877] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 16:14:26,255] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 16:33:57,373] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-15 16:33:57,390] [log.py:241] [log:log_response] [WARNING]- Forbidden (CSRF cookie not set.): /api/login/
+[2024-07-15 16:33:57,390] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 2870
+[2024-07-15 16:49:12,506] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-15 16:49:12,901] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 16:49:15,903] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 16:49:15,904] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-07-15 17:03:54,746] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:03:55,137] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:04:09,671] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 17:04:09,964] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:04:15,193] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 17:04:15,766] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:04:25,098] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:04:25,411] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:04:26,602] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:04:26,819] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:04:37,137] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:04:37,419] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:04:40,407] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:04:40,408] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-07-15 17:05:31,328] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:05:31,329] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-07-15 17:13:30,895] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /1api/login/ HTTP/1.1" 200 0
+[2024-07-15 17:13:30,927] [log.py:241] [log:log_response] [WARNING]- Not Found: /1api/login/
+[2024-07-15 17:13:30,928] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /1api/login/ HTTP/1.1" 404 2130
+[2024-07-15 17:17:36,156] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:17:36,529] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:17:37,740] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:17:37,964] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:18:25,603] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:18:25,604] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-07-15 17:19:00,823] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:19:01,124] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:19:03,415] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:19:03,416] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 2130
+[2024-07-15 17:19:10,615] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:19:10,932] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:19:12,159] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:19:12,371] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:19:14,565] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:19:14,790] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:19:16,960] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:19:16,960] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 2128
+[2024-07-15 17:19:22,102] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:19:22,326] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:19:25,562] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:19:25,797] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:19:26,984] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:19:26,984] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 2126
+[2024-07-15 17:19:35,195] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:19:35,468] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:19:43,794] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:19:43,795] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-07-15 17:39:54,838] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:39:54,838] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-07-15 17:40:05,906] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:40:05,907] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-07-15 17:40:21,107] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:40:21,458] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:40:23,888] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:40:23,888] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 2126
+[2024-07-15 17:40:30,970] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:40:31,278] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:40:32,504] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:40:32,770] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:40:34,307] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:40:34,308] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 2128
+[2024-07-15 17:40:55,558] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:40:55,883] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:41:05,274] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:41:05,541] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:41:36,317] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-15 17:41:36,632] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:42:02,021] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:42:02,021] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-07-15 17:42:20,655] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:42:20,968] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:42:23,193] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:42:23,434] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:42:29,690] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:42:29,928] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:42:30,779] [log.py:241] [log:log_response] [WARNING]- Conflict: /api/login/
+[2024-07-15 17:42:30,780] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 409 73
+[2024-07-15 17:42:39,351] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:42:39,634] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:42:41,847] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:42:42,620] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:43:12,603] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:43:12,921] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:43:21,300] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:43:21,610] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:43:23,497] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-15 17:43:23,497] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-15 17:43:30,034] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:43:30,515] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:43:32,126] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-07-15 17:43:32,126] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-07-15 17:44:08,812] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 17:44:09,134] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 17:44:11,331] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-15 17:44:11,331] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-15 21:40:40,187] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-15 21:40:40,272] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-15 21:40:40,272] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-15 21:40:47,675] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-15 21:40:47,678] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-15 21:43:52,231] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/huk/TuRelay/backend/apps/views/login.py", line 57, in post
+    Token.objects.update_or_create(user=user, defaults={'token': access_token})
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 949, in update_or_create
+    obj, created = self.select_for_update().get_or_create(defaults, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1546, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1577, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1465, in build_filter
+    self.check_related_objects(join_info.final_field, value, join_info.opts)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1276, in check_related_objects
+    self.check_query_object_type(value, opts, field)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1253, in check_query_object_type
+    raise ValueError(
+ValueError: Cannot query "admin": Must be "User" instance.
+[2024-07-15 21:43:52,242] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login/ HTTP/1.1" 500 151220
+[2024-07-15 21:44:01,544] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/huk/TuRelay/backend/apps/views/login.py", line 57, in post
+    Token.objects.update_or_create(user=user, defaults={'token': access_token})
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 949, in update_or_create
+    obj, created = self.select_for_update().get_or_create(defaults, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1546, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1577, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1465, in build_filter
+    self.check_related_objects(join_info.final_field, value, join_info.opts)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1276, in check_related_objects
+    self.check_query_object_type(value, opts, field)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1253, in check_query_object_type
+    raise ValueError(
+ValueError: Cannot query "admin": Must be "User" instance.
+[2024-07-15 21:44:01,546] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login/ HTTP/1.1" 500 151220
+[2024-07-15 21:46:03,335] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/huk/TuRelay/backend/apps/views/login.py", line 57, in post
+    Token.objects.update_or_create(user=user, defaults={'token': access_token})
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 949, in update_or_create
+    obj, created = self.select_for_update().get_or_create(defaults, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1546, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1577, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1465, in build_filter
+    self.check_related_objects(join_info.final_field, value, join_info.opts)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1276, in check_related_objects
+    self.check_query_object_type(value, opts, field)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1253, in check_query_object_type
+    raise ValueError(
+ValueError: Cannot query "admin": Must be "User" instance.
+[2024-07-15 21:46:03,337] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login/ HTTP/1.1" 500 151220
+[2024-07-15 21:50:02,057] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 21:50:02,456] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 21:50:04,621] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 21:50:04,824] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 21:50:06,027] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 21:50:06,242] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 21:50:28,657] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/huk/TuRelay/backend/apps/views/login.py", line 57, in post
+    Token.objects.update_or_create(user=user, defaults={'token': access_token})
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 949, in update_or_create
+    obj, created = self.select_for_update().get_or_create(defaults, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1546, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1577, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1465, in build_filter
+    self.check_related_objects(join_info.final_field, value, join_info.opts)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1276, in check_related_objects
+    self.check_query_object_type(value, opts, field)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1253, in check_query_object_type
+    raise ValueError(
+ValueError: Cannot query "admin": Must be "User" instance.
+[2024-07-15 21:50:28,663] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login/ HTTP/1.1" 500 151220
+[2024-07-15 21:55:30,086] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 21:55:30,433] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 21:55:34,830] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/huk/TuRelay/backend/apps/views/login.py", line 57, in post
+    Token.objects.update_or_create(user=user, defaults={'token': access_token})
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 949, in update_or_create
+    obj, created = self.select_for_update().get_or_create(defaults, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1546, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1577, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1465, in build_filter
+    self.check_related_objects(join_info.final_field, value, join_info.opts)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1276, in check_related_objects
+    self.check_query_object_type(value, opts, field)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1253, in check_query_object_type
+    raise ValueError(
+ValueError: Cannot query "admin": Must be "User" instance.
+[2024-07-15 21:55:34,836] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login/ HTTP/1.1" 500 151265
+[2024-07-15 21:55:44,051] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 21:55:44,344] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 21:57:33,269] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 21:57:33,759] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 21:57:36,046] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-15 21:57:53,550] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 21:57:53,850] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 21:58:06,898] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-15 21:58:06,898] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-15 21:58:10,893] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/huk/TuRelay/backend/apps/views/login.py", line 57, in post
+    Token.objects.update_or_create(user=user, defaults={'token': access_token})
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 949, in update_or_create
+    obj, created = self.select_for_update().get_or_create(defaults, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1546, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1577, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1465, in build_filter
+    self.check_related_objects(join_info.final_field, value, join_info.opts)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1276, in check_related_objects
+    self.check_query_object_type(value, opts, field)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1253, in check_query_object_type
+    raise ValueError(
+ValueError: Cannot query "admin": Must be "User" instance.
+[2024-07-15 21:58:10,899] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login/ HTTP/1.1" 500 151220
+[2024-07-15 22:00:27,242] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 22:00:27,565] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:00:29,728] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 22:00:29,920] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:00:34,582] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/huk/TuRelay/backend/apps/views/login.py", line 59, in post
+    Token.objects.update_or_create(user=user, defaults={'token': access_token})
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 949, in update_or_create
+    obj, created = self.select_for_update().get_or_create(defaults, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1546, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1577, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1465, in build_filter
+    self.check_related_objects(join_info.final_field, value, join_info.opts)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1276, in check_related_objects
+    self.check_query_object_type(value, opts, field)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1253, in check_query_object_type
+    raise ValueError(
+ValueError: Cannot query "admin": Must be "User" instance.
+[2024-07-15 22:00:34,588] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login/ HTTP/1.1" 500 151220
+[2024-07-15 22:00:36,355] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/huk/TuRelay/backend/apps/views/login.py", line 59, in post
+    Token.objects.update_or_create(user=user, defaults={'token': access_token})
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 949, in update_or_create
+    obj, created = self.select_for_update().get_or_create(defaults, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 916, in get_or_create
+    return self.get(**kwargs), False
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 623, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1546, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1577, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1465, in build_filter
+    self.check_related_objects(join_info.final_field, value, join_info.opts)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1276, in check_related_objects
+    self.check_query_object_type(value, opts, field)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/db/models/sql/query.py", line 1253, in check_query_object_type
+    raise ValueError(
+ValueError: Cannot query "admin": Must be "User" instance.
+[2024-07-15 22:00:36,355] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login/ HTTP/1.1" 500 151220
+[2024-07-15 22:00:51,580] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 22:00:51,885] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:02:23,000] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 22:02:23,283] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:04:17,052] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 22:04:17,466] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:04:23,257] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/login/
+[2024-07-15 22:04:23,257] [basehttp.py:212] [basehttp:log_message] [ERROR]- "POST /api/login/ HTTP/1.1" 500 90
+[2024-07-15 22:04:41,440] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 22:04:41,801] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:04:48,835] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-15 22:08:40,470] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-15 22:08:40,791] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:08:56,875] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-15 22:10:18,594] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 22:10:18,916] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:10:21,172] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 22:10:21,388] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:10:24,595] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-15 22:10:24,920] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-15 22:10:28,474] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-15 22:11:25,927] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-15 22:11:51,240] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-15 22:11:51,241] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-15 22:11:55,202] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-15 22:11:55,202] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-15 22:11:56,350] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-15 22:11:56,351] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-15 22:12:21,146] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-15 22:12:21,147] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-15 22:12:22,387] [log.py:241] [log:log_response] [WARNING]- Forbidden: /api/login/
+[2024-07-15 22:12:22,387] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 79
+[2024-07-16 11:24:18,794] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-16 11:24:18,957] [log.py:241] [log:log_response] [WARNING]- Forbidden: /api/login/
+[2024-07-16 11:24:18,957] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 79
+[2024-07-16 11:24:35,852] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 13:22:57,392] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-16 13:45:34,475] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 13:46:01,038] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-16 13:46:01,228] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 14:16:53,395] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 14:17:13,679] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 14:19:37,416] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-16 14:19:37,539] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 14:20:34,008] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 14:24:59,595] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 14:33:53,479] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:33:54,013] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:33:55,170] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:33:55,371] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:33:59,574] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:33:59,821] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:02,007] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:02,209] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:04,370] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:04,599] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:11,815] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:12,034] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:15,235] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:15,484] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:20,691] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:20,896] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:22,108] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:22,317] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:33,637] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:34,135] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:51,557] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:51,838] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:54,005] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:54,214] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:34:56,362] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:34:56,573] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:35:09,976] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:35:10,287] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:35:45,079] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:35:45,396] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:35:59,764] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:36:00,037] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:36:01,190] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-16 14:36:01,391] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:36:07,633] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 14:36:07,836] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:38:42,733] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-16 14:38:50,455] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:39:00,792] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 14:39:01,109] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:39:16,133] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 14:43:28,733] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-16 14:43:29,083] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:43:50,769] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-16 14:43:51,158] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:43:53,390] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-16 14:43:53,603] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:43:54,799] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-16 14:43:55,005] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:43:56,365] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-16 14:43:56,925] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 14:44:00,186] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-16 14:44:00,516] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 15:11:00,755] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 15:11:01,162] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 15:11:37,078] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 15:14:38,046] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 15:22:59,207] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 15:26:52,710] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 15:28:41,781] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 15:31:20,359] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 15:40:19,263] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 15:46:01,932] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-16 15:46:02,096] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:10:23,418] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:11:07,347] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:17:32,967] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:19:04,328] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:19:41,814] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:21:52,986] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:29:37,480] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:33:27,108] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:33:35,247] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:33:57,396] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:34:30,200] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:35:38,967] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:36:16,663] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:42:08,605] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:43:06,694] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:45:31,843] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 16:47:38,053] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
