@@ -903,3 +903,20 @@ ValueError: Cannot query "admin": Must be "User" instance.
 [2024-07-16 16:43:06,694] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
 [2024-07-16 16:45:31,843] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
 [2024-07-16 16:47:38,053] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 567
+[2024-07-16 17:44:47,217] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 17:44:47,737] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 17:44:49,958] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 17:44:50,150] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 17:44:57,471] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 17:44:57,693] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 17:45:00,841] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 17:45:01,058] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 17:45:07,238] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 17:45:07,444] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 17:45:10,583] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 17:45:10,794] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 17:47:16,247] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-16 17:47:16,346] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
+[2024-07-16 17:52:55,135] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/login.py changed, reloading.
+[2024-07-16 17:52:55,639] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-16 17:53:26,491] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584

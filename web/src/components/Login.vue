@@ -41,7 +41,7 @@ methods: {
       if (response.status === 200) {
         const accessToken = response.data.access_token;
         const refreshToken = response.data.refresh_token;
-        const username = this.username;
+        const name = response.data.name; // 获取 name 字段
 
         const loginTime = this.$dayjs(); // 获取当前时间
         const tokenExpiry = loginTime.add(1, 'hour').format(); // 格式化后的token过期时间
@@ -49,7 +49,7 @@ methods: {
 
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('username', username);
+        localStorage.setItem('name', name);
         localStorage.setItem('tokenExpiry', tokenExpiry);
         localStorage.setItem('sessionTimeout', sessionTimeout);
 

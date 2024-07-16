@@ -54,8 +54,11 @@ class LoginView(APIView):
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
         
-        # 保存新的令牌到数据库
-        Token.objects.update_or_create(user=user, defaults={'token': access_token})
+        # 保存新的令牌到数据库，并更新create_time字段
+        Token.objects.update_or_create(
+            user=user,
+            defaults={'token': access_token, 'create_time': timezone.now()}
+        )
         
         # 更新用户的最后登录时间
         user.login_time = timezone.now()
@@ -66,5 +69,6 @@ class LoginView(APIView):
             'status': 'login_successful',
             'access_token': access_token,
             'refresh_token': str(refresh),
+            'name':user.name,
             'message': '登录成功'
         }, status=200)
