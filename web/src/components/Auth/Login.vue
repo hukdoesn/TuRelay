@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-      <img src="../assets/svg/站立太空服猫.svg" alt="Logo" class="logo">
+      <img src="@/assets/svg/熊猫上班.svg" alt="Logo" class="logo">
       <h1>登录</h1>
       <form @submit.prevent="submitForm">
           <div class="form-group">
@@ -53,7 +53,7 @@ methods: {
         localStorage.setItem('tokenExpiry', tokenExpiry);
         localStorage.setItem('sessionTimeout', sessionTimeout);
 
-        message.success('登录成功');
+        // message.success('登录成功');
         this.$router.push('/home'); // 登录成功后跳转到主页
       }
     } catch (error) {

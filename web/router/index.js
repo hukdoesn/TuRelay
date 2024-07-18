@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
-import NotFound from '../src/components/404.vue'
 import dayjs from 'dayjs';
 
 const router = createRouter({
@@ -9,25 +7,172 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../src/components/Login.vue'),
+      component: () => import('@/components/Auth/Login.vue'),
       meta: { requiresAuth: false, breadcrumbName: '登录' }   // 登录页面不需要认证
 
     },
     {
-      path: '/home',
-      name: 'home',
-      component: () => import('../src/components/code/Home.vue'),
-      meta: { requiresAuth: true }    // 主页需要认证
+      path: '/',
+      redirect: '/home', // 根路径重定向到/home
     },
     {
-      path: '/',
-      redirect: '/home' // 根路径重定向到/home
+      path: '/home',
+      name: 'home',
+      component: () => import('@/components/Home.vue'),
+      meta: { requiresAuth: true, breadcrumbName: '首页' },    // 主页需要认证
+      redirect: '/dashboard', // 默认重定向到数据概览页面
+      children: [
+        {
+          path: '/dashboard',
+          name: 'dashboard',
+          component: () => import('@/components/Dashboard/Dashboard.vue'),
+          meta: { 
+            requiresAuth: true ,
+            breadcrumbName: '仪表盘',
+          },
+        },
+        { 
+          path: '/user-management/user-list', 
+          component: () => import('@/components/UserManagement/UserList.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '用户列表' 
+          } 
+        },
+        { 
+          path: '/user-management/user-groups', 
+          component: () => import('@/components/UserManagement/UserGroups.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '用户组' 
+          } 
+        },
+        { 
+          path: '/user-management/login-lock', 
+          component: () => import('@/components/UserManagement/LoginLock.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '登录锁定' 
+          } 
+        },
+        { 
+          path: '/user-management/credentials', 
+          component: () => import('@/components/UserManagement/Credentials.vue'), 
+          meta: {
+             requiresAuth: true, 
+             breadcrumbName: '凭据管理' 
+            } 
+          },
+        { 
+          path: '/asset-management/hosts', 
+          component: () => import('@/components/AssetManagement/Hosts.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '主机' 
+          } 
+        },
+        { 
+          path: '/asset-management/databases', 
+          component: () => import('@/components/AssetManagement/Databases.vue'), 
+          meta: {
+             requiresAuth: true, 
+             breadcrumbName: '数据库' 
+            } 
+          },
+        { 
+          path: '/asset-management/websites',
+           component: () => import('@/components/AssetManagement/Websites.vue'), 
+           meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '网站'
+           } 
+        },
+        { 
+          path: '/web-terminal', 
+          component: () => import('@/components/Terminal/WebTerminal.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: 'web终端' 
+          } 
+        },
+        { 
+          path: '/ci-cd-system',
+          component: () => import('@/components/CI_CDSystem/CI_CDSystem.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: 'CI/CD系统' 
+          } 
+        },
+        { 
+          path: '/alert-management/alert-contacts', 
+          component: () => import('@/components/AlertManagement/AlertContacts.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '报警联系人' 
+          } 
+        },
+        { 
+          path: '/alert-management/alert-rules', 
+          component: () => import('@/components/AlertManagement/AlertRules.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '报警规则' 
+          } 
+        },
+        { 
+          path: '/audit-management/command-records', 
+          component: () => import('@/components/AuditManagement/CommandRecords.vue'), 
+          meta: {
+            requiresAuth: true, 
+            breadcrumbName: '命令记录' 
+          } 
+        },
+        { 
+          path: '/logs-management/login-logs', 
+          component: () => import('@/components/LogsManagement/LoginLogs.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '登录日志' 
+          } 
+        },
+        { 
+          path: '/logs-management/operation-logs', 
+          component: () => import('@/components/LogsManagement/OperationLogs.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '操作日志' 
+          } 
+        },
+        { 
+          path: '/settings/auth-settings', 
+          component: () => import('@/components/Settings/AuthSettings.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '认证设置' 
+          } 
+        },
+        { 
+          path: '/settings/system-tools', 
+          component: () => import('@/components/Settings/SystemTools.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '系统工具' 
+          } 
+        },
+        { 
+          path: '/settings/about', 
+          component: () => import('@/components/Settings/About.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '关于' 
+          } 
+        },
+      ]
     },
     {
       path: '/:pathMatch(.*)*',
-      name: 'NotFound',
-      component: () => import('../src/components/404.vue'),
-      // component: NotFound,
+      name: '404',
+      component: () => import('@/components/Global/404.vue'),
       meta: { requiresAuth: true }    // 需要认证的404页面
     }
   ]
@@ -47,7 +192,7 @@ router.beforeEach((to, from, next) => {
     // 如果访问令牌已过期，清除本地存储中的相关信息
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('username');
+    localStorage.removeItem('name');
     localStorage.removeItem('tokenExpiry');
     localStorage.removeItem('sessionTimeout');
   }
@@ -56,7 +201,7 @@ router.beforeEach((to, from, next) => {
     // 如果会话已超时，清除本地存储中的相关信息，并重定向到登录页面
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('username');
+    localStorage.removeItem('name');
     localStorage.removeItem('tokenExpiry');
     localStorage.removeItem('sessionTimeout');
     if (to.name !== 'login') {
