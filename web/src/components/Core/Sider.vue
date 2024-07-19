@@ -1,6 +1,6 @@
 <template>
     <a-layout-sider v-model:collapsed="collapsed" collapsible theme="light">
-      <div class="logo">
+      <div class="logo" @click="JumpToHome">
         <img src="@/assets/svg/可爱太空猫1.svg" alt="Logo" class="logo-img" />
         <span v-if="!collapsed" class="logo-text">TuRelay</span>
       </div>
@@ -130,6 +130,10 @@
   const openKeys = ref([]);
   const route = useRoute();
   const router = useRouter();
+
+  const JumpToHome = () => {
+    router.push('/dashboard');
+  }
   
   const updateMenuState = () => {
     // 更新选中的菜单项
@@ -170,6 +174,8 @@
     height: 32px;
     margin: 16px;
     background: rgba(255, 255, 255, 0.3);
+    /* 点击 */
+    cursor: pointer;
   }
   
   .logo-img {

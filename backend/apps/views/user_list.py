@@ -37,7 +37,7 @@ class UserListView(APIView):
             user_role = UserRole.objects.filter(user=user).first()
             role_name = user_role.role.role_name if user_role else "无角色"
             description = user_role.role.description if user_role else ""
-            role_display = f"{role_name}({description})" if description else role_name
+            role_display = f"{role_name} - {description}" if description else role_name
 
             data.append({
                 'id': index,  # 前端生成的编号
