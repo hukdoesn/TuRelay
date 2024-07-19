@@ -100,6 +100,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+
 # 基础设置，包括语言、时区等
 LANGUAGE_CODE = 'en-us'  # 语言代码
 TIME_ZONE = 'Asia/Shanghai' # 设置时区

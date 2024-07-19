@@ -964,3 +964,612 @@ ValueError: Cannot query "admin": Must be "User" instance.
 [2024-07-18 21:47:01,448] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
 [2024-07-18 21:57:37,235] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
 [2024-07-18 21:58:22,207] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
+[2024-07-19 09:58:30,245] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-19 09:58:30,409] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
+[2024-07-19 11:06:15,990] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-07-19 11:06:15,991] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-07-19 11:06:18,261] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
+[2024-07-19 13:15:56,076] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-19 13:15:56,251] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
+[2024-07-19 14:09:52,156] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 14:09:52,628] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:10:00,998] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 14:10:01,285] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:13:00,757] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 14:13:01,103] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:19:38,065] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-19 14:19:38,496] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:19:50,263] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-19 14:19:50,633] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:20:27,534] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-19 14:20:27,863] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:20:38,184] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-07-19 14:20:38,728] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:21:10,359] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-07-19 14:21:10,754] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:21:12,949] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-07-19 14:21:13,161] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:21:15,279] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-07-19 14:21:15,518] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:21:23,789] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-07-19 14:21:23,992] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:21:25,154] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-07-19 14:21:25,361] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:22:02,586] [log.py:241] [log:log_response] [WARNING]- Method Not Allowed: /api/users/
+[2024-07-19 14:22:02,587] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/users/ HTTP/1.1" 405 41
+[2024-07-19 14:22:22,400] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/ HTTP/1.1" 200 176
+[2024-07-19 14:26:45,195] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:26:45,872] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:27:03,608] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:27:04,022] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:27:06,261] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:27:06,502] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:27:08,650] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:27:08,864] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:27:12,023] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:27:12,232] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:27:17,425] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:27:17,648] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:27:20,796] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:27:21,055] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:27:46,547] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 14:27:46,878] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:28:16,566] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 14:28:16,849] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:28:36,333] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 14:28:36,630] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:31:03,508] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:31:03,848] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:31:08,050] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:31:08,277] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:31:19,623] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 14:31:19,942] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:31:26,227] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:31:26,537] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:31:31,921] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:31:31,922] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/ HTTP/1.1" 401 58
+[2024-07-19 14:34:10,362] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:34:10,714] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:34:11,904] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:34:12,200] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:34:14,451] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:34:14,649] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:34:21,939] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:34:22,268] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:34:24,639] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:34:24,841] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:34:27,022] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:34:27,254] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:35:21,806] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:35:21,806] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 58
+[2024-07-19 14:35:29,437] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:35:29,438] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 58
+[2024-07-19 14:35:43,266] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
+[2024-07-19 14:35:52,682] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:35:52,695] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 58
+[2024-07-19 14:38:16,301] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:38:16,301] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 58
+[2024-07-19 14:38:39,429] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:38:39,429] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 58
+[2024-07-19 14:40:21,769] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:40:21,771] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 58
+[2024-07-19 14:40:29,824] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-07-19 14:40:29,895] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:40:29,895] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 27
+[2024-07-19 14:40:54,822] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:40:54,823] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 27
+[2024-07-19 14:43:37,347] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:43:37,353] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 27
+[2024-07-19 14:48:30,141] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users?username=&email=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-07-19 14:48:30,198] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/users
+[2024-07-19 14:48:30,199] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users?username=&email=&page=1&page_size=10 HTTP/1.1" 404 2300
+[2024-07-19 14:48:37,821] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/users
+[2024-07-19 14:48:37,821] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users?username=&email=&page=1&page_size=10 HTTP/1.1" 404 2300
+[2024-07-19 14:49:22,840] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:49:23,204] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:49:27,990] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/users
+[2024-07-19 14:49:27,991] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users?username=&email=&page=1&page_size=10 HTTP/1.1" 404 2300
+[2024-07-19 14:52:26,137] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/users
+[2024-07-19 14:52:26,138] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users?username=&email=&page=1&page_size=10 HTTP/1.1" 404 2300
+[2024-07-19 14:52:55,486] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:52:55,869] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:52:59,325] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/users
+[2024-07-19 14:52:59,325] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users?username=&email=&page=1&page_size=10 HTTP/1.1" 404 2300
+[2024-07-19 14:53:56,844] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-19 14:53:57,178] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:54:13,726] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-19 14:54:14,003] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:54:17,558] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users
+[2024-07-19 14:54:17,559] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users?username=&email=&page=1&page_size=10 HTTP/1.1" 401 27
+[2024-07-19 14:54:38,940] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/users/
+[2024-07-19 14:54:38,940] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 404 2302
+[2024-07-19 14:54:43,334] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-19 14:54:43,657] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:54:45,902] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-07-19 14:54:46,218] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:54:47,774] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:54:47,774] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 27
+[2024-07-19 14:59:10,507] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:59:10,510] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 58
+[2024-07-19 14:59:18,729] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 14:59:18,730] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 58
+[2024-07-19 14:59:45,911] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 14:59:46,235] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 14:59:49,684] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 15:00:30,777] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 15:08:01,171] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 15:08:15,326] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 15:08:24,362] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 15:15:16,633] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:15:17,122] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:15:19,454] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:15:20,006] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:16:05,780] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 15:16:05,785] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 51
+[2024-07-19 15:16:10,309] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 15:16:10,310] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 51
+[2024-07-19 15:17:02,409] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:17:02,719] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:17:03,996] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:17:04,240] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:17:05,970] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/users/
+[2024-07-19 15:17:05,971] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 401 51
+[2024-07-19 15:22:41,226] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:22:41,578] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:23:50,129] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:23:50,448] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:23:55,664] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:23:55,937] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:24:06,288] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:24:06,567] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:24:10,776] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:24:10,964] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:24:14,124] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:24:14,341] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:24:17,484] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:24:17,696] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:24:29,301] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:24:29,835] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:24:58,464] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:24:58,765] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:25:18,210] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:25:18,525] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:25:20,711] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:25:20,958] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:25:25,138] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:25:25,400] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:25:46,434] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:25:46,774] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:25:54,068] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:25:54,450] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:25:55,636] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:25:55,946] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:26:12,332] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:26:12,612] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:26:13,794] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:26:14,005] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:26:16,144] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:26:16,357] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:26:24,628] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:26:24,848] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:26:28,020] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:26:28,270] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:26:30,396] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:26:30,590] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:26:32,711] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:26:32,942] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:33:32,230] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:33:32,603] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:33:40,919] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:33:41,291] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:33:44,499] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:33:44,707] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:33:46,853] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:33:47,126] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:33:49,299] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:33:49,524] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:34:00,813] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:34:01,154] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:34:30,728] [log.py:241] [log:log_response] [WARNING]- Forbidden: /api/users/
+[2024-07-19 15:34:30,728] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 403 27
+[2024-07-19 15:34:53,103] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 497, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 415, in initial
+    self.check_permissions(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 332, in check_permissions
+    if not permission.has_permission(request, self):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/permissions.py", line 140, in has_permission
+    return bool(request.user and request.user.is_authenticated)
+AttributeError: 'User' object has no attribute 'is_authenticated'
+[2024-07-19 15:34:53,107] [basehttp.py:212] [basehttp:log_message] [ERROR]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 500 103682
+[2024-07-19 15:35:33,712] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 497, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 415, in initial
+    self.check_permissions(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 332, in check_permissions
+    if not permission.has_permission(request, self):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/permissions.py", line 140, in has_permission
+    return bool(request.user and request.user.is_authenticated)
+AttributeError: 'User' object has no attribute 'is_authenticated'
+[2024-07-19 15:35:33,714] [basehttp.py:212] [basehttp:log_message] [ERROR]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 500 103682
+[2024-07-19 15:43:29,424] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:43:29,819] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:43:51,844] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-19 15:43:51,937] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
+[2024-07-19 15:43:56,920] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 497, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 415, in initial
+    self.check_permissions(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 332, in check_permissions
+    if not permission.has_permission(request, self):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/permissions.py", line 140, in has_permission
+    return bool(request.user and request.user.is_authenticated)
+AttributeError: 'User' object has no attribute 'is_authenticated'
+[2024-07-19 15:43:56,925] [basehttp.py:212] [basehttp:log_message] [ERROR]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 500 103682
+[2024-07-19 15:44:15,428] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 15:44:15,730] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:44:47,716] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 15:44:48,060] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:45:12,497] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:45:12,889] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:45:25,412] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:45:25,712] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:45:28,978] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:45:29,182] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:45:35,470] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:45:35,681] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:45:39,932] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:45:40,144] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:45:42,376] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:45:42,587] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:45:44,725] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:45:44,920] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:45:49,102] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:45:49,468] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:46:02,789] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:46:03,108] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:47:37,352] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:47:37,703] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:47:39,932] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:47:40,144] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:48:44,422] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:48:44,744] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:50:34,840] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:50:35,160] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:50:38,398] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:50:38,595] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:50:39,730] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:50:39,953] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:50:45,114] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:50:45,263] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:50:48,412] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:50:48,563] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:50:50,706] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:50:50,867] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:50:59,051] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:50:59,229] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:51:01,379] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:51:01,543] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:51:03,681] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:51:03,821] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:51:05,961] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:51:06,233] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:51:13,433] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:51:13,756] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:56:36,857] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:56:37,146] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:56:42,478] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 15:57:02,018] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:58:29,516] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:58:29,913] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:58:33,159] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:58:33,321] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:58:36,471] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:58:36,630] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:58:41,788] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:58:42,089] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:58:59,358] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:58:59,640] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:59:02,867] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:59:03,048] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:59:15,297] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:59:15,525] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:59:20,691] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:59:20,886] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:59:24,027] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:59:24,246] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:59:35,579] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:59:35,825] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:59:36,955] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:59:37,087] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:59:41,250] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:59:41,416] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 15:59:44,556] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/__init__.py changed, reloading.
+[2024-07-19 15:59:44,829] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:08:27,559] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:08:27,911] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:09:33,476] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:09:33,778] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:09:42,104] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:09:42,387] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:09:45,576] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:09:45,862] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:09:47,107] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:09:47,297] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:17:14,329] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:17:14,678] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:17:22,679] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:18:02,075] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:18:02,372] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:27:05,340] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:27:05,688] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:29:54,416] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:29:54,790] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:30:28,454] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:30:28,804] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:30:33,029] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:30:33,264] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:30:40,524] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:30:40,790] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:30:41,951] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:30:42,163] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:30:43,289] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:30:43,476] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:30:47,644] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:30:47,855] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:30:48,977] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:30:49,179] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:30:56,439] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:30:56,663] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:30:58,802] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:30:59,037] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:33:15,737] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:33:16,059] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:33:18,245] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:33:18,439] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:33:24,113] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 497, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 415, in initial
+    self.check_permissions(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/views.py", line 332, in check_permissions
+    if not permission.has_permission(request, self):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/rest_framework/permissions.py", line 140, in has_permission
+    return bool(request.user and request.user.is_authenticated)
+AttributeError: 'User' object has no attribute 'is_authenticated'
+[2024-07-19 16:33:24,117] [basehttp.py:212] [basehttp:log_message] [ERROR]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 500 103673
+[2024-07-19 16:34:46,241] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:34:46,797] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:34:48,107] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:34:48,290] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:34:52,521] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:34:52,738] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:34:56,957] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:34:57,206] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:35:06,727] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:35:06,955] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:35:10,132] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:35:10,333] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:35:13,509] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:35:13,796] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:35:14,932] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:35:15,143] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:35:18,296] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:35:18,566] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:35:38,101] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:35:38,399] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:35:40,633] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:35:40,830] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:35:41,956] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:35:42,148] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:35:46,400] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-07-19 16:35:46,772] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:37:41,581] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/token_auth.py changed, reloading.
+[2024-07-19 16:37:41,911] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:37:46,590] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:38:09,293] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:38:42,668] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/token_auth.py changed, reloading.
+[2024-07-19 16:38:42,969] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:38:46,161] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/token_auth.py changed, reloading.
+[2024-07-19 16:38:46,387] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:38:51,733] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 16:38:51,965] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:38:53,157] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 16:38:53,406] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:39:29,306] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 16:39:29,771] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:39:32,027] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 16:39:32,246] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:39:43,594] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 16:39:43,868] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:39:45,066] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 16:39:45,256] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:39:47,431] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:40:00,818] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:40:01,762] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:40:23,232] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 16:40:23,560] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:40:30,883] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:40:31,145] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:40:35,345] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:40:35,557] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:40:37,709] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:40:37,946] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:40:40,529] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-07-19 16:40:40,586] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:40:44,508] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 16:40:44,728] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 16:40:49,544] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:41:04,394] [log.py:241] [log:log_response] [WARNING]- Forbidden: /api/users/
+[2024-07-19 16:41:04,394] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/ HTTP/1.1" 403 27
+[2024-07-19 16:42:05,457] [log.py:241] [log:log_response] [WARNING]- Forbidden: /api/users/
+[2024-07-19 16:42:05,458] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/ HTTP/1.1" 403 27
+[2024-07-19 16:42:22,496] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/ HTTP/1.1" 200 176
+[2024-07-19 16:42:28,662] [log.py:241] [log:log_response] [WARNING]- Forbidden: /api/users/
+[2024-07-19 16:42:28,663] [basehttp.py:212] [basehttp:log_message] [WARNING]- "GET /api/users/ HTTP/1.1" 403 27
+[2024-07-19 16:49:31,025] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:49:31,578] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:49:32,136] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:49:33,540] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:49:34,235] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:49:34,944] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 176
+[2024-07-19 16:50:39,096] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
+[2024-07-19 16:50:41,282] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 16:50:46,326] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 16:50:47,413] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 16:50:48,103] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 16:50:48,632] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 16:50:49,108] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 16:50:49,827] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:01:35,308] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:02:40,065] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:02:45,855] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:02:47,909] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:02:49,393] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:02:50,678] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:02:55,999] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:03:02,236] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:03:03,330] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:03:06,670] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:03:10,629] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:03:21,800] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:03:22,268] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:03:23,524] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:03:23,853] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:03:24,985] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:03:25,227] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:03:38,677] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:03:39,030] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:03:40,274] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:03:41,235] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:03:48,843] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:03:49,378] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:03:51,635] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:03:51,848] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:03:54,052] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:03:54,288] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:03:55,643] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 381
+[2024-07-19 17:04:25,905] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 381
+[2024-07-19 17:06:23,598] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:06:24,038] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:06:57,605] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:14,078] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:16,299] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:21,538] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:27,363] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:28,621] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:30,428] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:33,592] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:34,513] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:38,501] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:45,544] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:47,257] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:48,247] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:07:50,072] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:09:23,733] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:09:42,305] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:09:48,353] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:09:58,553] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:10:00,539] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:10:04,648] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:10:09,172] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:10:22,307] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:10:26,157] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:24:48,839] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:24:58,737] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:25:36,081] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:26:38,405] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:26:39,158] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 295
+[2024-07-19 17:59:19,399] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:59:19,892] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:59:23,136] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:59:23,369] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:59:25,549] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:59:25,739] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:59:29,015] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:59:29,248] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:59:34,484] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:59:34,685] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:59:37,834] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 17:59:38,105] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:59:55,544] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 17:59:55,833] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 17:59:59,007] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 17:59:59,196] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 18:00:02,400] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-07-19 18:00:02,611] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 18:01:25,560] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/user_list.py changed, reloading.
+[2024-07-19 18:01:25,918] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-07-19 18:01:51,499] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-07-19 18:01:51,586] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 584
+[2024-07-19 18:01:53,928] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 348
+[2024-07-19 18:02:08,032] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 348
+[2024-07-19 18:02:10,913] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 348
+[2024-07-19 18:02:12,039] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 348
+[2024-07-19 18:02:12,653] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 348
+[2024-07-19 18:02:13,670] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 348
+[2024-07-19 18:02:14,701] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 348
+[2024-07-19 18:02:15,508] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 348

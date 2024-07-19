@@ -12,7 +12,25 @@ from django.contrib.auth.hashers import check_password  # 使用 Django 的密�
 from rest_framework import serializers
 from django.views import View
 from django.utils import timezone
-from rest_framework_simplejwt.tokens import RefreshToken  # 再次确保导入了这个模块
 from django.conf import settings
-from apps.models import User, UserLock, Token
-# from rest_framework.authtoken.models import Token
+from apps.models import User, UserLock, Token, UserRole, Role
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import BaseAuthentication
+from rest_framework.exceptions import AuthenticationFailed
+
+# 自定义Token认证类
+class CustomTokenAuthentication(BaseAuthentication):
+    def authenticate(self, request):
+        token = request.headers.get('Authorization')
+        if not token:
+            raise AuthenticationFailed('未提供Token')
+
+        try:
+            token_obj = Token.objects.get(token=token)
+        except Token.DoesNotExist:
+            raise AuthenticationFailed('无效的Token')
+
+        user = token_obj.user
+        user.is_authenticated = True  # 手动添加is_authenticated属性
+        return (user, None)
