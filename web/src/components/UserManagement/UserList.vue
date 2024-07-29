@@ -12,37 +12,111 @@
     </div>
     <div class="button_create">
         <span>用户列表</span>
-        <a-button class="button_item button_font" type="primary" @click="createUser">新建用户</a-button>
+        <a-button class="button_item button_font" type="primary" @click="showCreateUserModal">新建用户</a-button>
     </div>
     <div class="table_user">
-        <a-table style="font-size: 13px;" :columns="columns" :data-source="data" :pagination="paginationOptions" :scroll="tableScroll"
-            size="small" @change="handleTableChange" />
+        <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
+            :scroll="tableScroll" size="middle" @change="handleTableChange" />
     </div>
-    <a-modal v-model:visible="editModalVisible" title="编辑用户" @ok="handleEditOk" @cancel="handleEditCancel">
+    <!-- 重置密码模态框 -->
+    <a-modal v-model:open="resetPasswordModalVisible" title="重置密码" @ok="handleResetPasswordOk"
+        @cancel="handleResetPasswordCancel">
+        <a-form :model="resetPasswordForm">
+            <a-form-item label="新密码" name="password" :rules="formRules.password">
+                <a-input-password v-model:value="resetPasswordForm.newPassword" placeholder="请输入新密码" />
+            </a-form-item>
+        </a-form>
+    </a-modal>
+    <a-modal v-model:open="editModalVisible" title="编辑用户" @ok="handleEditOk" @cancel="handleEditCancel">
         <!-- 编辑用户表单 -->
         <a-form :model="editForm">
-            <a-form-item label="用户名">
-                <a-input v-model:value="editForm.username" disabled />
+            <a-form-item label="用户名" name="username" :rules="formRules.username">
+                <a-input v-model:value="editForm.username" />
             </a-form-item>
-            <a-form-item label="邮箱">
-                <a-input v-model:value="editForm.email" />
-            </a-form-item>
-            <a-form-item label="名称">
+            <a-form-item label="名称" name="name" :rules="formRules.name">
                 <a-input v-model:value="editForm.name" />
             </a-form-item>
+            <a-form-item label="手机" name="mobile" :rules="formRules.mobile">
+                <a-input v-model:value="editForm.mobile" />
+            </a-form-item>
+            <a-form-item label="邮箱" name="email" :rules="formRules.email">
+                <a-input v-model:value="editForm.email" />
+            </a-form-item>
+            <!-- 角色单选框 -->
+            <a-form-item label="角色">
+                <a-radio-group v-model:value="editForm.role" @change="handleEditRoleChange">
+                    <a-radio v-for="role in roles" :key="role.id" :value="role.id">{{ role.role_name }}</a-radio>
+                </a-radio-group>
+            </a-form-item>
+            <!-- 权限单选框 -->
+            <a-form-item label="权限">
+                <a-radio-group v-model:value="editForm.permissions">
+                    <a-radio v-for="permission in permissions" :key="permission.id" :value="permission.id">
+                        {{ permission.name }}
+                    </a-radio>
+                </a-radio-group>
+            </a-form-item>
             <!-- 根据需要添加其他字段 -->
+        </a-form>
+    </a-modal>
+    <!-- 新建用户模态框 -->
+    <a-modal v-model:open="createUserModalVisible" title="新建用户" @ok="handleCreateUserOk"
+        @cancel="handleCreateUserCancel" @open="resetCreateUserForm">
+        <a-form :model="createUserForm" :rules="formRules" ref="createFormRef">
+            <a-form-item label="用户名" name="username" :rules="formRules.username">
+                <a-input v-model:value="createUserForm.username" placeholder="请输入用户名" />
+            </a-form-item>
+            <a-form-item label="名称" name="name" :rules="formRules.name">
+                <a-input v-model:value="createUserForm.name" placeholder="请输入名称" />
+            </a-form-item>
+            <a-form-item label="手机" name="mobile" :rules="formRules.mobile">
+                <a-input v-model:value="createUserForm.mobile" placeholder="请输入手机号" />
+            </a-form-item>
+            <a-form-item label="邮箱" name="email" :rules="formRules.email">
+                <a-input v-model:value="createUserForm.email" placeholder="请输入邮箱" />
+            </a-form-item>
+            <a-form-item label="密码" name="password" :rules="formRules.password">
+                <a-input-password v-model:value="createUserForm.password" placeholder="请输入密码" />
+            </a-form-item>
+            <a-form-item label="角色">
+                <a-radio-group v-model:value="createUserForm.role" @change="handleRoleChange">
+                    <a-radio v-for="role in roles" :key="role.id" :value="role.id">{{ role.role_name }}</a-radio>
+                </a-radio-group>
+            </a-form-item>
+            <a-form-item v-if="showPermissions" label="权限">
+                <a-radio-group v-model:value="createUserForm.permissions">
+                    <a-radio v-for="permission in permissions" :key="permission.id"
+                        :value="permission.id">{{ permission.name }}</a-radio>
+                </a-radio-group>
+            </a-form-item>
+            <a-form-item label="状态">
+                <a-switch v-model:checked="createUserForm.status" checked-children="启用" un-checked-children="禁用" />
+            </a-form-item>
         </a-form>
     </a-modal>
 </template>
 
 <script setup>
-import { ref, reactive, h } from 'vue'
+// 引入所需模块和函数
+import { ref, reactive, onMounted, h } from 'vue'
 import axios from 'axios'
-import { message, Tag, Badge, Modal, Dropdown, Menu } from 'ant-design-vue'
+import { message, Tag, Badge, Modal, Dropdown, Menu, Popconfirm, MenuItem } from 'ant-design-vue'
 import dayjs from 'dayjs'
+import { useRouter } from 'vue-router'
 
+// 获取 router 实例
+const router = useRouter()
+
+// 显示新建用户模态框
+const showCreateUserModal = () => {
+    createUserModalVisible.value = true
+    resetCreateUserForm()
+}
+
+// 搜索字段
 const searchUsername = ref('')
 const searchEmail = ref('')
+// 表格数据和分页选项
 const data = ref([])
 const paginationOptions = reactive({
     current: 1,
@@ -51,20 +125,92 @@ const paginationOptions = reactive({
     showSizeChanger: true,  // 显示分页大小选择器
     total: 0,
 })
+// 表格滚动选项
 const tableScroll = { y: 400 }
+// 编辑模态框相关
 const editModalVisible = ref(false)
 const editForm = reactive({
     username: '',
-    email: '',
     name: '',
+    mobile: '',
+    email: '',
+    password: '',
+    role: '',
+    permissions: [],
     // 添加其他字段
 })
 
+// 重置密码模态框相关
+const resetPasswordModalVisible = ref(false)
+const resetPasswordForm = reactive({
+    username: '',
+    newPassword: '',
+})
+
+// 新建用户模态框相关
+const createUserModalVisible = ref(false)
+const createUserForm = reactive({
+    username: '',
+    name: '',
+    password: '',
+    mobile: '',
+    email: '',
+    role: '',
+    permissions: [],
+    status: true,
+})
+
+const formRules = reactive({
+    username: [
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+        { min: 3, max: 15, message: '用户名长度在 3 到 15 个字符', trigger: 'blur' }
+    ],
+    name: [
+        { required: true, message: '请输入名称', trigger: 'blur' }
+    ],
+    mobile: [
+        { required: true, message: '请输入手机号', trigger: 'blur' },
+        { pattern: /^1[0-9]\d{9}$/, message: '请输入有效的手机号', trigger: 'blur' }
+    ],
+    email: [
+        { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+        { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }
+    ],
+    password: [
+        { required: true, message: '请输入密码', trigger: 'blur' },
+        { min: 6, message: '密码长度不能小于 6 个字符', trigger: 'blur' }
+    ],
+    role: [
+        { required: true, message: '请选择角色', trigger: 'change' }
+    ],
+    permissions: [
+        { required: true, message: '请选择权限', trigger: 'change' },
+        { type: 'array', min: 1, message: '至少选择一个权限', trigger: 'change' }
+    ]
+});
+
+const createFormRef = ref(null);  // 用于重置用户表单的ref
+
+// 获取角色和权限数据
+const roles = ref([])
+const permissions = ref([])
+
+// 是否显示编辑权限字段
+const editShowPermissions = ref(false)
+
+// 获取角色和权限数据
+const rolesPermissions = ref([])
+
+
+// 是否显示新建权限字段
+const showPermissions = ref(false)
+
+// 表格列定义
 const columns = [
     {
         title: '编号',
         dataIndex: 'id',
-        width: 100,
+        width: 120,
         showSorterTooltip: false,
         sorter: (a, b) => a.id - b.id,  // 前端编号排序
         customRender: ({ text }) => h('div', {
@@ -74,18 +220,18 @@ const columns = [
     {
         title: '用户名',
         dataIndex: 'username',
-        width: 150,
+        width: 170,
     },
     {
         title: '名称',
         dataIndex: 'name',
-        width: 150,
+        width: 170,
     },
     {
         title: '角色',
         dataIndex: 'role',
         customRender: ({ text }) => {
-            const [roleName, description] = text.split(' - ');
+            const [roleName, description] = typeof text === 'string' ? text.split(' - ') : [text, ''];
             return h('span', [
                 roleName,
                 description ? h('span', [
@@ -94,6 +240,11 @@ const columns = [
                 ]) : null
             ]);
         }
+    },
+    {
+        title: '手机',
+        dataIndex: 'mobile',
+        width: 170,
     },
     {
         title: '邮箱',
@@ -122,26 +273,40 @@ const columns = [
     {
         title: '操作',
         dataIndex: 'crud',
-        customRender: ({ record }) => {
-            return h('div', { style: 'display: flex; gap: 8px;' }, [
-                h('a', { onClick: () => showEditModal(record) }, '编辑'),
-                h('a', { onClick: () => confirmDelete(record) }, '删除'),
-                h(Dropdown, {
-                    overlay: () => h(Menu, [
-                        h(Menu.Item, { key: 'view' }, () => h('a', { onClick: () => viewDetails(record) }, '查看详情')),
-                        h(Menu.Item, { key: 'reset' }, () => h('a', { onClick: () => resetPassword(record) }, '重置密码')),
-                        h(Menu.Item, { key: 'unlock' }, () => h('a', { onClick: () => unlockUser(record) }, '解除锁定')),
-                    ])
-                }, h('a', null, '...'))
-            ]);
-        }
+        customRender: ({ record }) => h('div', { style: 'display: flex; align-items: center; justify-content: left; gap: 12px;' }, [
+            h('span', { style: 'color: rgb(20,93,254); cursor: pointer;', onClick: () => showEditModal(record) }, '编辑'),
+            h(Popconfirm, {
+                title: `是否要删除 ${record.username} 账号?`,
+                okText: 'Yes',
+                cancelText: 'No',
+                onConfirm: () => handleDeleteUser(record.username)
+            }, {
+                default: () => h('span', { style: 'color: red; cursor: pointer;' }, '删除')
+            }),
+            h(Dropdown, {
+                overlay: h(Menu, null, {
+                    default: () => [
+                        h(MenuItem, { key: 'view', onClick: () => viewDetails(record) }, { default: () => '查看详情' }),
+                        h(MenuItem, { key: 'reset', onClick: () => resetPassword(record) }, { default: () => '重置密码' }),
+                        // 根据record的status决定是显示锁定还是解锁
+                        h(MenuItem, { key: 'unlock', onClick: () => toggleUserStatus(record) }, { default: () => record.status ? '解锁用户' : '锁定用户' }),
+                    ]
+                }),
+                trigger: 'click, hover',
+                placement: "bottomLeft"
+            }, {
+                default: () => h('span', { style: 'cursor: pointer; color: rgb(20,93,254);' }, '...')
+            })
+        ])
     },
 ]
 
 // 获取用户列表数据
 const fetchUsers = async () => {
     try {
-        const token = localStorage.getItem('accessToken')  // 从localStorage获取Token
+        // 从localStorage获取Token
+        const token = localStorage.getItem('accessToken')
+        // 发送请求获取用户数据
         const response = await axios.get('/api/users/', {
             headers: {
                 'Authorization': token  // 在请求头中包含Token
@@ -157,65 +322,143 @@ const fetchUsers = async () => {
         data.value = response.data.results.map((user, index) => ({
             ...user,
             id: index + 1,  // 当前页的数据从1开始编号
+            user_id: user.user_id,  // 包含实际的数据库用户ID
         }))
         paginationOptions.total = response.data.count
     } catch (error) {
+        // 获取用户列表失败的提示
         message.error('获取用户列表失败')
         console.error('Error fetching users:', error)
     }
 }
 
+// 获取角色和权限数据
+const fetchRolesAndPermissions = async () => {
+    try {
+        const token = localStorage.getItem('accessToken')
+        const response = await axios.get('/api/roles_permissions/', {
+            headers: {
+                'Authorization': token  // 在请求头中包含Token
+            }
+        })
+        roles.value = response.data.roles
+        permissions.value = response.data.permissions
+        rolesPermissions.value = response.data.roles_permission  // 保存 roles_permission 数据
+    } catch (error) {
+        message.error('获取角色和权限数据失败')
+        console.error('Error fetching roles and permissions:', error)
+    }
+}
+
 // 重置搜索条件
 const resetFilters = () => {
+    // 清空搜索字段
     searchUsername.value = ''
     searchEmail.value = ''
+    // 重新获取用户列表
     fetchUsers()
 }
 
-// 新建用户函数
-const createUser = () => {
-    // 在这里添加新建用户的逻辑
-    console.log('新建用户')
+
+
+// 新建用户确认处理函数
+const handleCreateUserOk = async () => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        const formData = {
+            ...createUserForm,
+            permissions: Array.isArray(createUserForm.permissions) ? createUserForm.permissions : [createUserForm.permissions]
+        };
+
+        console.log('FormData being sent:', formData);  // 打印发送的数据
+
+        // 发送POST请求以创建新用户
+        await axios.post('/api/users/create/', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`  // 添加Bearer前缀
+            }
+        });
+
+        message.success('新建用户成功');
+        createUserModalVisible.value = false;
+        fetchUsers();  // 重新获取用户列表
+    } catch (error) {
+        message.error('新建用户失败');
+        console.error('Error creating user:', error);
+    }
+};
+
+
+
+// 新建用户取消处理函数
+const handleCreateUserCancel = () => {
+    createUserModalVisible.value = false
 }
+
+// 重置新建用户表单
+const resetCreateUserForm = () => {
+    createUserForm.username = ''
+    createUserForm.name = ''
+    createUserForm.password = ''
+    createUserForm.mobile = ''
+    createUserForm.email = ''
+    createUserForm.role = ''
+    createUserForm.permissions = []
+    createUserForm.status = true
+    showPermissions.value = false
+    if (createFormRef.value) {
+        createFormRef.value.resetFields()
+    }
+}
+
+
 
 // 处理表格分页和排序变化
 const handleTableChange = (pagination) => {
+    // 更新分页选项
     paginationOptions.current = pagination.current
     paginationOptions.pageSize = pagination.pageSize
+    // 重新获取用户列表
     fetchUsers()
 }
 
 // 显示编辑对话框
 const showEditModal = (record) => {
-    editForm.username = record.username
-    editForm.email = record.email
-    editForm.name = record.name
-    // 设置其他字段
-    editModalVisible.value = true
-}
+    // 填充编辑表单数据
+    editForm.username = record.username;
+    editForm.name = record.name;
+    editForm.mobile = record.mobile;
+    editForm.email = record.email;
 
-// 确认删除
-const confirmDelete = (record) => {
-    Modal.confirm({
-        title: `是否要删除 ${record.username} 账号?`,
-        onOk: () => deleteUser(record),
-        onCancel: () => console.log('取消删除'),
-    });
-}
+    // 从角色字段中提取角色 ID，假设角色格式为 "RoleName - Description"
+    const roleId = roles.value.find(role => role.role_name === record.role.split(' - ')[0])?.id;
+    editForm.role = roleId;
+
+    // 将后端返回的 permissions 数据转换为权限 ID
+    if (record.permissions.length > 0) {
+        editForm.permissions = record.permissions[0].id; // 单选框只支持一个值，取第一个权限的ID
+    } else {
+        editForm.permissions = null;
+    }
+
+    editModalVisible.value = true;
+};
+
+
 
 // 删除用户
-const deleteUser = async (record) => {
+const handleDeleteUser = async (username) => {
     try {
-        const token = localStorage.getItem('accessToken')
-        await axios.delete(`/api/users/${record.user_id}/`, {
+        const token = localStorage.getItem('accessToken')  // 从localStorage获取Token
+        await axios.delete(`/api/users/${username}/`, {  // 发送DELETE请求
             headers: {
-                'Authorization': token
+                'Authorization': token  // 在请求头中包含Token
             }
         })
-        message.success(`用户 ${record.username} 删除成功`)
+        message.success(`用户 ${username} 删除成功`)
         fetchUsers()  // 重新获取用户列表
     } catch (error) {
-        message.error(`删除用户 ${record.username} 失败`)
+        message.error(`删除用户 ${username} 失败`)
         console.error('Error deleting user:', error)
     }
 }
@@ -225,34 +468,102 @@ const viewDetails = (record) => {
     console.log('查看详情', record)
 }
 
+// 显示重置密码对话框
+const showResetPasswordModal = (record) => {
+    // 填充重置密码表单数据
+    resetPasswordForm.username = record.username
+    resetPasswordModalVisible.value = true
+}
+
+// 重置密码确认处理函数
+const handleResetPasswordOk = async () => {
+    try {
+        const token = localStorage.getItem('accessToken')  // 从localStorage获取Token
+        // 发送POST请求重置密码
+        await axios.post(`/api/users/${resetPasswordForm.username}/reset_password/`, {
+            new_password: resetPasswordForm.newPassword
+        }, {
+            headers: {
+                'Authorization': token  // 在请求头中包含Token
+            }
+        })
+        message.success(`用户 ${resetPasswordForm.username} 密码重置成功，请重新登录`)
+        resetPasswordModalVisible.value = false
+        // 清除localStorage中的所有信息
+        localStorage.clear();
+        router.push('/login');
+    } catch (error) {
+        message.error(`重置用户 ${resetPasswordForm.username} 密码失败`)
+        console.error('Error resetting password:', error)
+    }
+}
+
+// 重置密码取消处理函数
+const handleResetPasswordCancel = () => {
+    resetPasswordModalVisible.value = false
+}
+
 // 重置密码
 const resetPassword = (record) => {
-    console.log('重置密码', record)
+    showResetPasswordModal(record)
 }
 
 // 解除锁定
-const unlockUser = (record) => {
-    console.log('解除锁定', record)
-}
+const toggleUserStatus = async (record) => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        const currentUsername = localStorage.getItem('name'); // 从 localStorage 获取当前用户名
+        const newStatus = record.status ? 0 : 1;
+        await axios.patch(`/api/users/${record.username}/lock/`, { status: newStatus }, {
+            headers: {
+                'Authorization': token
+            }
+        });
+        const statusText = newStatus ? '禁用' : '启用';
+        message.success(`用户 ${record.username} 已${statusText}`);
+
+        // 如果禁用当前用户，清除 token 并重定向到登录页面
+        if (newStatus) {
+            if (record.username === currentUsername) { // 假设有一个变量存储当前用户名
+                localStorage.removeItem('accessToken');
+                router.push('/login');
+                return;
+            }
+        }
+
+        fetchUsers();
+    } catch (error) {
+        message.error(`更改用户 ${record.username} 状态失败`);
+        console.error('Error toggling user status:', error);
+    }
+};
 
 // 编辑对话框确定
 const handleEditOk = async () => {
     try {
+        // 从localStorage获取Token
         const token = localStorage.getItem('accessToken')
-        await axios.put(`/api/users/${editForm.user_id}/`, {
+        // 发送更新请求
+        await axios.put(`/api/users/${editForm.username}/`, {
             username: editForm.username,
             email: editForm.email,
             name: editForm.name,
+            mobile: editForm.mobile,
+            role: editForm.role,
+            permissions: Array.isArray(editForm.permissions) ? editForm.permissions : [editForm.permissions], // 确保 permissions 是数组
             // 添加其他字段
         }, {
             headers: {
                 'Authorization': token
             }
         })
+        // 更新成功的提示
         message.success('用户信息更新成功')
         editModalVisible.value = false
-        fetchUsers()  // 重新获取用户列表
+        // 重新获取用户列表
+        fetchUsers()
     } catch (error) {
+        // 更新失败的提示
         message.error('用户信息更新失败')
         console.error('Error updating user:', error)
     }
@@ -263,12 +574,29 @@ const handleEditCancel = () => {
     editModalVisible.value = false
 }
 
-// 初始化加载用户列表
-fetchUsers()
+// 处理角色变化
+const handleRoleChange = (event) => {
+    const selectedRoleId = event.target.value;
+    createUserForm.role = selectedRoleId;
+
+    // 根据选择的角色决定是否显示权限选项
+    if (selectedRoleId === 1) { // 1 是 'Administrator' 的角色ID
+        // Administrator 角色自动设置为 '全部权限'
+        createUserForm.permissions = [2]; // 2 是 '全部权限' 的权限ID
+        showPermissions.value = false; // 不显示权限选择框
+    } else {
+        // 其他角色，允许选择权限
+        createUserForm.permissions = []; // 清空权限
+        showPermissions.value = true; // 显示权限选择框
+    }
+}
+
+// 初始化加载用户列表和角色、权限数据
+onMounted(() => {
+    fetchUsers()
+    fetchRolesAndPermissions()
+})
 </script>
-
-
-
 
 <style>
 .content_tools,

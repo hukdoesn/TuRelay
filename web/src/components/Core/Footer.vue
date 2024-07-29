@@ -1,5 +1,5 @@
 <template>
-    <a-layout-footer style="text-align: center">
+    <a-layout-footer style="text-align: center; background-color: #fff;">
       To Relay ©2024 Created by Hututu
     </a-layout-footer>
 </template>

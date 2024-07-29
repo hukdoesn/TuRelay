@@ -1,8 +1,9 @@
-from apps.utils import(
-    APIView, JsonResponse, hashlib, jwt, datetime, 
-    get_object_or_404, timezone, RefreshToken, 
+from apps.utils import (
+    APIView, JsonResponse, jwt, datetime,
+    get_object_or_404, timezone, RefreshToken,
     settings, User, UserLock, Token
 )
+from django.contrib.auth.hashers import make_password, check_password
 
 
 class LoginView(APIView):
@@ -28,11 +29,8 @@ class LoginView(APIView):
         if user.status == 1:
             return JsonResponse({'status': 'account_locked', 'message': '账号已被锁定'}, status=403)
         
-        # 将输入的密码进行SHA-256加密
-        hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
-        
         # 比较输入的密码与数据库中的密码
-        if user.password != hashed_password:
+        if not check_password(password, user.password):
             # 密码不匹配，增加登录尝试次数
             user_lock.login_count += 1
             user_lock.last_attempt_time = timezone.now()
@@ -69,6 +67,6 @@ class LoginView(APIView):
             'status': 'login_successful',
             'access_token': access_token,
             'refresh_token': str(refresh),
-            'name':user.name,
+            'name': user.name,
             'message': '登录成功'
         }, status=200)

@@ -1,6 +1,38 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import dayjs from 'dayjs';
 
+import axios from 'axios';
+import { message } from 'ant-design-vue';
+
+// 添加请求拦截器，在每个请求头中添加 token
+axios.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            config.headers['Authorization'] = token;
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
+// 添加响应拦截器，处理 403 错误
+axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        if (error.response && error.response.status === 403) {
+            // message.error('账号被锁定，请联系管理员');
+            localStorage.removeItem('accessToken'); // 清除 token
+            router.push('/login'); // 重定向到登录页面
+        }
+        return Promise.reject(error);
+    }
+);
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

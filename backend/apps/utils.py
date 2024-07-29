@@ -13,7 +13,7 @@ from rest_framework import serializers
 from django.views import View
 from django.utils import timezone
 from django.conf import settings
-from apps.models import User, UserLock, Token, UserRole, Role
+from apps.models import User, UserLock, Token, UserRole, Role, Permission, RolePermission
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import BaseAuthentication
