@@ -64,40 +64,27 @@ class Permission(models.Model):
     def __str__(self):
         return self.name
 
-class UserRole(models.Model):
-    """
-    用户角色模型，存储用户和角色的对应关系
-    """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户")  # 关联到 User 模型
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, verbose_name="角色")  # 关联到 Role 模型
-
-    class Meta:
-        db_table = 't_user_role'  # 指定数据库表名为 t_user_role
-        unique_together = (('user', 'role'),)  # 联合唯一约束
-
-    def __str__(self):
-        return f"{self.user.username} - {self.role.role_name}"
-
 class RolePermission(models.Model):
     """
     角色权限模型，存储角色和权限的对应关系
     """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户")  # 关联到 User 模型
     role = models.ForeignKey(Role, on_delete=models.CASCADE, verbose_name="角色")  # 关联到 Role 模型
     permission = models.ForeignKey(Permission, on_delete=models.CASCADE, verbose_name="权限")  # 关联到 Permission 模型
 
     class Meta:
         db_table = 't_role_permission'  # 指定数据库表名为 t_role_permission
-        unique_together = (('role', 'permission'),)  # 联合唯一约束
+        unique_together = (('user', 'role', 'permission'),)  # 联合唯一约束
 
     def __str__(self):
-        return f"{self.role.role_name} - {self.permission.name}"
+        return f"{self.user.username} - {self.role.role_name} - {self.permission.name}"
 
 class Token(models.Model):
     """
     令牌模型，存储用户的认证令牌
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")  # 关联到 User 模型
-    token = models.CharField(max_length=255, verbose_name="令牌")  # 令牌字符串
+    token = models.CharField(max_length=500, verbose_name="令牌")  # 令牌字符串
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
 
     class Meta:

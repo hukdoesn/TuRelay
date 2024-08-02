@@ -13,7 +13,7 @@ from rest_framework import serializers
 from django.views import View
 from django.utils import timezone
 from django.conf import settings
-from apps.models import User, UserLock, Token, UserRole, Role, Permission, RolePermission, LoginLog
+from apps.models import User, UserLock, Token, Role, Permission, RolePermission, LoginLog
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import BaseAuthentication
@@ -34,3 +34,13 @@ class CustomTokenAuthentication(BaseAuthentication):
         user = token_obj.user
         user.is_authenticated = True  # 手动添加is_authenticated属性
         return (user, None)
+
+
+# 添加函数用于检查用户是否具有只读权限
+def user_has_view_permission(user):
+    # 判断用户是否拥有只读权限
+    role_permissions = RolePermission.objects.filter(user_id=user.id)
+    for rp in role_permissions:
+        if rp.permission.code == 'view':
+            return True
+    return False

@@ -1,4 +1,4 @@
-from apps.utils import APIView, Response, User, status, Paginator, EmptyPage, PageNotAnInteger, CustomTokenAuthentication, IsAuthenticated, UserRole, Role, Permission, RolePermission
+from apps.utils import APIView, Response, User, status, Paginator, EmptyPage, PageNotAnInteger, CustomTokenAuthentication, IsAuthenticated, Role, Permission, RolePermission, user_has_view_permission
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -19,7 +19,7 @@ class UserCreateSerializer(serializers.Serializer):
     def validate_status(self, value):
         # 将 True 转换为 0，将 False 转换为 1
         return 0 if value else 1
-    
+
 # 用户序列化器，用于验证创建和更新用户的请求数据
 class UserUpdateSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
@@ -36,8 +36,6 @@ class UserUpdateSerializer(serializers.Serializer):
     def validate_status(self, value):
         # 将 True 转换为 0，将 False 转换为 1
         return 0 if value else 1
-
-
 
 # 定义新的APIView类，用于获取角色和权限数据
 class RolesPermissionsView(APIView):
@@ -98,16 +96,13 @@ class UserListView(APIView):
         data = []
         for index, user in enumerate(users_page, start=1):
             # 获取用户的角色信息
-            user_role = UserRole.objects.filter(user=user).first()
-            role_name = user_role.role.role_name if user_role else "无角色"
-            description = user_role.role.description if user_role else ""
-            role_display = f"{role_name} - {description}" if description else role_name
+            role_permissions = RolePermission.objects.filter(user=user)
+            role_display = role_permissions[0].role.role_name if role_permissions.exists() else "无角色"
+            description = role_permissions[0].role.description if role_permissions.exists() else ""
+            role_display = f"{role_display} - {description}" if description else role_display
             
             # 获取与角色关联的权限信息
-            role_permissions = RolePermission.objects.filter(role=user_role.role)
-            permissions = Permission.objects.filter(id__in=[rp.permission.id for rp in role_permissions])
-
-            permission_details = [{'id': perm.id, 'name': perm.name} for perm in permissions]
+            permission_details = [{'id': rp.permission.id, 'name': rp.permission.name} for rp in role_permissions]
 
             data.append({
                 'id': index,  # 前端生成的编号
@@ -129,6 +124,38 @@ class UserListView(APIView):
             'results': data
         }, status=status.HTTP_200_OK)
 
+
+class UserDetailView(APIView):
+    authentication_classes = [CustomTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, username):
+        """
+        处理GET请求，返回用户详细信息
+        """
+        try:
+            user = User.objects.get(username=username)
+            role_permissions = RolePermission.objects.filter(user=user)
+            role_display = role_permissions[0].role.role_name if role_permissions.exists() else "无角色"
+            description = role_permissions[0].role.description if role_permissions.exists() else ""
+            role_display = f"{role_display} - {description}" if description else role_display
+
+            permission_details = [{'id': rp.permission.id, 'name': rp.permission.name} for rp in role_permissions]
+
+            user_data = {
+                'username': user.username,
+                'name': user.name,
+                'role': role_display,
+                'permissions': permission_details,
+                'email': user.email,
+                'mobile': user.mobile,
+                'status': user.status,
+                'create_time': user.create_time,
+            }
+            return Response(user_data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"detail": "用户未找到"}, status=status.HTTP_404_NOT_FOUND)
+
     def delete(self, request, username):
         """
         处理DELETE请求，根据用户名删除用户
@@ -137,20 +164,15 @@ class UserListView(APIView):
             # 查找用户
             user = User.objects.get(username=username)
             
-            # 查找与用户相关的UserRole记录
-            user_roles = UserRole.objects.filter(user=user)
-            
             # 删除与用户相关的RolePermission记录
-            for user_role in user_roles:
-                RolePermission.objects.filter(role=user_role.role).delete()
+            RolePermission.objects.filter(user=user).delete()
             
-            # 删除用户权限
-            user.delete()  # 删除用户
+            # 删除用户
+            user.delete()
             return Response({"detail": "用户删除成功"}, status=status.HTTP_204_NO_CONTENT)
         except User.DoesNotExist:
             return Response({"detail": "用户未找到"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            # 其他异常处理
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, username):
@@ -228,9 +250,8 @@ class CreateUserView(APIView):
                     email=validated_data['email'],
                     status=validated_data['status']  # 直接使用验证后的 status
                 )
-                UserRole.objects.create(user=user, role=role)
                 for permission in permissions:
-                    RolePermission.objects.create(role=role, permission=permission)
+                    RolePermission.objects.create(user=user, role=role, permission=permission)
                 return Response({"detail": "用户创建成功"}, status=status.HTTP_201_CREATED)
             else:
                 print(serializer.errors)  # 打印序列化器错误信息以调试
@@ -261,13 +282,12 @@ class UserUpdateView(APIView):
 
                 # 更新用户角色
                 role = Role.objects.get(id=validated_data['role'])
-                UserRole.objects.update_or_create(user=user, defaults={'role': role})
 
                 # 更新用户权限
-                RolePermission.objects.filter(role=role).delete()
+                RolePermission.objects.filter(user=user).delete()
                 permissions = Permission.objects.filter(id__in=validated_data['permissions'])
                 for permission in permissions:
-                    RolePermission.objects.create(role=role, permission=permission)
+                    RolePermission.objects.create(user=user, role=role, permission=permission)
 
                 user.save()
                 return Response({"detail": "用户信息更新成功"}, status=status.HTTP_200_OK)

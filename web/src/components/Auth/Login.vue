@@ -42,15 +42,16 @@ methods: {
         const accessToken = response.data.access_token;
         const refreshToken = response.data.refresh_token;
         const name = response.data.name; // 获取 name 字段
-
         const loginTime = this.$dayjs(); // 获取当前时间
         const tokenExpiry = loginTime.add(1, 'hour').format(); // 格式化后的token过期时间
+        const isReadOnly = response.data.is_read_only;  // 获取只读权限状态
         const sessionTimeout = loginTime.add(1, 'hour').format(); // 格式化后的登录超时时间
 
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('name', name);
         localStorage.setItem('tokenExpiry', tokenExpiry);
+        localStorage.setItem('isReadOnly', isReadOnly);  // 存储只读权限状态
         localStorage.setItem('sessionTimeout', sessionTimeout);
 
         // message.success('登录成功');

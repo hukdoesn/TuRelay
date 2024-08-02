@@ -1,9 +1,9 @@
 from apps.utils import (
     APIView, JsonResponse, jwt, datetime,
     get_object_or_404, timezone, RefreshToken,
-    settings, User, UserLock, LoginLog, Token
+    settings, User, UserLock, LoginLog, Token, user_has_view_permission
 )
-from django.contrib.auth.hashers import  check_password
+from django.contrib.auth.hashers import check_password
 from user_agents import parse
 
 class LoginView(APIView):
@@ -15,14 +15,12 @@ class LoginView(APIView):
         username = data.get('username')  # 获取请求中的用户名
         password = data.get('password')  # 获取请求中的密码
         client_ip = request.META.get('REMOTE_ADDR')  # 获取客户端 IP 地址
-        
+
         user_agent_string = request.META.get('HTTP_USER_AGENT')  # 获取浏览器信息
         user_agent = parse(user_agent_string)
         
-        browser_info = f"{user_agent.browser.family} {user_agent.browser.version_string}"       # 获取浏览器信息
-        os_info = user_agent.os.family     # 获取操作系统信息
-        # 调试信息
-        # print(f"Username: {username}, Password: {password}")
+        browser_info = f"{user_agent.browser.family} {user_agent.browser.version_string}"  # 获取浏览器信息
+        os_info = user_agent.os.family  # 获取操作系统信息
 
         # 尝试获取用户对象，如果不存在返回用户不存在状态码
         try:
@@ -95,14 +93,18 @@ class LoginView(APIView):
         user_lock.login_count = 0
         user_lock.save()
 
-        # 生成新的JWT令牌
+        # 检查用户是否具有只读权限
+        is_read_only = user_has_view_permission(user)
+
+        # 生成新的JWT令牌并将只读权限信息包含在负载中
         refresh = RefreshToken.for_user(user)
-        access_token = str(refresh.access_token)
+        access_token = refresh.access_token
+        access_token['is_read_only'] = is_read_only  # 将权限信息加入到JWT负载中
 
         # 更新或创建用户 Token
         Token.objects.update_or_create(
             user=user,
-            defaults={'token': access_token, 'create_time': timezone.now()}
+            defaults={'token': str(access_token), 'create_time': timezone.now()}
         )
 
         # 更新用户登录时间
@@ -122,8 +124,9 @@ class LoginView(APIView):
         # 返回登录成功响应
         return JsonResponse({
             'status': 'login_successful',
-            'access_token': access_token,
+            'access_token': str(access_token),
             'refresh_token': str(refresh),
             'name': user.name,
+            'is_read_only': is_read_only,  # 返回权限信息
             'message': '登录成功'
         }, status=200)
