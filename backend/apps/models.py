@@ -112,3 +112,23 @@ class LoginLog(models.Model):
 
     def __str__(self):
         return f"{self.username} - {self.client_ip} - {self.login_status}"
+
+
+class OperationLog(models.Model):
+    """
+    操作日志模型，记录用户的操作信息
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="操作人员")  # 关联到 User 模型
+    module = models.CharField(max_length=150, verbose_name="操作模块")  # 操作模块
+    request_interface = models.CharField(max_length=255, verbose_name="请求接口")  # 请求接口
+    request_method = models.CharField(max_length=10, verbose_name="请求方式")  # 请求方式，如 GET、POST 等
+    ip_address = models.GenericIPAddressField(verbose_name="IP地址")  # IP地址
+    before_change = models.TextField(null=True, blank=True, verbose_name="变更前")  # 变更前的内容
+    after_change = models.TextField(null=True, blank=True, verbose_name="变更后")  # 变更后的内容
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
+
+    class Meta:
+        db_table = 't_operation_log'  # 指定数据库表名为 t_operation_log
+
+    def __str__(self):
+        return f"{self.user.username} - {self.module} - {self.create_time}"

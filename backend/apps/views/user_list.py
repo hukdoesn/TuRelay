@@ -2,6 +2,7 @@ from apps.utils import APIView, Response, User, status, Paginator, EmptyPage, Pa
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from django.forms.models import model_to_dict
 
 # 用户创建序列化器，用于验证创建用户的请求数据
 class UserCreateSerializer(serializers.Serializer):
@@ -163,13 +164,14 @@ class UserDetailView(APIView):
         try:
             # 查找用户
             user = User.objects.get(username=username)
+            user_data = model_to_dict(user)     # 将用户数据转换为字典，记录删除前的状态
             
             # 删除与用户相关的RolePermission记录
             RolePermission.objects.filter(user=user).delete()
             
             # 删除用户
             user.delete()
-            return Response({"detail": "用户删除成功"}, status=status.HTTP_204_NO_CONTENT)
+            return Response(user_data, status=status.HTTP_204_NO_CONTENT)  # 返回完整的用户信息
         except User.DoesNotExist:
             return Response({"detail": "用户未找到"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
@@ -182,6 +184,7 @@ class UserDetailView(APIView):
         try:
             # 查找用户
             user = User.objects.get(username=username)
+            before_data = model_to_dict(user)  # 记录更新前的数据
             # 获取新的状态值
             new_status = request.data.get('status')
             user.status = new_status  # 更新状态
@@ -192,7 +195,8 @@ class UserDetailView(APIView):
                     user.token.delete()
             user.save()  # 保存更改
             status_text = "禁用" if new_status else "启用"
-            return Response({"detail": f"用户{status_text}成功"}, status=status.HTTP_200_OK)
+            after_data = model_to_dict(user)  # 记录更新后的数据
+            return Response(after_data, status=status.HTTP_200_OK)  # 返回完整的更新后用户信息
         except User.DoesNotExist:
             return Response({"detail": "用户未找到"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
@@ -219,7 +223,7 @@ class UserDetailView(APIView):
                 new_password = serializer.validated_data.get('new_password')
                 user.password = make_password(new_password)
                 user.save()
-                return Response({"detail": "密码重置成功"}, status=status.HTTP_200_OK)
+                return Response(model_to_dict(user), status=status.HTTP_200_OK)  # 返回完整的用户信息
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
             return Response({"detail": "用户未找到"}, status=status.HTTP_404_NOT_FOUND)
@@ -241,7 +245,16 @@ class CreateUserView(APIView):
             if serializer.is_valid():
                 validated_data = serializer.validated_data
                 role = Role.objects.get(id=validated_data['role'])
-                permissions = Permission.objects.filter(id__in=validated_data['permissions'])
+
+                # 检查角色是否为“管理员”
+                if role.role_name.lower() == 'administrator':
+                    # 如果角色是管理员，则只分配全部权限 (permission_id = 1)
+                    permissions = Permission.objects.filter(id=1)
+                else:
+                    # 仅为非管理员角色分配指定的权限
+                    permissions = Permission.objects.filter(id__in=validated_data['permissions'])
+                
+                # 创建用户
                 user = User.objects.create(
                     username=validated_data['username'],
                     name=validated_data['name'],
@@ -250,16 +263,18 @@ class CreateUserView(APIView):
                     email=validated_data['email'],
                     status=validated_data['status']  # 直接使用验证后的 status
                 )
+                
+                # 分配角色和权限
                 for permission in permissions:
                     RolePermission.objects.create(user=user, role=role, permission=permission)
-                return Response({"detail": "用户创建成功"}, status=status.HTTP_201_CREATED)
+
+                return Response(model_to_dict(user), status=status.HTTP_201_CREATED)  # 返回完整的用户信息
             else:
                 print(serializer.errors)  # 打印序列化器错误信息以调试
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(str(e))  # 打印异常信息以调试
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class UserUpdateView(APIView):
     authentication_classes = [CustomTokenAuthentication]
@@ -272,6 +287,7 @@ class UserUpdateView(APIView):
         try:
             # 查找用户
             user = User.objects.get(username=username)
+            before_data = model_to_dict(user)  # 记录更新前的数据
             serializer = UserUpdateSerializer(data=request.data)
             if serializer.is_valid():
                 validated_data = serializer.validated_data
@@ -285,13 +301,21 @@ class UserUpdateView(APIView):
 
                 # 更新用户权限
                 RolePermission.objects.filter(user=user).delete()
-                permissions = Permission.objects.filter(id__in=validated_data['permissions'])
+
+                # 根据角色分配权限
+                if role.role_name.lower() == 'administrator':
+                    # 如果角色是管理员，则只分配全部权限 (permission_id = 1)
+                    permissions = Permission.objects.filter(id=1)
+                else:
+                    # 非管理员角色时，分配用户选择的权限
+                    permissions = Permission.objects.filter(id__in=validated_data['permissions'])
+                
                 for permission in permissions:
                     RolePermission.objects.create(user=user, role=role, permission=permission)
 
                 user.save()
-                return Response({"detail": "用户信息更新成功"}, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                after_data = model_to_dict(user)  # 记录更新后的数据
+                return Response(after_data, status=status.HTTP_200_OK)  # 返回完整的更新后用户信息
         except User.DoesNotExist:
             return Response({"detail": "用户未找到"}, status=status.HTTP_404_NOT_FOUND)
         except Role.DoesNotExist:

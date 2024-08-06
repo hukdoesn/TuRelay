@@ -41,7 +41,6 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/components/Auth/Login.vue'),
       meta: { requiresAuth: false, breadcrumbName: '登录' }   // 登录页面不需要认证
-
     },
     {
       path: '/',

@@ -45,13 +45,13 @@
             </a-form-item>
             <!-- 角色单选框 -->
             <a-form-item label="角色">
-                <a-radio-group v-model:value="editForm.role">
+                <a-radio-group v-model:value="editForm.role" @change="handleRoleChange('edit')">
                     <a-radio v-for="role in roles" :key="role.id" :value="role.id">{{ role.role_name }}</a-radio>
                 </a-radio-group>
             </a-form-item>
             <!-- 权限单选框 -->
             <a-form-item label="权限">
-                <a-radio-group v-model:value="editForm.permissions">
+                <a-radio-group v-model:value="editForm.permissions" :disabled="editForm.role === 1">
                     <a-radio v-for="permission in permissions" :key="permission.id" :value="permission.id">
                         {{ permission.name }}
                     </a-radio>
@@ -80,7 +80,7 @@
                 <a-input-password v-model:value="createUserForm.password" placeholder="请输入密码" />
             </a-form-item>
             <a-form-item label="角色">
-                <a-radio-group v-model:value="createUserForm.role" @change="handleRoleChange">
+                <a-radio-group v-model:value="createUserForm.role" @change="handleRoleChange('create')">
                     <a-radio v-for="role in roles" :key="role.id" :value="role.id">{{ role.role_name }}</a-radio>
                 </a-radio-group>
             </a-form-item>
@@ -229,7 +229,7 @@ const columns = [
     {
         title: '编号',
         dataIndex: 'id',
-        width: 120,
+        width: 100,
         showSorterTooltip: false,
         sorter: (a, b) => a.id - b.id,  // 前端编号排序
         customRender: ({ text }) => h('div', {
@@ -319,6 +319,7 @@ const columns = [
         ])
     },
 ]
+
 
 // 获取用户列表数据
 const fetchUsers = async () => {
@@ -462,9 +463,9 @@ const handleDeleteUser = async (username) => {
     checkPermission(async () => {
         try {
             const token = localStorage.getItem('accessToken')  // 从localStorage获取Token
-            await axios.delete(`/api/users/${username}/`, {  // 发送DELETE请求
+            await axios.delete(`/api/users/${username}/delete/`, {  // 发送DELETE请求
                 headers: {
-                    'Authorization': token  // 在请求头中包含Token
+                    'Authorization': token,  // 在请求头中包含Token
                 }
             })
             message.success(`用户 ${username} 删除成功`)
@@ -593,21 +594,26 @@ const handleEditCancel = () => {
 }
 
 // 处理角色变化
-const handleRoleChange = (event) => {
-    const selectedRoleId = event.target.value;
-    createUserForm.role = selectedRoleId;
-
-    // 根据选择的角色决定是否显示权限选项
-    if (selectedRoleId === 1) { // 1 是 'Administrator' 的角色ID
-        // Administrator 角色自动设置为 '全部权限'
-        createUserForm.permissions = [2]; // 2 是 '全部权限' 的权限ID
-        showPermissions.value = false; // 不显示权限选择框
-    } else {
-        // 其他角色，允许选择权限
-        createUserForm.permissions = []; // 清空权限
-        showPermissions.value = true; // 显示权限选择框
-    }
-}
+const handleRoleChange = (mode) => {
+  let form;
+  if (mode === 'create') {
+    form = createUserForm;
+  } else {
+    form = editForm;
+  }
+  
+  const selectedRoleId = form.role;
+  
+  if (selectedRoleId === 1) { // Assuming 1 is the ID for 'Administrator'
+    form.permissions = [2]; // Automatically set to '全部权限'
+    showPermissions.value = false; // Hide permissions selection
+    editShowPermissions.value = false;
+  } else {
+    form.permissions = []; // Clear permissions
+    showPermissions.value = mode === 'create'; // Show permissions selection only in create mode
+    editShowPermissions.value = mode === 'edit';
+  }
+};
 
 // 初始化加载用户列表和角色、权限数据
 onMounted(() => {

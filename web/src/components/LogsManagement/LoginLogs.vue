@@ -48,7 +48,7 @@ const columns = [
     {
         title: '编号',
         dataIndex: 'id',
-        width: 120,
+        width: 100,
         showSorterTooltip: false,
         sorter: (a, b) => a.id - b.id,  // 前端编号排序
         customRender: ({ text }) => h('div', {
@@ -58,7 +58,7 @@ const columns = [
     {
         title: '用户名',
         dataIndex: 'username',
-        width: 150,
+        width: 120,
     },
     {
         title: '客户端IP',
