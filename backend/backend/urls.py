@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView
+from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -12,4 +12,5 @@ urlpatterns = [
     path('api/users/<str:username>/update/', UserUpdateView.as_view(), name='user-update'),  # 配置更新用户信息的API路径
     path('api/roles_permissions/', RolesPermissionsView.as_view(), name='roles-permissions'),  # 配置获取角色和权限数据的API路径
     path('api/login_logs/', LoginLogView.as_view(), name='login-log'),  # 配置获取登录日志数据的API路径
+    path('api/operation_logs/', OperationLogView.as_view(), name='operation-log'),  # 配置获取操作日志数据的API路径
 ]

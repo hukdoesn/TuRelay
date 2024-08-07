@@ -792,3 +792,878 @@ rest_framework.exceptions.AuthenticationFailed: 未提供Token
 [2024-08-06 22:11:33,329] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
 [2024-08-06 22:11:45,154] [basehttp.py:212] [basehttp:log_message] [INFO]- "PUT /api/users/test/update/ HTTP/1.1" 200 222
 [2024-08-06 22:11:45,208] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-06 22:13:08,132] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-06 22:13:08,197] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 09:57:25,887] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-08-07 09:57:26,313] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 09:57:28,681] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-08-07 09:57:29,250] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 09:57:38,708] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/settings.py changed, reloading.
+[2024-08-07 09:57:38,914] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 09:57:54,059] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-08-07 09:57:54,378] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 09:57:57,569] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-08-07 09:57:57,572] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/roles_permissions/ HTTP/1.1" 200 0
+[2024-08-07 09:57:57,604] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 09:57:57,621] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 09:58:14,625] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/test/delete/ HTTP/1.1" 200 0
+[2024-08-07 09:58:14,707] [basehttp.py:212] [basehttp:log_message] [INFO]- "DELETE /api/users/test/delete/ HTTP/1.1" 204 222
+[2024-08-07 09:58:14,746] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 09:58:26,711] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 09:58:26,722] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 09:58:48,785] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 09:58:49,099] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 09:58:58,617] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 09:58:58,906] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 09:59:02,336] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 09:59:02,558] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 09:59:19,139] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/create/ HTTP/1.1" 200 0
+[2024-08-07 09:59:19,381] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/users/create/ HTTP/1.1" 201 218
+[2024-08-07 09:59:19,460] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 09:59:29,877] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/test/update/ HTTP/1.1" 200 0
+[2024-08-07 09:59:29,931] [basehttp.py:212] [basehttp:log_message] [INFO]- "PUT /api/users/test/update/ HTTP/1.1" 200 222
+[2024-08-07 09:59:29,988] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 09:59:33,094] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/test/lock/ HTTP/1.1" 200 0
+[2024-08-07 09:59:33,130] [basehttp.py:212] [basehttp:log_message] [INFO]- "PATCH /api/users/test/lock/ HTTP/1.1" 200 218
+[2024-08-07 09:59:33,152] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 721
+[2024-08-07 09:59:37,484] [basehttp.py:212] [basehttp:log_message] [INFO]- "PATCH /api/users/test/lock/ HTTP/1.1" 200 218
+[2024-08-07 09:59:37,530] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 09:59:39,358] [basehttp.py:212] [basehttp:log_message] [INFO]- "DELETE /api/users/test/delete/ HTTP/1.1" 204 222
+[2024-08-07 09:59:39,400] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 10:01:56,419] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-08-07 10:01:56,453] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1852
+[2024-08-07 10:02:07,306] [log.py:241] [log:log_response] [WARNING]- Not Found: /api/login/
+[2024-08-07 10:02:07,308] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 404 73
+[2024-08-07 10:02:18,805] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 10:02:21,226] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 10:02:21,239] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 10:02:50,903] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 10:02:55,321] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 10:02:55,336] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 10:02:59,741] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1870
+[2024-08-07 10:09:59,581] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-08-07 10:09:59,931] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:10:03,109] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-08-07 10:10:03,300] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:10:10,582] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-08-07 10:10:10,797] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:10:12,085] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-08-07 10:10:12,302] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:10:50,352] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-08-07 10:10:50,664] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:10:53,012] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-08-07 10:10:53,277] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:10:55,695] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-08-07 10:10:55,926] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:10:58,113] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/utils.py changed, reloading.
+[2024-08-07 10:10:58,389] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:12:37,251] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1870
+[2024-08-07 10:24:40,719] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-08-07 10:24:41,072] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:24:52,500] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-08-07 10:24:52,791] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:24:56,020] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-08-07 10:24:56,279] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:24:57,396] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-08-07 10:24:57,600] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:24:59,883] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/__init__.py changed, reloading.
+[2024-08-07 10:25:00,094] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:25:08,492] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-08-07 10:25:08,708] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:25:12,008] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-08-07 10:25:12,228] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:25:15,520] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/backend/urls.py changed, reloading.
+[2024-08-07 10:25:15,730] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:32:03,546] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:32:03,911] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:32:10,327] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:32:10,639] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:32:23,204] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:32:23,488] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:14,937] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:15,232] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:17,556] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:17,758] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:23,108] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:23,304] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:25,608] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:25,809] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:32,182] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:32,619] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:33,890] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:34,072] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:35,382] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:35,563] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:39,897] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:40,088] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:41,378] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:41,572] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:43,008] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:43,192] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:44,471] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:44,654] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:47,977] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:48,198] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:49,494] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:49,676] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:56,081] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:56,331] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:33:58,621] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:33:58,812] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:01,106] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:01,287] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:02,571] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:02,758] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:08,105] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:08,330] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:09,635] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:09,824] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:12,109] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:12,310] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:28,932] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:29,237] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:34,697] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:34,986] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:36,313] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:36,499] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:38,792] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:39,089] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 10:34:47,638] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 10:34:47,858] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 11:04:08,164] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 11:04:08,527] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 11:05:48,759] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 11:05:53,570] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1872
+[2024-08-07 11:51:29,188] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 0
+[2024-08-07 11:51:29,347] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:51:31,950] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:51:50,494] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:53:39,017] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:53:46,120] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:54:49,026] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:55:23,990] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:55:46,569] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:55:50,275] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:55:57,462] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 11:55:57,996] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 11:55:59,318] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 11:55:59,506] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 11:56:02,813] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 11:56:03,375] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 11:56:16,981] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 11:56:17,265] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 11:56:18,681] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:56:19,480] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:56:31,895] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:56:44,546] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3372
+[2024-08-07 11:56:49,530] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 11:56:49,547] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 11:57:04,111] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/users/create/ HTTP/1.1" 201 218
+[2024-08-07 11:57:04,182] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 11:57:10,206] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 637
+[2024-08-07 11:57:12,251] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 11:57:12,270] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 11:57:20,497] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/demo/update/ HTTP/1.1" 200 0
+[2024-08-07 11:57:20,569] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = middleware_method(
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 44, in process_view
+    'before_change': json.dumps(before_change_data, ensure_ascii=False) if before_change_data else '{}',
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 234, in dumps
+    return cls(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type datetime is not JSON serializable
+[2024-08-07 11:57:20,572] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 89271
+[2024-08-07 11:58:23,921] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-08-07 11:58:23,921] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/roles_permissions/ HTTP/1.1" 200 0
+[2024-08-07 11:58:23,991] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 11:58:24,015] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 11:58:32,258] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = middleware_method(
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 44, in process_view
+    'before_change': json.dumps(before_change_data, ensure_ascii=False) if before_change_data else '{}',
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 234, in dumps
+    return cls(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type datetime is not JSON serializable
+[2024-08-07 11:58:32,258] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 89271
+[2024-08-07 11:59:10,594] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 11:59:11,419] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:01:33,621] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:01:33,966] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:01:38,326] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:01:38,587] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:01:42,830] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 12:01:42,853] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 12:01:49,114] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = middleware_method(
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 35, in process_view
+    before_change_data = self.get_before_data(request, view_func, view_kwargs)
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 106, in get_before_data
+    if isinstance(value, datetime):
+NameError: name 'datetime' is not defined
+[2024-08-07 12:01:49,117] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 74086
+[2024-08-07 12:02:04,604] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:02:04,910] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:02:09,518] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:02:09,871] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:02:12,363] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = middleware_method(
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 36, in process_view
+    before_change_data = self.get_before_data(request, view_func, view_kwargs)
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 107, in get_before_data
+    if isinstance(value, datetime):
+TypeError: isinstance() arg 2 must be a type or tuple of types
+[2024-08-07 12:02:12,365] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 74131
+[2024-08-07 12:02:22,354] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:02:22,675] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:02:26,050] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:02:26,257] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:02:36,833] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-08-07 12:02:37,076] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 12:02:41,005] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 12:02:41,023] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 12:02:44,308] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = middleware_method(
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 44, in process_view
+    'before_change': json.dumps(before_change_data, ensure_ascii=False) if before_change_data else '{}',
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 234, in dumps
+    return cls(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type datetime is not JSON serializable
+[2024-08-07 12:02:44,311] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 89270
+[2024-08-07 12:03:41,176] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:03:42,077] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:03:44,775] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = middleware_method(
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 44, in process_view
+    'before_change': json.dumps(before_change_data, ensure_ascii=False) if before_change_data else '{}',
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 234, in dumps
+    return cls(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type datetime is not JSON serializable
+[2024-08-07 12:03:44,784] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 89257
+[2024-08-07 12:03:44,841] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = middleware_method(
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 44, in process_view
+    'before_change': json.dumps(before_change_data, ensure_ascii=False) if before_change_data else '{}',
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 234, in dumps
+    return cls(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type datetime is not JSON serializable
+[2024-08-07 12:03:44,842] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 89257
+[2024-08-07 12:04:07,266] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:04:07,595] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:04:13,992] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:04:14,447] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:04:17,967] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = middleware_method(
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 36, in process_view
+    before_change_data = self.get_before_data(request, view_func, view_kwargs)
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 107, in get_before_data
+    if isinstance(value, datetime):
+TypeError: isinstance() arg 2 must be a type or tuple of types
+[2024-08-07 12:04:17,969] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 74117
+[2024-08-07 12:04:52,944] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:04:53,334] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:04:55,892] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 65, in process_response
+    request.operation_data['after_change'] = json.dumps(after_change_data, ensure_ascii=False)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 234, in dumps
+    return cls(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type datetime is not JSON serializable
+[2024-08-07 12:04:55,895] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 88041
+[2024-08-07 12:05:03,986] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:05:04,354] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:05:07,859] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 12:05:07,877] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 734
+[2024-08-07 12:05:12,768] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 65, in process_response
+    request.operation_data['after_change'] = json.dumps(after_change_data, ensure_ascii=False)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 234, in dumps
+    return cls(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type datetime is not JSON serializable
+[2024-08-07 12:05:12,771] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 88041
+[2024-08-07 12:05:45,770] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:05:46,624] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:05:49,160] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:05:49,402] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:05:55,912] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 12:05:55,938] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 12:05:56,647] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 12:05:56,664] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 12:06:10,424] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 12:06:10,458] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 12:06:14,219] [log.py:241] [log:log_response] [ERROR]- Internal Server Error: /api/users/demo/update/
+Traceback (most recent call last):
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/huk/Library/Python/3.9/lib/python/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Users/huk/TuRelay/backend/apps/middleware_log.py", line 65, in process_response
+    request.operation_data['after_change'] = json.dumps(after_change_data, ensure_ascii=False)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 234, in dumps
+    return cls(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type datetime is not JSON serializable
+[2024-08-07 12:06:14,223] [basehttp.py:212] [basehttp:log_message] [ERROR]- "PUT /api/users/demo/update/ HTTP/1.1" 500 88041
+[2024-08-07 12:06:59,396] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:06:59,743] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:07:03,096] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:07:03,328] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:07:05,624] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 12:07:06,244] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:07:08,631] [basehttp.py:212] [basehttp:log_message] [INFO]- "PUT /api/users/demo/update/ HTTP/1.1" 200 246
+[2024-08-07 12:07:08,703] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 734
+[2024-08-07 12:07:22,099] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 637
+[2024-08-07 12:07:24,041] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 12:07:24,063] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 734
+[2024-08-07 12:07:31,984] [basehttp.py:212] [basehttp:log_message] [INFO]- "PUT /api/users/demo/update/ HTTP/1.1" 200 246
+[2024-08-07 12:07:32,029] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 12:07:42,283] [basehttp.py:212] [basehttp:log_message] [INFO]- "PUT /api/users/demo/update/ HTTP/1.1" 200 246
+[2024-08-07 12:07:42,342] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 12:07:59,868] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/create/ HTTP/1.1" 200 0
+[2024-08-07 12:08:00,180] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/users/create/ HTTP/1.1" 201 221
+[2024-08-07 12:08:00,228] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 12:08:09,976] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 12:08:14,179] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-08-07 12:08:14,216] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1874
+[2024-08-07 12:08:16,053] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6754
+[2024-08-07 12:09:33,676] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:09:42,159] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:09:43,862] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:09:55,892] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:02,528] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:09,311] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:19,166] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:24,297] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1874
+[2024-08-07 12:10:24,789] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:25,435] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1874
+[2024-08-07 12:10:26,917] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:27,465] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1874
+[2024-08-07 12:10:29,031] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:30,149] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1874
+[2024-08-07 12:10:35,068] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:39,580] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:43,697] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:10:52,694] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:00,092] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:04,910] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:14,288] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:17,213] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:19,982] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:25,796] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:32,767] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:38,419] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:42,192] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:45,736] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:51,384] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1874
+[2024-08-07 12:11:51,938] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:11:52,975] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1874
+[2024-08-07 12:11:53,945] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:12:04,544] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:12:09,064] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:12:13,060] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1874
+[2024-08-07 12:12:16,669] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:12:23,616] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:12:31,652] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:17,975] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:23,251] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:26,996] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:28,350] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:30,323] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:35,404] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:36,599] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:44,217] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:45,485] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:46,494] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:13:47,959] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:14:01,133] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:14:06,512] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:14:21,910] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:14:22,335] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:14:24,652] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:14:24,866] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:14:27,143] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:14:27,363] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:14:31,698] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:14:31,918] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:14:45,358] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:14:45,633] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:14:47,663] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:14:53,627] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:15:50,280] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:15:50,595] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:15:51,849] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:15:52,054] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:15:55,301] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:15:55,506] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:15:57,740] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:15:57,948] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:16:00,173] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:16:00,586] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:16:01,807] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:16:02,035] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:16:03,254] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:16:03,519] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:16:07,559] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:16:14,070] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:16:14,418] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:16:15,729] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:16:16,212] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:17:50,862] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:17:51,203] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:18:04,943] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:18:05,263] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:18:08,599] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:18:09,186] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:18:46,438] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:18:51,702] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:19:03,617] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:19:03,933] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:21:35,396] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:21:35,734] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:21:37,094] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:21:37,275] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:21:41,592] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 12:21:41,980] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 12:21:45,017] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:22:03,954] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 12:22:11,904] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:18:25,673] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 13:18:32,075] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:18:36,331] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/operation_logs/?page=1&page_size=10&username=admin&request_method= HTTP/1.1" 200 0
+[2024-08-07 13:18:36,362] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=admin&request_method= HTTP/1.1" 200 4590
+[2024-08-07 13:18:43,064] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:18:55,868] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/operation_logs/?page=1&page_size=10&username=&request_method=post HTTP/1.1" 200 0
+[2024-08-07 13:18:55,909] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method=post HTTP/1.1" 200 94
+[2024-08-07 13:19:00,029] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:19:04,497] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/operation_logs/?page=1&page_size=10&username=&request_method=POST HTTP/1.1" 200 0
+[2024-08-07 13:19:04,625] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method=POST HTTP/1.1" 200 1538
+[2024-08-07 13:19:07,275] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:19:21,960] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/operation_logs/?page=1&page_size=10&username=test&request_method= HTTP/1.1" 200 0
+[2024-08-07 13:19:22,009] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=test&request_method= HTTP/1.1" 200 2178
+[2024-08-07 13:19:22,583] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:23:03,206] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:23:11,466] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 13:23:11,860] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 13:23:13,257] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 13:23:13,616] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 13:25:50,016] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:27:24,293] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:27:26,566] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:27:27,679] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:27:29,902] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:27:36,155] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:27:41,302] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:28:00,948] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:28:05,423] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:28:16,861] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:28:32,741] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:28:40,463] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:28:54,404] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:28:56,185] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:03,830] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:20,140] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:24,376] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:28,335] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:32,401] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:29:33,087] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:37,621] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:29:38,452] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:46,604] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:53,641] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:57,772] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:29:59,588] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:30:00,643] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:30:02,105] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:30:08,985] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:30:09,942] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:30:21,657] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:36:40,433] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:36:42,964] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:36:49,180] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:36:52,737] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/operation_logs/?page=1&page_size=20&username=&request_method= HTTP/1.1" 200 0
+[2024-08-07 13:36:52,775] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=20&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:36:55,429] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:36:56,526] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:38:10,114] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:38:59,704] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:39:02,230] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:39:05,230] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:40:50,739] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:40:53,592] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:42:45,422] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:42:47,033] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:44:13,576] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:44:32,145] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:46:11,764] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:46:22,878] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:46:28,419] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:46:29,659] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:46:32,252] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:46:35,124] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 13:46:35,146] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 13:46:38,215] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:46:39,553] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:46:42,267] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:49:07,010] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:49:26,785] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:49:30,956] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:49:32,639] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:53:01,793] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 0
+[2024-08-07 13:53:01,846] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:53:06,813] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:53:08,366] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:53:20,632] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:53:23,766] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:54:27,631] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:28,895] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:32,952] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:33,598] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:34,124] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:34,312] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:34,535] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:38,192] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:39,713] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:42,808] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:55:43,714] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:55:45,241] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 13:55:46,569] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:59:28,932] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:59:33,239] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:59:36,217] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 13:59:52,511] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-08-07 13:59:52,512] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/roles_permissions/ HTTP/1.1" 200 0
+[2024-08-07 13:59:52,586] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 13:59:52,604] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:00:00,357] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:02:33,013] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:02:36,175] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:04:56,603] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:04:59,117] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:08:05,306] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:11:19,149] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:11:20,571] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:13:56,458] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:13:57,206] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:14:30,847] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:14:50,637] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:14:57,237] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:15:30,215] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:15:31,821] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:15:34,548] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:15:34,548] [basehttp.py:81] [basehttp:handle_error] [INFO]- - Broken pipe from ('172.17.102.34', 53067)
+[2024-08-07 14:15:34,766] [basehttp.py:81] [basehttp:handle_error] [INFO]- - Broken pipe from ('172.17.102.34', 53090)
+[2024-08-07 14:15:34,930] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:17:27,940] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-08-07 14:17:28,059] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:17:32,646] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:17:54,771] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:17:56,966] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:18:03,913] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:18:05,346] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:18:25,379] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:18:31,280] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-08-07 14:18:31,613] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 14:18:35,187] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:18:35,712] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:18:52,379] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:18:54,685] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:19:25,021] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:19:29,005] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:19:29,488] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:19:29,489] [basehttp.py:81] [basehttp:handle_error] [INFO]- - Broken pipe from ('172.17.102.34', 52238)
+[2024-08-07 14:19:29,620] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:19:29,841] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:20:07,578] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:20:08,307] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:20:09,186] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:28:12,603] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:28:18,352] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 14:28:18,375] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:29:37,975] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:30:17,624] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:30:22,300] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:30:34,075] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:30:40,777] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:31:01,536] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:31:05,378] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:31:06,157] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:31:30,798] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 14:31:30,824] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:32:13,079] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 14:32:13,096] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:32:18,102] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 14:32:18,131] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:32:20,106] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 14:32:20,262] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:32:43,627] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 14:32:43,644] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:32:44,860] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 14:32:44,905] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:33:00,203] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 14:33:00,221] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:33:01,230] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 14:33:01,264] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 14:33:05,782] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:33:07,908] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:34:03,726] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:35:19,945] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:35:29,730] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:44:06,998] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:44:44,109] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:44:46,064] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:49:36,406] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:49:38,901] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:49:41,412] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:49:42,955] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:51:38,494] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 14:51:39,679] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:52:06,755] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:52:17,439] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:52:19,158] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:52:29,575] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:55:54,684] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:56:00,512] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 14:56:29,963] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 14:56:30,384] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 14:56:32,945] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:01:34,714] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:01:45,068] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:02:02,266] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:02:03,871] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 15:02:04,664] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 15:02:12,799] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:02:25,181] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 15:02:26,070] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:02:27,428] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 15:02:37,142] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:15:26,486] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:15:28,414] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 15:15:28,443] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 15:15:33,814] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 15:15:33,841] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 15:15:42,123] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 15:15:46,672] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 15:15:46,708] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 15:15:51,689] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:15:54,085] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1875
+[2024-08-07 15:16:07,023] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 15:16:07,047] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 15:16:24,668] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 15:16:26,694] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 15:16:26,722] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 15:16:54,061] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 15:16:57,499] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 15:16:57,528] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 15:16:59,326] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1863
+[2024-08-07 15:17:00,370] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:56:16,736] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 0
+[2024-08-07 15:56:17,019] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:56:52,257] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:57:23,481] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:57:25,484] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:57:42,330] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:57:47,953] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:57:49,648] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:58:04,523] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:58:05,949] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1952
+[2024-08-07 15:59:18,619] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 15:59:19,072] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 15:59:22,186] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 16:06:17,950] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 16:06:18,314] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 16:06:20,641] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 16:06:20,837] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 16:06:24,242] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 16:06:33,836] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 16:06:34,115] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 16:06:36,421] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/views/operation_log.py changed, reloading.
+[2024-08-07 16:06:36,672] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 16:16:17,026] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 16:16:17,367] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 16:16:34,070] [autoreload.py:266] [autoreload:trigger_reload] [INFO]- /Users/huk/TuRelay/backend/apps/middleware_log.py changed, reloading.
+[2024-08-07 16:16:34,387] [autoreload.py:668] [autoreload:run_with_reloader] [INFO]- Watching for file changes with StatReloader
+[2024-08-07 16:16:38,448] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6676
+[2024-08-07 16:16:39,971] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-08-07 16:16:39,971] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/roles_permissions/ HTTP/1.1" 200 0
+[2024-08-07 16:16:39,999] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 16:16:40,021] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 952
+[2024-08-07 16:16:46,525] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/guest/delete/ HTTP/1.1" 200 0
+[2024-08-07 16:16:46,641] [basehttp.py:212] [basehttp:log_message] [INFO]- "DELETE /api/users/guest/delete/ HTTP/1.1" 204 225
+[2024-08-07 16:16:46,700] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 16:16:51,815] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/test/update/ HTTP/1.1" 200 0
+[2024-08-07 16:16:51,869] [basehttp.py:212] [basehttp:log_message] [INFO]- "PUT /api/users/test/update/ HTTP/1.1" 200 247
+[2024-08-07 16:16:51,921] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 729
+[2024-08-07 16:17:13,474] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 16:17:17,733] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 6483
+[2024-08-07 16:35:52,031] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1128
+[2024-08-07 16:36:43,318] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1128
+[2024-08-07 16:36:48,527] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1128
+[2024-08-07 16:37:10,077] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 1128
+[2024-08-07 16:47:28,915] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 16:47:28,933] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 729
+[2024-08-07 16:47:39,648] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/test/delete/ HTTP/1.1" 200 0
+[2024-08-07 16:47:39,728] [basehttp.py:212] [basehttp:log_message] [INFO]- "DELETE /api/users/test/delete/ HTTP/1.1" 204 247
+[2024-08-07 16:47:39,762] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 16:48:02,269] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/create/ HTTP/1.1" 200 0
+[2024-08-07 16:48:02,537] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/users/create/ HTTP/1.1" 201 218
+[2024-08-07 16:48:02,577] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 16:48:08,728] [basehttp.py:212] [basehttp:log_message] [INFO]- "PUT /api/users/test/update/ HTTP/1.1" 200 222
+[2024-08-07 16:48:08,799] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 728
+[2024-08-07 16:48:15,434] [basehttp.py:212] [basehttp:log_message] [INFO]- "PUT /api/users/test/update/ HTTP/1.1" 200 222
+[2024-08-07 16:48:15,498] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 16:48:17,775] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 16:48:17,792] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 16:48:20,687] [log.py:241] [log:log_response] [WARNING]- Bad Request: /api/users/create/
+[2024-08-07 16:48:20,690] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/users/create/ HTTP/1.1" 400 252
+[2024-08-07 16:48:36,842] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 16:48:36,861] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 16:48:59,262] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3100
+[2024-08-07 16:50:42,782] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 0
+[2024-08-07 16:50:42,881] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1864
+[2024-08-07 16:50:47,933] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3100
+[2024-08-07 16:50:49,315] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1864
+[2024-08-07 16:50:53,931] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3100
+[2024-08-07 16:51:39,140] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3100
+[2024-08-07 16:51:47,911] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3100
+[2024-08-07 16:51:49,803] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3100
+[2024-08-07 16:52:10,140] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1864
+[2024-08-07 16:52:11,213] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3100
+[2024-08-07 16:52:20,971] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 16:52:20,990] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 16:52:23,688] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/login_logs/?username=&client_ip=&page=1&page_size=10 HTTP/1.1" 200 1864
+[2024-08-07 16:52:26,577] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/operation_logs/?page=1&page_size=10&username=&request_method= HTTP/1.1" 200 3100
+[2024-08-07 16:52:30,153] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 16:52:30,175] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 16:56:20,041] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 16:56:20,059] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 16:56:22,219] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 16:56:22,236] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 17:00:05,574] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:00:05,600] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 17:11:47,182] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/login/ HTTP/1.1" 200 0
+[2024-08-07 17:11:47,437] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-08-07 17:11:47,437] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-08-07 17:11:48,249] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-08-07 17:11:48,250] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-08-07 17:11:49,023] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-08-07 17:11:49,023] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-08-07 17:11:49,827] [log.py:241] [log:log_response] [WARNING]- Unauthorized: /api/login/
+[2024-08-07 17:11:49,827] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 401 71
+[2024-08-07 17:11:50,669] [log.py:241] [log:log_response] [WARNING]- Forbidden: /api/login/
+[2024-08-07 17:11:50,669] [basehttp.py:212] [basehttp:log_message] [WARNING]- "POST /api/login/ HTTP/1.1" 403 79
+[2024-08-07 17:12:11,380] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 17:12:15,572] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:12:15,591] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 721
+[2024-08-07 17:13:43,400] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:13:43,415] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 721
+[2024-08-07 17:13:57,855] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:13:57,884] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 721
+[2024-08-07 17:14:45,367] [basehttp.py:212] [basehttp:log_message] [INFO]- "OPTIONS /api/users/test/lock/ HTTP/1.1" 200 0
+[2024-08-07 17:14:45,443] [basehttp.py:212] [basehttp:log_message] [INFO]- "PATCH /api/users/test/lock/ HTTP/1.1" 200 218
+[2024-08-07 17:14:45,473] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 17:14:59,944] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 637
+[2024-08-07 17:15:09,174] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:15:09,195] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 17:15:15,184] [basehttp.py:212] [basehttp:log_message] [INFO]- "POST /api/login/ HTTP/1.1" 200 635
+[2024-08-07 17:15:18,434] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:15:18,454] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 722
+[2024-08-07 17:15:21,326] [basehttp.py:212] [basehttp:log_message] [INFO]- "DELETE /api/users/test/delete/ HTTP/1.1" 204 246
+[2024-08-07 17:15:21,354] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 17:17:22,743] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:17:22,758] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 17:17:35,852] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:17:35,861] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 17:17:39,414] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:17:39,434] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 17:37:33,643] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:37:33,658] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 17:41:27,017] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:41:27,029] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501
+[2024-08-07 17:41:28,500] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/roles_permissions/ HTTP/1.1" 200 154
+[2024-08-07 17:41:28,512] [basehttp.py:212] [basehttp:log_message] [INFO]- "GET /api/users/?username=&email=&page=1&page_size=10 HTTP/1.1" 200 501

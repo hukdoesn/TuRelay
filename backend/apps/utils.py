@@ -13,11 +13,13 @@ from rest_framework import serializers
 from django.views import View
 from django.utils import timezone
 from django.conf import settings
-from apps.models import User, UserLock, Token, Role, Permission, RolePermission, LoginLog
+from apps.models import User, UserLock, Token, Role, Permission, RolePermission, LoginLog, OperationLog
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+# json
+import json
 
 # 自定义Token认证类
 class CustomTokenAuthentication(BaseAuthentication):

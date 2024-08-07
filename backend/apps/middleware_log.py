@@ -4,6 +4,8 @@ from django.forms.models import model_to_dict
 from .models import OperationLog, User
 from .utils import CustomTokenAuthentication
 import json
+from datetime import datetime
+
 
 class OperationLogMiddleware(MiddlewareMixin):
     """
@@ -12,7 +14,7 @@ class OperationLogMiddleware(MiddlewareMixin):
 
     # URL和breadcrumbName映射
     BREADCRUMB_MAP = {
-        '/api/users/': '用户管理',
+        '/api/users/': '用户列表',
         '/api/asset-management/hosts/': '主机管理',
         '/api/asset-management/databases/': '数据库管理',
         # 其他API接口映射
@@ -100,11 +102,20 @@ class OperationLogMiddleware(MiddlewareMixin):
             if 'username' in view_kwargs:
                 try:
                     user = User.objects.get(username=view_kwargs['username'])
-                    return model_to_dict(user)
+                    user_dict = model_to_dict(user)
+                    # Convert datetime fields to string
+                    for key, value in user_dict.items():
+                        if isinstance(value, datetime):  # Ensure datetime is correctly referenced
+                            user_dict[key] = value.isoformat()
+                    # 过滤掉password字段
+                    if 'password' in user_dict:
+                        user_dict['password'] = ''
+                    return user_dict
                 except User.DoesNotExist:
                     return None
             # 可以添加其他模型的处理逻辑
         return None
+
 
     def get_after_data(self, request, response):
         """
@@ -112,7 +123,16 @@ class OperationLogMiddleware(MiddlewareMixin):
         """
         try:
             if 'application/json' in response['Content-Type']:
-                return response.data
+                after_data = response.data
+                # Convert datetime fields to string
+                if isinstance(after_data, dict):
+                    for key, value in after_data.items():
+                        if isinstance(value, datetime):
+                            after_data[key] = value.isoformat()
+                    # 过滤掉password字段
+                    if 'password' in after_data:
+                        after_data['password'] = ''
+                return after_data
             else:
                 return f"响应状态码: {response.status_code}, 响应内容: {response.content.decode('utf-8')}"
         except Exception as e:

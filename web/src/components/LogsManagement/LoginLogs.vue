@@ -64,6 +64,16 @@ const columns = [
         title: '客户端IP',
         dataIndex: 'client_ip',
         width: 150,
+        customRender: ({ text }) => h('span', [
+            h('a', {
+                href: `https://ip.cn/`, // 跳转到IP查询网站
+                target: '_blank', // 在新选项卡中打开链接
+                style: { marginRight: '8px' }
+            }, [
+                h(IconFont, { type: 'icon-IPdizhi' }) 
+            ]),
+            text
+        ])
     },
     {
         title: '登录状态',

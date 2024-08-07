@@ -293,7 +293,7 @@ const columns = [
         title: '操作',
         dataIndex: 'crud',
         customRender: ({ record }) => h('div', { style: 'display: flex; align-items: center; justify-content: left; gap: 12px;' }, [
-            h('span', { style: 'color: rgb(20,93,254); cursor: pointer;', onClick: () => showEditModal(record) }, '编辑'),
+            h('span', { style: 'color: rgb(22,119,255); cursor: pointer;', onClick: () => showEditModal(record) }, '编辑'),
             h(Popconfirm, {
                 title: `是否要删除 ${record.username} 账号?`,
                 okText: 'Yes',

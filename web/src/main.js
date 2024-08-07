@@ -8,8 +8,8 @@ import './assets/css/global.css';
 import dayjs from 'dayjs';
 
 // 配置 axios
-// axios.defaults.baseURL = 'http://172.17.102.34:8100'; // 根据您的后端服务地址修改
- axios.defaults.baseURL = 'http://192.168.5.30:8100';
+axios.defaults.baseURL = 'http://172.17.102.34:8100'; // 根据您的后端服务地址修改
+//  axios.defaults.baseURL = 'http://192.168.5.30:8100';
 // axios.defaults.baseURL = 'http://localhost:8100'; // 根据您的后端服务地址修改
 
 // 其他全局配置，例如超时时间、请求头等
