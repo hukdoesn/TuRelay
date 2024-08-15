@@ -64,7 +64,9 @@ class LoginView(APIView):
             # 如果尝试次数达到5次，将用户锁定
             if user_lock.login_count >= 5:
                 user.status = 1
-                user.save()
+                user.save()     # 保存更新到数据库
+                user_lock.lock_count += 1       # 记录锁定次数
+                user_lock.save()  # 保存更新到数据库
                 # 记录锁定日志
                 LoginLog.objects.create(
                     user=user,

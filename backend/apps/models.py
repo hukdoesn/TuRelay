@@ -26,6 +26,7 @@ class UserLock(models.Model):
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")  # 关联到 User 模型
     login_count = models.IntegerField(default=0, verbose_name="登录尝试次数")  # 登录尝试次数
+    lock_count = models.IntegerField(default=0, verbose_name="尝试锁定次数")  # 尝试锁定次数
     last_attempt_time = models.DateTimeField(null=True, blank=True, verbose_name="最后尝试时间")  # 最后尝试时间
 
     class Meta:
@@ -132,3 +133,26 @@ class OperationLog(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.module} - {self.create_time}"
+
+class Credential(models.Model):
+    """
+    凭据模型，存储不同类型的凭据信息
+    """
+
+    id = models.AutoField(primary_key=True)  # 自动生成的 ID
+    name = models.CharField(max_length=150, verbose_name="凭据名称")  # 凭据名称
+    type = models.CharField(max_length=50, verbose_name="凭据类型")  # 凭据类型
+    account = models.CharField(max_length=150, null=True, blank=True, verbose_name="账户")  # 账户名
+    password = models.CharField(max_length=128, null=True, blank=True, verbose_name="密码")  # 密码（加密存储）
+    key = models.TextField(null=True, blank=True, verbose_name="密钥")  # 密钥
+    key_password = models.CharField(max_length=128, null=True, blank=True, verbose_name="密钥密码")  # 密钥密码
+    KeyId = models.CharField(max_length=255, null=True, blank=True, verbose_name="API Key")  # API 密钥
+    KeySecret = models.CharField(max_length=255, null=True, blank=True, verbose_name="API Secret")  # API 密钥
+    notes = models.TextField(null=True, blank=True, verbose_name="备注")  # 备注
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
+
+    class Meta:
+        db_table = 't_credential'  # 指定数据库表名为 t_credential
+
+    def __str__(self):
+        return f"{self.name} - {self.type}"

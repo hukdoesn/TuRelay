@@ -12,7 +12,7 @@
     <div class="button_create">
         <span>登录日志</span>
     </div>
-    <div class="table_login">
+    <div class="table_main">
         <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
             :scroll="tableScroll" size="middle" @change="handleTableChange" />
     </div>
@@ -88,6 +88,10 @@ const columns = [
         title: '原因',
         dataIndex: 'reason',
         width: 120,
+        customRender: ({ text }) => {
+            // 如果原因字段为空，则填充为'-'符号并添加左边距显示
+            return text ? text : h('div', { style: 'margin-left: 8px;' }, '-');
+        }
     },
     {
         title: '浏览器信息',

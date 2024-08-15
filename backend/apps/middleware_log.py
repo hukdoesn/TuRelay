@@ -1,7 +1,7 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.timezone import now
 from django.forms.models import model_to_dict
-from .models import OperationLog, User
+from .models import OperationLog, User, Credential
 from .utils import CustomTokenAuthentication
 import json
 from datetime import datetime
@@ -15,6 +15,7 @@ class OperationLogMiddleware(MiddlewareMixin):
     # URL和breadcrumbName映射
     BREADCRUMB_MAP = {
         '/api/users/': '用户列表',
+        '/api/credentials/': '凭据管理',
         '/api/asset-management/hosts/': '主机管理',
         '/api/asset-management/databases/': '数据库管理',
         # 其他API接口映射
@@ -103,17 +104,40 @@ class OperationLogMiddleware(MiddlewareMixin):
                 try:
                     user = User.objects.get(username=view_kwargs['username'])
                     user_dict = model_to_dict(user)
-                    # Convert datetime fields to string
+                    # 将日期时间字段转换为字符串
                     for key, value in user_dict.items():
-                        if isinstance(value, datetime):  # Ensure datetime is correctly referenced
+                        if isinstance(value, datetime):  # 确保正确引用日期时间
                             user_dict[key] = value.isoformat()
                     # 过滤掉password字段
                     if 'password' in user_dict:
-                        user_dict['password'] = ''
+                        user_dict['password'] = '***'
                     return user_dict
                 except User.DoesNotExist:
                     return None
-            # 可以添加其他模型的处理逻辑
+
+
+            # 获取凭据数据的before_change
+            if 'pk' in view_kwargs:  # 凭证ID传递为`pk`
+                try:
+                    credential = Credential.objects.get(pk=view_kwargs['pk'])
+                    credential_dict = model_to_dict(credential)
+                    # 将日期时间字段转换为字符串
+                    for key, value in credential_dict.items():
+                        if isinstance(value, datetime):
+                            credential_dict[key] = value.isoformat()
+                    # 过滤掉敏感字段，如密钥或密码
+                    if 'password' in credential_dict:
+                        credential_dict['password'] = '***'
+                    if 'key' in credential_dict:
+                        credential_dict['key'] = '****'  # 避免显示实际密钥
+                    if 'key_password' in credential_dict:
+                        credential_dict['key_password'] = '***'
+                    if 'KeySecret' in credential_dict:
+                        credential_dict['KeySecret'] = '****'  # 避免显示实际KeySecret
+                    return credential_dict
+                except Credential.DoesNotExist:
+                    return None
+                
         return None
 
 
@@ -132,6 +156,13 @@ class OperationLogMiddleware(MiddlewareMixin):
                     # 过滤掉password字段
                     if 'password' in after_data:
                         after_data['password'] = ''
+                    # 过滤掉敏感字段，如密钥或密码
+                    if 'key' in after_data:
+                        after_data['key'] = '****'  # 避免显示实际密钥
+                    if 'key_password' in after_data:
+                        after_data['key_password'] = '****'
+                    if 'KeySecret' in after_data:
+                        after_data['KeySecret'] = '****'  # 避免显示实际KeySecret
                 return after_data
             else:
                 return f"响应状态码: {response.status_code}, 响应内容: {response.content.decode('utf-8')}"

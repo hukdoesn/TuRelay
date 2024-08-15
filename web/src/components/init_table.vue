@@ -2,7 +2,7 @@
     <div class="content_table">
         <div class="input_tools">
             <a-input class="input_item" addonBefore="用户名"  placeholder="请输入用户名" />
-            <a-input class="input_item" addonBefore="登录IP" autofocus placeholder="请输入登录IP" />
+            <a-input class="input_item" addonBefore="登录IP" placeholder="请输入登录IP" />
         </div>
         <div class="button_tools">
             <a-button class="button_font">重置</a-button>
@@ -12,14 +12,14 @@
     <div class="button_create">
         <span>登录日志</span>
     </div>
-    <div class="table_login">
+    <div class="table_main">
         <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
             :scroll="tableScroll" size="middle" @change="handleTableChange" />
     </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue' 
+import { ref, reactive , onMounted, h} from 'vue' 
 import { message } from 'ant-design-vue';
 import axios from 'axios';  // 引入axios用于请求后端API
 

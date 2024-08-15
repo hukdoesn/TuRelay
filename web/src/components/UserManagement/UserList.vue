@@ -21,7 +21,7 @@
     <!-- 重置密码模态框 -->
     <a-modal v-model:open="resetPasswordModalVisible" title="重置密码" @ok="handleResetPasswordOk"
         @cancel="handleResetPasswordCancel">
-        <a-form :model="resetPasswordForm">
+        <a-form :model="resetPasswordForm" >
             <a-form-item label="新密码" name="password" :rules="formRules.password">
                 <a-input-password v-model:value="resetPasswordForm.newPassword" placeholder="请输入新密码" />
             </a-form-item>
@@ -29,9 +29,8 @@
     </a-modal>
     <a-modal v-model:open="editModalVisible" title="编辑用户" @ok="handleEditOk" @cancel="handleEditCancel">
         <!-- 编辑用户表单 -->
-        <a-form :model="editForm">
+        <a-form :model="editForm"  labelAlign="right" :labelCol="{ span: 3 }">
             <a-form-item label="用户" name="username" :rules="formRules.username">
-            
                 <a-input :disabled="true" v-model:value="editForm.username" />
             </a-form-item>
             <a-form-item label="名称" name="name" :rules="formRules.name">
@@ -63,7 +62,7 @@
     <!-- 新建用户模态框 -->
     <a-modal v-model:open="createUserModalVisible" title="新建用户" @ok="handleCreateUserOk"
         @cancel="handleCreateUserCancel" @open="resetCreateUserForm">
-        <a-form :model="createUserForm" :rules="formRules" ref="createFormRef">
+        <a-form :model="createUserForm" :rules="formRules" ref="createFormRef" labelAlign="right" :labelCol="{ span: 3 }">
             <a-form-item label="用户" name="username" :rules="formRules.username">
                 <a-input v-model:value="createUserForm.username" placeholder="请输入用户名" />
             </a-form-item>
@@ -167,7 +166,9 @@ const createUserForm = reactive({
 const formRules = reactive({
     username: [
         { required: true, message: '请输入用户名', trigger: 'blur' },
-        { min: 3, max: 15, message: '用户名长度在 3 到 15 个字符', trigger: 'blur' }
+        { min: 3, max: 15, message: '用户名长度在 3 到 15 个字符', trigger: 'blur' },
+        // 限制中文且只允许英语或拼音的新规则
+        { pattern: /^[a-zA-Z0-9]+$/, message: '用户名只能包含英文', trigger: 'blur' }
     ],
     name: [
         { required: true, message: '请输入名称', trigger: 'blur' }
@@ -255,7 +256,7 @@ const columns = [
                 roleName,
                 description ? h('span', [
                     '\u00A0\u00A0',  // 添加两个不间断空格
-                    h(Tag, { bordered: false, color: 'processing' }, () => h('span', { style: { fontSize: '10px' } }, description))  // 设置字体大小为14px
+                    h(Tag, { bordered: false, color: '' }, () => h('span', { style: { fontSize: '10px' } }, description))  // 设置字体大小为14px
                 ]) : null
             ]);
         }
@@ -381,6 +382,14 @@ const resetFilters = () => {
 
 // 新建用户确认处理函数
 const handleCreateUserOk = async () => {
+    // 触发表单验证
+    try {
+        await createFormRef.value.validateFields();
+    } catch (validationError) {
+        message.error('请检查表单是否填写正确');
+        console.error('表单验证错误:', validationError);
+        return; // 如果验证失败，则提前返回
+    }
     checkPermission(async () => {
         try {
             const token = localStorage.getItem('accessToken');
@@ -389,7 +398,6 @@ const handleCreateUserOk = async () => {
                 permissions: Array.isArray(createUserForm.permissions) ? createUserForm.permissions : [createUserForm.permissions]
             };
 
-            console.log('FormData being sent:', formData);  // 打印发送的数据
             // 发送POST请求以创建新用户
             await axios.post('/api/users/create/', formData, {
                 headers: {

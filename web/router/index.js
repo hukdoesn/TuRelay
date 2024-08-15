@@ -79,11 +79,11 @@ const router = createRouter({
           } 
         },
         { 
-          path: '/user-management/login-lock', 
-          component: () => import('@/components/UserManagement/LoginLock.vue'), 
+          path: '/user-management/lock-record', 
+          component: () => import('@/components/UserManagement/LockRecord.vue'), 
           meta: { 
             requiresAuth: true, 
-            breadcrumbName: '登录锁定' 
+            breadcrumbName: '锁定记录' 
           } 
         },
         { 

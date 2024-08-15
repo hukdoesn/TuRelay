@@ -29,8 +29,8 @@
           <a-menu-item key="/user-management/user-groups">
             <router-link to="/user-management/user-groups">用户组</router-link>
           </a-menu-item>
-          <a-menu-item key="/user-management/login-lock">
-            <router-link to="/user-management/login-lock">登录锁定</router-link>
+          <a-menu-item key="/user-management/lock-record">
+            <router-link to="/user-management/lock-record">锁定记录</router-link>
           </a-menu-item>
           <a-menu-item key="/user-management/credentials">
             <router-link to="/user-management/credentials">凭据管理</router-link>

@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView
+from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -13,4 +13,9 @@ urlpatterns = [
     path('api/roles_permissions/', RolesPermissionsView.as_view(), name='roles-permissions'),  # 配置获取角色和权限数据的API路径
     path('api/login_logs/', LoginLogView.as_view(), name='login-log'),  # 配置获取登录日志数据的API路径
     path('api/operation_logs/', OperationLogView.as_view(), name='operation-log'),  # 配置获取操作日志数据的API路径
+    path('api/lock_record/', LockRecordView.as_view(), name='lock-record'),  # 配置获取锁定记录的API路径
+    path('api/credentials/', CredentialView.as_view(), name='credentials-list'),  # 配置凭据列表的API路径
+    path('api/credentials/create/', CredentialView.as_view(), name='credentials-create'),  # 配置新建凭据的API路径
+    path('api/credentials/<int:pk>/delete/', CredentialView.as_view(), name='credentials-delete'),  # 配置删除凭据的API路径
+    path('api/credentials/<int:pk>/update/', CredentialView.as_view(), name='credentials-update'),  # 配置更新凭据的API路径
 ]

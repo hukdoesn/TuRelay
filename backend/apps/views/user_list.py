@@ -1,4 +1,4 @@
-from apps.utils import APIView, Response, User, status, Paginator, EmptyPage, PageNotAnInteger, CustomTokenAuthentication, IsAuthenticated, Role, Permission, RolePermission, user_has_view_permission
+from apps.utils import APIView, Response, User, UserLock, status, Paginator, EmptyPage, PageNotAnInteger, CustomTokenAuthentication, IsAuthenticated, Role, Permission, RolePermission, user_has_view_permission
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -188,6 +188,13 @@ class UserDetailView(APIView):
             # 获取新的状态值
             new_status = request.data.get('status')
             user.status = new_status  # 更新状态
+            
+            # 获取或创建用户锁定记录
+            user_lock, created = UserLock.objects.get_or_create(user=user)
+            
+            # 解锁用户时重置登录尝试次数
+            user_lock.login_count = 0
+            user_lock.save()
 
             # 检查并删除用户的 token
             if new_status:  # 如果锁定用户，尝试清除其token
