@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView
+from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -18,4 +18,8 @@ urlpatterns = [
     path('api/credentials/create/', CredentialView.as_view(), name='credentials-create'),  # 配置新建凭据的API路径
     path('api/credentials/<int:pk>/delete/', CredentialView.as_view(), name='credentials-delete'),  # 配置删除凭据的API路径
     path('api/credentials/<int:pk>/update/', CredentialView.as_view(), name='credentials-update'),  # 配置更新凭据的API路径
+    path('api/monitor_domains/', DomainMonitorView.as_view(), name='domain-monitor'),  # 配置域名监控列表的API路径
+    path('api/monitor_domains/create/', DomainMonitorView.as_view(), name='domain-monitor-create'),  # 配置新建域名监控的API路径
+    path('api/monitor_domains/<int:pk>/update/', DomainMonitorView.as_view(), name='domain-monitor-update'),  # 配置更新域名监控的API路径
+    path('api/monitor_domains/<int:pk>/delete/', DomainMonitorView.as_view(), name='domain-monitor-delete'),  # 配置删除域名监控的API路径
 ]

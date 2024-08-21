@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'corsheaders',      # 添加 corsheaders 应用，用于处理跨域请求
     'rest_framework', # Django REST framework
     'rest_framework.authtoken', # Token 认证
+    'django_apscheduler',
     'apps', # 本地应用
 ]
 
@@ -201,6 +202,11 @@ LOGGING = {
             'handlers': ['error', 'info', 'console', 'default'],  # 自定义日志记录器，包括错误、信息、控制台和默认
             'level': 'DEBUG',  # 记录DEBUG级别及以上的日志
             'propagate': True  # 向上级传播日志
+        },
+        'apscheduler': {
+            'handlers': ['default', 'console'],
+            'level': 'INFO',  # 确保捕获APScheduler日志
+            'propagate': False
         },
     }
 }

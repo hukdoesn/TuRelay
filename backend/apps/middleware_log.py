@@ -1,7 +1,7 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.timezone import now
 from django.forms.models import model_to_dict
-from .models import OperationLog, User, Credential
+from .models import OperationLog, User, Credential, DomainMonitor
 from .utils import CustomTokenAuthentication
 import json
 from datetime import datetime
@@ -18,6 +18,7 @@ class OperationLogMiddleware(MiddlewareMixin):
         '/api/credentials/': '凭据管理',
         '/api/asset-management/hosts/': '主机管理',
         '/api/asset-management/databases/': '数据库管理',
+        '/api/monitor_domains/':'站点监控'
         # 其他API接口映射
     }
 
@@ -106,7 +107,7 @@ class OperationLogMiddleware(MiddlewareMixin):
                     user_dict = model_to_dict(user)
                     # 将日期时间字段转换为字符串
                     for key, value in user_dict.items():
-                        if isinstance(value, datetime):  # 确保正确引用日期时间
+                        if isinstance(value, datetime):
                             user_dict[key] = value.isoformat()
                     # 过滤掉password字段
                     if 'password' in user_dict:
@@ -115,29 +116,43 @@ class OperationLogMiddleware(MiddlewareMixin):
                 except User.DoesNotExist:
                     return None
 
+            if 'pk' in view_kwargs:
+                # 通过检查view_func名称或请求路径来确定我们正在处理的模型
+                if 'credential' in request.path:
+                    # 在数据之前处理凭证
+                    try:
+                        credential = Credential.objects.get(pk=view_kwargs['pk'])
+                        credential_dict = model_to_dict(credential)
+                        # 将日期时间字段转换为字符串
+                        for key, value in credential_dict.items():
+                            if isinstance(value, datetime):
+                                credential_dict[key] = value.isoformat()
+                        # 过滤掉敏感字段，如密钥或密码
+                        if 'password' in credential_dict:
+                            credential_dict['password'] = '***'
+                        if 'key' in credential_dict:
+                            credential_dict['key'] = '****'  # 避免显示实际密钥
+                        if 'key_password' in credential_dict:
+                            credential_dict['key_password'] = '****'
+                        if 'KeySecret' in credential_dict:
+                            credential_dict['KeySecret'] = '****'  # 避免显示实际KeySecret
+                        return credential_dict
+                    except Credential.DoesNotExist:
+                        return None
 
-            # 获取凭据数据的before_change
-            if 'pk' in view_kwargs:  # 凭证ID传递为`pk`
-                try:
-                    credential = Credential.objects.get(pk=view_kwargs['pk'])
-                    credential_dict = model_to_dict(credential)
-                    # 将日期时间字段转换为字符串
-                    for key, value in credential_dict.items():
-                        if isinstance(value, datetime):
-                            credential_dict[key] = value.isoformat()
-                    # 过滤掉敏感字段，如密钥或密码
-                    if 'password' in credential_dict:
-                        credential_dict['password'] = '***'
-                    if 'key' in credential_dict:
-                        credential_dict['key'] = '****'  # 避免显示实际密钥
-                    if 'key_password' in credential_dict:
-                        credential_dict['key_password'] = '***'
-                    if 'KeySecret' in credential_dict:
-                        credential_dict['KeySecret'] = '****'  # 避免显示实际KeySecret
-                    return credential_dict
-                except Credential.DoesNotExist:
-                    return None
-                
+                elif 'monitor_domain' in request.path:
+                    # 在数据之前处理DomainMonitor
+                    try:
+                        monitor = DomainMonitor.objects.get(pk=view_kwargs['pk'])
+                        monitor_dict = model_to_dict(monitor)
+                        # 将日期时间字段转换为字符串
+                        for key, value in monitor_dict.items():
+                            if isinstance(value, datetime):
+                                monitor_dict[key] = value.isoformat()
+                        return monitor_dict
+                    except DomainMonitor.DoesNotExist:
+                        return None
+
         return None
 
 

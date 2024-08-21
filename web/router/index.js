@@ -115,7 +115,7 @@ const router = createRouter({
            component: () => import('@/components/AssetManagement/Websites.vue'), 
            meta: { 
             requiresAuth: true, 
-            breadcrumbName: '网站'
+            breadcrumbName: '站点监控'
            } 
         },
         { 

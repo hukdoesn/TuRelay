@@ -48,7 +48,7 @@
             <router-link to="/asset-management/databases">数据库</router-link>
           </a-menu-item>
           <a-menu-item key="/asset-management/websites">
-            <router-link to="/asset-management/websites">网站</router-link>
+            <router-link to="/asset-management/websites">站点监控</router-link>
           </a-menu-item>
         </a-sub-menu>
         <a-menu-item key="/web-terminal">

@@ -156,3 +156,30 @@ class Credential(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.type}"
+
+
+class DomainMonitor(models.Model):
+    """
+    域名监控模型，存储域名监控的相关信息
+    """
+    name = models.CharField(max_length=150, verbose_name="监控名称")  # 监控名称
+    domain = models.CharField(max_length=255, verbose_name="域名")  # 域名
+    # type = models.CharField(max_length=50, verbose_name="监控类型")  # 监控类型
+    connectivity = models.BooleanField(default=False, verbose_name="连通性")  # 连通性
+    status_code = models.IntegerField(null=True, blank=True, verbose_name="状态码")  # 状态码
+    redirection = models.CharField(max_length=255, null=True, blank=True, verbose_name="重定向地址")  # 重定向地址
+    time_consumption = models.FloatField(null=True, blank=True, verbose_name="耗时（秒）")  # 耗时（秒）
+    # dns = models.CharField(max_length=255, null=True, blank=True, verbose_name="DNS 信息")  # DNS 信息
+    tls_version = models.CharField(max_length=50, null=True, blank=True, verbose_name="TLS 版本")  # TLS 版本
+    http_version = models.CharField(max_length=50, null=True, blank=True, verbose_name="HTTP 版本")  # HTTP 版本
+    certificate_days = models.IntegerField(null=True, blank=True, verbose_name="证书剩余天数")  # 证书剩余天数
+    enable = models.BooleanField(default=True, verbose_name="启用")  # 是否启用监控
+    alert = models.BooleanField(default=False, verbose_name="告警")  # 是否开启告警
+    monitor_frequency = models.IntegerField(default=60, verbose_name="监控频率（秒）")  # 监控频率（秒）
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
+
+    class Meta:
+        db_table = 't_domain_monitor'  # 指定数据库表名为 t_domain_monitor
+
+    def __str__(self):
+        return f"{self.name} - {self.domain}"
