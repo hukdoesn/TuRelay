@@ -42,7 +42,7 @@
             <span>资产管理</span>
           </template>
           <a-menu-item key="/asset-management/hosts">
-            <router-link to="/asset-management/hosts">主机</router-link>
+            <router-link to="/asset-management/hosts">主机列表</router-link>
           </a-menu-item>
           <a-menu-item key="/asset-management/databases">
             <router-link to="/asset-management/databases">数据库</router-link>

@@ -99,7 +99,7 @@ const router = createRouter({
           component: () => import('@/components/AssetManagement/Hosts.vue'), 
           meta: { 
             requiresAuth: true, 
-            breadcrumbName: '主机' 
+            breadcrumbName: '主机列表' 
           } 
         },
         { 

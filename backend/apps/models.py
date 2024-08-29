@@ -183,3 +183,25 @@ class DomainMonitor(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.domain}"
+
+class Host(models.Model):
+    """
+    主机模型，存储主机信息
+    """
+
+    name = models.CharField(max_length=150, verbose_name="主机名称")  # 主机名称
+    status = models.BooleanField(default=False, verbose_name="连接状态")  # 是否可连接
+    node = models.CharField(max_length=255, verbose_name="节点")  # 节点，用于树形控制
+    operating_system = models.CharField(max_length=50, verbose_name="操作系统")  # 操作系统
+    network = models.GenericIPAddressField(verbose_name="IP地址")  # IP地址
+    protocol = models.CharField(max_length=10, verbose_name="协议")  # 协议
+    port = models.IntegerField(verbose_name="端口")  # 端口
+    account_type = models.ForeignKey(Credential, on_delete=models.CASCADE, verbose_name="关联凭据")  # 关联凭据
+    remarks = models.TextField(null=True, blank=True, verbose_name="备注")  # 备注
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
+
+    class Meta:
+        db_table = 't_host'  # 指定数据库表名为 t_host
+
+    def __str__(self):
+        return f"{self.name} - {self.operating_system} - {self.network}"

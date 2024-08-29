@@ -2,8 +2,7 @@
     <div class="content_tools">
         <div class="input_tools">
             <a-input class="input_item" addonBefore="用户名" v-model:value="searchUsername" placeholder="请输入用户名" />
-            <a-input class="input_item" addonBefore="邮箱" v-model:value.lazy="searchEmail"
-                placeholder="请输入邮箱" />
+            <a-input class="input_item" addonBefore="邮箱" v-model:value.lazy="searchEmail" placeholder="请输入邮箱" />
         </div>
         <div class="button_tools">
             <a-button class="button_font" @click="resetFilters">重置</a-button>
@@ -21,7 +20,7 @@
     <!-- 重置密码模态框 -->
     <a-modal v-model:open="resetPasswordModalVisible" title="重置密码" @ok="handleResetPasswordOk"
         @cancel="handleResetPasswordCancel">
-        <a-form :model="resetPasswordForm" >
+        <a-form :model="resetPasswordForm">
             <a-form-item label="新密码" name="password" :rules="formRules.password">
                 <a-input-password v-model:value="resetPasswordForm.newPassword" placeholder="请输入新密码" />
             </a-form-item>
@@ -29,7 +28,7 @@
     </a-modal>
     <a-modal v-model:open="editModalVisible" title="编辑用户" @ok="handleEditOk" @cancel="handleEditCancel">
         <!-- 编辑用户表单 -->
-        <a-form :model="editForm"  labelAlign="right" :labelCol="{ span: 3 }">
+        <a-form :model="editForm" labelAlign="right" :labelCol="{ span: 3 }">
             <a-form-item label="用户" name="username" :rules="formRules.username">
                 <a-input :disabled="true" v-model:value="editForm.username" />
             </a-form-item>
@@ -62,7 +61,8 @@
     <!-- 新建用户模态框 -->
     <a-modal v-model:open="createUserModalVisible" title="新建用户" @ok="handleCreateUserOk"
         @cancel="handleCreateUserCancel" @open="resetCreateUserForm">
-        <a-form :model="createUserForm" :rules="formRules" ref="createFormRef" labelAlign="right" :labelCol="{ span: 3 }">
+        <a-form :model="createUserForm" :rules="formRules" ref="createFormRef" labelAlign="right"
+            :labelCol="{ span: 3 }">
             <a-form-item label="用户" name="username" :rules="formRules.username">
                 <a-input v-model:value="createUserForm.username" placeholder="请输入用户名" />
             </a-form-item>
@@ -85,8 +85,8 @@
             </a-form-item>
             <a-form-item v-if="showPermissions" label="权限">
                 <a-radio-group v-model:value="createUserForm.permissions">
-                    <a-radio v-for="permission in permissions" :key="permission.id"
-                        :value="permission.id">{{ permission.name }}</a-radio>
+                    <a-radio v-for="permission in permissions" :key="permission.id" :value="permission.id">{{
+                permission.name }}</a-radio>
                 </a-radio-group>
             </a-form-item>
             <a-form-item label="状态">
@@ -105,7 +105,7 @@ import axios from 'axios'
 import { message, Tag, Badge, Modal, Dropdown, Menu, Popconfirm, MenuItem } from 'ant-design-vue'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
-import {showPermissionWarning} from '@/components/Global/PermissonWarning.vue'
+import { showPermissionWarning, checkPermission } from '@/components/Global/PermissonWarning.vue'
 
 // 获取 router 实例
 const router = useRouter()
@@ -212,18 +212,6 @@ const showPermissions = ref(false)
 
 // 权限模态框的引用
 const permissionModal = ref(null)
-
-// 通用权限检查函数
-const checkPermission = (callback) => {
-    const token = localStorage.getItem('accessToken');
-    const payload = JSON.parse(atob(token.split('.')[1])); // 解码JWT的负载部分
-    console.log(payload)
-    if (payload.is_read_only) {
-        showPermissionWarning();  // 调用分离的权限提示函数
-    } else {
-        callback();
-    }
-};
 
 // 表格列定义
 const columns = [
@@ -603,24 +591,24 @@ const handleEditCancel = () => {
 
 // 处理角色变化
 const handleRoleChange = (mode) => {
-  let form;
-  if (mode === 'create') {
-    form = createUserForm;
-  } else {
-    form = editForm;
-  }
-  
-  const selectedRoleId = form.role;
-  
-  if (selectedRoleId === 1) { // Assuming 1 is the ID for 'Administrator'
-    form.permissions = [2]; // Automatically set to '全部权限'
-    showPermissions.value = false; // Hide permissions selection
-    editShowPermissions.value = false;
-  } else {
-    form.permissions = []; // Clear permissions
-    showPermissions.value = mode === 'create'; // Show permissions selection only in create mode
-    editShowPermissions.value = mode === 'edit';
-  }
+    let form;
+    if (mode === 'create') {
+        form = createUserForm;
+    } else {
+        form = editForm;
+    }
+
+    const selectedRoleId = form.role;
+
+    if (selectedRoleId === 1) { // 假设1是“管理员”的ID
+        form.permissions = [2]; // 自动设置为“全部权限”
+        showPermissions.value = false; // 隐藏权限选择
+        editShowPermissions.value = false;
+    } else {
+        form.permissions = []; // 清除权限
+        showPermissions.value = mode === 'create'; // 仅在创建模式下显示权限选择
+        editShowPermissions.value = mode === 'edit';
+    }
 };
 
 // 初始化加载用户列表和角色、权限数据

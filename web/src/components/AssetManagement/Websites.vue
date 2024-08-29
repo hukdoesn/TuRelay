@@ -62,9 +62,9 @@
                     <a-radio value="15">15秒</a-radio>
                     <a-radio value="30">30秒</a-radio>
                     <a-radio value="60">1分钟</a-radio>
-                    <a-radio value="120">2分钟</a-radio>
                     <a-radio value="300">5分钟</a-radio>
                     <a-radio value="600">10分钟</a-radio>
+                    <a-radio value="1800">30分钟</a-radio>
                 </a-radio-group>
             </a-form-item>
             <a-form-item label="是否告警" name="alert">
@@ -90,9 +90,9 @@
                     <a-radio value="15">15秒</a-radio>
                     <a-radio value="30">30秒</a-radio>
                     <a-radio value="60">1分钟</a-radio>
-                    <a-radio value="120">2分钟</a-radio>
                     <a-radio value="300">5分钟</a-radio>
                     <a-radio value="600">10分钟</a-radio>
+                    <a-radio value="1800">30分钟</a-radio>
                 </a-radio-group>
             </a-form-item>
             <a-form-item label="是否告警" name="alert">
