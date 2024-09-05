@@ -1,7 +1,7 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.timezone import now
 from django.forms.models import model_to_dict
-from .models import OperationLog, User, Credential, DomainMonitor
+from .models import OperationLog, User, Credential, DomainMonitor, Host
 from .utils import CustomTokenAuthentication
 import json
 from datetime import datetime
@@ -18,7 +18,8 @@ class OperationLogMiddleware(MiddlewareMixin):
         '/api/credentials/': '凭据管理',
         '/api/asset-management/hosts/': '主机管理',
         '/api/asset-management/databases/': '数据库管理',
-        '/api/monitor_domains/':'站点监控'
+        '/api/monitor_domains/':'站点监控',
+        '/api/hosts/': '主机列表',
         # 其他API接口映射
     }
 
@@ -151,6 +152,19 @@ class OperationLogMiddleware(MiddlewareMixin):
                                 monitor_dict[key] = value.isoformat()
                         return monitor_dict
                     except DomainMonitor.DoesNotExist:
+                        return None
+                    
+                elif 'host' in request.path:
+                    # 在数据之前处理Host
+                    try:
+                        host = Host.objects.get(pk=view_kwargs['pk'])
+                        host_dict = model_to_dict(host)
+                        # 将日期时间字段转换为字符串
+                        for key, value in host_dict.items():
+                            if isinstance(value, datetime):
+                                host_dict[key] = value.isoformat()
+                        return host_dict
+                    except Host.DoesNotExist:
                         return None
 
         return None

@@ -36,8 +36,14 @@
                 <a-form-item label="账户" name="account" :rules="rules.account">
                     <a-input v-model:value="form.account" placeholder="请输入账户" />
                 </a-form-item>
-                <a-form-item label="密钥" name="key" :rules="rules.key">
-                    <a-textarea v-model:value="form.key" placeholder="请输入新密钥" />
+                <a-form-item label="密钥" name="key" style="margin-bottom: -15px;">
+                    <a-textarea v-model:value="form.key" placeholder="请输入密钥"/>
+                </a-form-item>
+                <a-form-item>
+                    <!-- 添加上传文件按钮 -->
+                    <a-upload :before-upload="handleFileUpload" :show-upload-list="false">
+                        <a-button type="dashed">上传文件</a-button>
+                    </a-upload>
                 </a-form-item>
                 <a-form-item label="密钥密码" name="key_password" :rules="rules.key_password">
                     <a-input type="password" v-model:value="form.key_password" placeholder="请输入新密钥密码" />
@@ -66,7 +72,7 @@
 import { ref, reactive, defineExpose, defineEmits } from 'vue';
 import { message } from 'ant-design-vue'
 import axios from 'axios'
-import { showPermissionWarning } from '@/components/Global/PermissonWarning.vue'
+import { showPermissionWarning, checkPermission } from '@/components/Global/PermissonWarning.vue'
 
 // 定义 emit 事件
 const emit = defineEmits(['refresh']);
@@ -106,17 +112,6 @@ const rules = {
     KeySecret: [{ required: false, message: '请输入新Key Secret', trigger: 'blur' }],
 }
 
-// 权限检查函数
-const checkPermission = (callback) => {
-    const token = localStorage.getItem('accessToken')
-    const payload = JSON.parse(atob(token.split('.')[1])) // 解码JWT的负载部分
-    if (payload.is_read_only) {
-        showPermissionWarning()  // 调用分离的权限提示函数
-    } else {
-        callback()
-    }
-}
-
 // 重置表单内容的函数
 const resetForm = () => {
     form.id = null
@@ -130,6 +125,16 @@ const resetForm = () => {
     form.KeySecret = ''
     form.notes = ''
 }
+
+// 处理文件上传
+const handleFileUpload = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        form.key = e.target.result; // 将文件内容设置到密钥字段中
+    };
+    reader.readAsText(file);
+    return false; // 阻止自动上传
+};
 
 // 处理模态框的确定按钮点击事件
 const handleOk = () => {

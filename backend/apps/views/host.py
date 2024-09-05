@@ -1,8 +1,17 @@
-from apps.utils import APIView, Response, status, Paginator, EmptyPage, PageNotAnInteger, CustomTokenAuthentication, IsAuthenticated, Credential, Host
+from apps.utils import APIView, Response, status, Paginator, EmptyPage, PageNotAnInteger, CustomTokenAuthentication, IsAuthenticated, Credential, Host, Node
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from rest_framework import serializers
 import json
+import paramiko
+import io
+
+# 节点序列化器，用于验证和序列化 Node 模型的数据
+class NodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Node
+        fields = '__all__'
+
 
 # 主机序列化器，用于验证和序列化 Host 模型的数据
 class HostSerializer(serializers.ModelSerializer):
@@ -56,7 +65,7 @@ class HostView(APIView):
                 'id': host.id,
                 'name': host.name,
                 'status': host.status,
-                'node': host.node,
+                'node': host.node.name,  # 返回节点名称
                 'operating_system': host.operating_system,
                 'network': host.network,
                 'protocol': host.protocol,
@@ -170,4 +179,99 @@ class CredentialSelectionView(APIView):
         serializer = CredentialSelectionSerializer(credentials, many=True)
 
         # 返回序列化后的数据
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+class TestConnectionView(APIView):
+    """
+    测试主机连接的视图类，并更新主机的连接状态
+    """
+    authentication_classes = [CustomTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """
+        处理POST请求，测试主机连接并更新连接状态
+        """
+        host_id = request.data.get('host_id')
+        ip_address = request.data.get('ip_address')
+        port = (request.data.get('port'))
+        credential_id = request.data.get('credential_id')
+
+        # 获取主机对象和凭据信息
+        host = get_object_or_404(Host, pk=host_id)
+        credential = get_object_or_404(Credential, pk=credential_id)
+
+        # 测试连接
+        if credential.type == '密码':
+            result, error = self.test_ssh_connection(ip_address, port, credential.account, credential.password)
+        elif credential.type == '密钥':
+            result, error = self.test_ssh_key_connection(ip_address, port, credential.account, credential.key, credential.key_password)
+        else:
+            return Response({'status': 1, 'error': '不支持的凭据类型'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 更新主机状态字段
+        host.status = result
+        host.save()
+
+        # 根据结果返回响应
+        if result:
+            return Response({'status': 0}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status': 1, 'error': error}, status=status.HTTP_200_OK)
+
+    def test_ssh_connection(self, ip, port, username, password):
+        """
+        使用密码测试SSH连接
+        """
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(ip, port=port, username=username, password=password)
+            ssh.close()
+            return True, None
+        except paramiko.AuthenticationException as auth_error:
+            return False, f"Authentication failed: {auth_error}"
+        except paramiko.SSHException as ssh_error:
+            return False, f"SSH error occurred: {ssh_error}"
+        except Exception as e:
+            return False, f"Unexpected error: {str(e)}"
+
+    def test_ssh_key_connection(self, ip, port, username, key, key_password=None):
+            """
+            使用密钥测试SSH连接
+            """
+            try:
+                # 使用StringIO将字符串键转换为类似文件的对象
+                key_file = io.StringIO(key)
+                # 加载私钥，处理可能提供或不提供密钥密码的情况
+                pkey = paramiko.RSAKey.from_private_key(key_file, password=key_password)
+                
+                ssh = paramiko.SSHClient()
+                ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                ssh.connect(ip, port=port, username=username, pkey=pkey)
+                ssh.close()
+                return True, None
+            except paramiko.AuthenticationException as auth_error:
+                return False, f"Authentication failed: {auth_error}"
+            except paramiko.SSHException as ssh_error:
+                return False, f"SSH error occurred: {ssh_error}"
+            except Exception as e:
+                return False, f"Unexpected error: {str(e)}"
+            
+# 新增节点信息的API
+class NodeSelectionView(APIView):
+    """
+    NodeSelectionView 类返回简要的节点信息，
+    包括 id 和 name。
+    """
+    authentication_classes = [CustomTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """
+        处理GET请求，返回节点的简要信息列表。
+        """
+        nodes = Node.objects.all()
+        serializer = NodeSerializer(nodes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

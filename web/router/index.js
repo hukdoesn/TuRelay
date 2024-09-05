@@ -201,6 +201,14 @@ const router = createRouter({
       ]
     },
     {
+      path: '/web-terminal/:hostId', 
+      component: () => import('@/components/Terminal/WebShellTerminal.vue'), 
+      meta: { 
+        requiresAuth: true, 
+        breadcrumbName: 'web终端' 
+      } 
+    },    
+    {
       path: '/:pathMatch(.*)*',
       name: '404',
       component: () => import('@/components/Global/404.vue'),

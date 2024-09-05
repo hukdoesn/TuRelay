@@ -18,8 +18,7 @@ import Content from './Core/Content.vue';
 import Footer from './Core/Footer.vue';
 </script>
 
-  
-  <style scoped>
+<style scoped>
   .site-layout .site-layout-background {
     background: #fff;
   }
@@ -27,5 +26,5 @@ import Footer from './Core/Footer.vue';
   [data-theme='dark'] .site-layout .site-layout-background {
     background: #141414;
   }
-  </style>
+</style>
   

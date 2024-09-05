@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView
+from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_data
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -22,9 +22,12 @@ urlpatterns = [
     path('api/monitor_domains/create/', DomainMonitorView.as_view(), name='domain-monitor-create'),  # 配置新建域名监控的API路径
     path('api/monitor_domains/<int:pk>/update/', DomainMonitorView.as_view(), name='domain-monitor-update'),  # 配置更新域名监控的API路径
     path('api/monitor_domains/<int:pk>/delete/', DomainMonitorView.as_view(), name='domain-monitor-delete'),  # 配置删除域名监控的API路径
+    path('api/nodes/', NodeSelectionView.as_view(), name='node-selection'),  # 配置节点选择的API路径   
     path('api/hosts/', HostView.as_view(), name='hosts-list'),  # 配置主机列表的API路径
     path('api/hosts/create/', HostView.as_view(), name='hosts-create'),  # 配置新建主机的API路径
-    path('api/hosts/<int:pk>/update/', HostView.as_view(), name='hosts-update'),  # 配置更新主机的API路径
-    path('api/hosts/<int:pk>/delete/', HostView.as_view(), name='hosts-delete'),  # 配置删除主机的API路径
+    path('api/hosts/<str:pk>/update/', HostView.as_view(), name='hosts-update'),  # 配置更新主机的API路径
+    path('api/hosts/<str:pk>/delete/', HostView.as_view(), name='hosts-delete'),  # 配置删除主机的API路径
     path('api/hosts/credentials_selection/', CredentialSelectionView.as_view(), name='credential-selection'),  # 配置选择凭据的API路径
+    path('api/hosts/test_connection/', TestConnectionView.as_view(), name='test-connection'),  # 配置测试连接的API路径
+    path('api/terminal/get_tree/', get_tree_data, name='get-terminal-tree'),  # 配置获取终端树的API路径
 ]

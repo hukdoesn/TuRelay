@@ -2,9 +2,7 @@
     <div class="content_table">
         <!-- 筛选条件输入框 -->
         <div class="input_tools">
-            <a-input v-model:value="searchName" class="input_item" addonBefore="名称" placeholder="请输入主机
-            
-            名称" />
+            <a-input v-model:value="searchName" class="input_item" addonBefore="名称" placeholder="请输入主机名称" />
             <a-input v-model:value="searchNode" class="input_item" addonBefore="节点" placeholder="请输入节点" />
         </div>
         <!-- 重置和查询按钮 -->
@@ -70,7 +68,14 @@
                 </a-select>
             </a-form-item>
             <a-form-item label="节点" name="node" :rules="createRules.node">
-                <a-input v-model:value="createForm.node" placeholder="请输入节点" />
+                <a-select v-model:value="createForm.node" placeholder="请选择节点">
+                    <a-select-option 
+                        v-for="node in availableNodes" 
+                        :key="node.id" 
+                        :value="node.id">
+                        {{ node.name }}
+                    </a-select-option>
+                </a-select>
             </a-form-item>
             <a-form-item label="备注" name="remarks">
                 <a-textarea v-model:value="createForm.remarks" placeholder="请输入备注" />
@@ -135,7 +140,14 @@
                 </a-select>
             </a-form-item>
             <a-form-item label="节点" name="node" :rules="editRules.node">
-                <a-input v-model:value="editForm.node" placeholder="请输入节点" />
+                <a-select v-model:value="editForm.node" placeholder="请选择节点">
+                    <a-select-option 
+                        v-for="node in availableNodes" 
+                        :key="node.id" 
+                        :value="node.id">
+                        {{ node.name }}
+                    </a-select-option>
+                </a-select>
             </a-form-item>
             <a-form-item label="备注" name="remarks">
                 <a-textarea v-model:value="editForm.remarks" placeholder="请输入备注" />
@@ -177,6 +189,9 @@ const openCreateModal = () => {
 const searchName = ref('');
 const searchNode = ref('');
 const searchProtocol = ref('');
+
+// 节点选项
+const availableNodes = ref([]);
 
 // 表格数据
 const data = ref([])
@@ -223,7 +238,7 @@ const createForm = reactive({
     network: '',
     port: '',
     account_type: '',
-    node: 'Default',
+    node: '',
     remarks: '',
 });
 
@@ -315,13 +330,15 @@ const showCreateModal = () => {
         isCreateModalVisible.value = true;
         handleProtocolChange();  // 根据协议更新凭据
         resetCreateForm();  // 重置新建表单
+        fetchNodes(); // 获取节点列表
 };
 
 // 显示编辑模态框并填充表单数据
 const showEditModal = (record) => {
-        isEditModalVisible.value = true;
-        // 调用prepareEditForm来设置表单数据
-        prepareEditForm(record);
+    isEditModalVisible.value = true;
+    prepareEditForm(record); // This should populate the form
+    currentHost.value = record;  // Make sure currentHost is set
+    fetchNodes(); // 获取节点列表
 };
 const prepareEditForm = (record) => {
   // 设置要编辑的当前记录
@@ -347,7 +364,7 @@ const resetCreateForm = () => {
     createForm.network = '';
     createForm.port = '';
     createForm.account_type = '';
-    createForm.node = 'Default';
+    createForm.node = '';
     createForm.remarks = '';
     isAccountTypeDisabled.value = true;
     credentialOption.value = 'existing'; // 默认使用现有凭据
@@ -399,7 +416,17 @@ const handleEditOk = () => {
         editFormRef.value.validate().then(async () => {
             try {
                 const token = localStorage.getItem('accessToken');
-                await axios.put(`/api/hosts/${currentHost.value.id}/update/`, editForm, {
+
+                // 在发送请求之前，将account_type转换为ID
+                const selectedCredential = filteredCredentials.value.find(
+                    (credential) => credential.name === editForm.account_type
+                );
+                
+                // 确保account_type设置为ID，而不是名称
+                const formData = { ...editForm };
+                formData.account_type = selectedCredential ? selectedCredential.id : null;
+
+                await axios.put(`/api/hosts/${currentHost.value.id}/update/`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -452,8 +479,8 @@ const columns = [
         dataIndex: 'status',
         width: 100,
         customRender: ({ record }) => {
-            const status = record.status ? 'error' : 'success';
-            const text = record.status ? '错误' : '成功';
+            const status = record.status ? 'success' : 'error';
+            const text = record.status ? '成功' : '失败';
             return h('div', { style: 'display: flex;  align-items: center; gap: 8px;' }, [
                 h(Badge, { status }),
                 h('span', text)
@@ -521,7 +548,7 @@ const columns = [
         dataIndex: 'crud',
         // width: 170,
         customRender: ({ record }) => h('div', { style: 'display: flex; align-items: center; justify-content: left; gap: 12px;' }, [
-            h(IconFont, { type: 'icon-zhongduan', style: { fontSize: '18px', cursor: 'pointer' } }),
+            h(IconFont, { type: 'icon-zhongduan', style: { fontSize: '18px', cursor: 'pointer' }, onClick: () => openWebTerminal(record.id) }),
             h('span', { style: 'color: rgb(22,119,255); cursor: pointer;', onClick: () => showEditModal(record) }, '编辑'),
             h(Popconfirm, {
                 title: `是否要删除 ${record.name} 主机?`,
@@ -534,6 +561,21 @@ const columns = [
         ])
     },
 ]
+
+// 获取节点列表
+const fetchNodes = async () => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        const response = await axios.get('/api/nodes/', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        availableNodes.value = response.data;
+    } catch (error) {
+        message.error('获取节点列表失败');
+    }
+};
 
 // 获取主机列表
 const fetchHosts = async () => {
@@ -583,6 +625,48 @@ const handleDeleteHost = async (id) => {
     })  
 };
 
+const handleTestConnection = async () => {
+    // 如果编辑，使用“editForm”，如果创建，使用“createForm”
+    const form = isEditModalVisible.value ? editForm : createForm;
+
+    // 在提出请求之前，将凭证名称转换为ID
+    const selectedCredential = filteredCredentials.value.find(
+        (credential) => credential.name === form.account_type
+    );
+
+    let credentialId = form.account_type;
+
+    if (selectedCredential) {
+        credentialId = selectedCredential.id; // Convert the name to the ID
+    }
+
+    try {
+        const response = await axios.post('/api/hosts/test_connection/', {
+            host_id: currentHost.value?.id || null,  // 如果是编辑，使用当前记录的ID，否则为 null
+            ip_address: form.network, //来自正确表格的IP地址
+            port: form.port,          //    表格的端口
+            credential_id: credentialId, // 表格的凭据ID
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+            timeout: 20000,  // 20秒超时
+        });
+
+        if (response.data.status === 0) {
+            message.success('连接成功');
+            fetchHosts();  // 重新加载主机列表
+        } else {
+            message.error(`连接失败: ${response.data.error}`);
+        }
+    } catch (error) {
+        // 处理超时连接
+        if (error.code === 'ECONNABORTED') {
+            message.error('连接超时');
+        }
+    }
+};
+
 // 处理表格分页和排序变化
 const handleTableChange = (pagination) => {
     paginationOptions.current = pagination.current;
@@ -598,9 +682,14 @@ const resetFilters = () => {
     fetchHosts();
 }
 
+const openWebTerminal = (hostId) => {
+    window.open(`/web-terminal/${hostId}`, '_blank');
+};
+
 // 初次加载时获取主机列表
 onMounted(() => {
     fetchHosts();
+    fetchNodes(); // 获取节点列表
 })
 </script>
 

@@ -184,6 +184,19 @@ class DomainMonitor(models.Model):
     def __str__(self):
         return f"{self.name} - {self.domain}"
 
+class Node(models.Model):
+    """
+    节点模型，存储节点信息
+    """
+    name = models.CharField(max_length=150, verbose_name="节点名称")  # 节点名称
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
+
+    class Meta:
+        db_table = 't_node'  # 指定数据库表名为 t_node
+
+    def __str__(self):
+        return f"{self.name}"
+
 class Host(models.Model):
     """
     主机模型，存储主机信息
@@ -191,7 +204,7 @@ class Host(models.Model):
 
     name = models.CharField(max_length=150, verbose_name="主机名称")  # 主机名称
     status = models.BooleanField(default=False, verbose_name="连接状态")  # 是否可连接
-    node = models.CharField(max_length=255, verbose_name="节点")  # 节点，用于树形控制
+    node = models.ForeignKey(Node, on_delete=models.CASCADE, verbose_name="节点")  # 关联节点
     operating_system = models.CharField(max_length=50, verbose_name="操作系统")  # 操作系统
     network = models.GenericIPAddressField(verbose_name="IP地址")  # IP地址
     protocol = models.CharField(max_length=10, verbose_name="协议")  # 协议
