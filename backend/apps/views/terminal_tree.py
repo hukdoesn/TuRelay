@@ -1,60 +1,58 @@
 from django.http import JsonResponse
 from apps.models import Node, Host
+from django.db.models import Prefetch
 
-def build_tree_structure():
+def get_tree_structure(request):
     """
-    构建节点与主机的树结构数据
-    """
-    node_dict = {}
-
-    # 查询所有节点
-    nodes = Node.objects.all()
-
-    # 构建节点的层次结构
-    for node in nodes:
-        node_path = node.name.split("/")  # 按照 / 分割节点路径
-        current_level = node_dict
-
-        for part in node_path:
-            if part and part not in current_level:  # Ensure part is not empty
-                current_level[part] = {"children": {}}
-            current_level = current_level[part]["children"]
-
-    # 查询主机并将其添加到相应的节点
-    hosts = Host.objects.all()
-
-    for host in hosts:
-        node_id = host.node.id
-        node = Node.objects.get(id=node_id)
-        node_path = node.name.split("/")
-        current_level = node_dict
-
-        # Navigate to the correct node level for the host
-        for part in node_path:
-            if part:
-                current_level = current_level[part]["children"]
-
-        # 在对应的节点下添加主机
-        current_level[host.name] = {"title": host.name, "key": host.name, "type": "host"}
-
-    # 将字典转换为树形结构数组格式
-    def dict_to_tree(data):
-        tree = []
-        for key, value in data.items():
-            node = {"title": key, "key": key}  # Set title and key for each node
-            if "children" in value and value["children"]:
-                node["children"] = dict_to_tree(value["children"])
-            tree.append(node)
-        return tree
-
-    return dict_to_tree(node_dict)
-
-def get_tree_data(request):
-    """
-    API 端点，返回树结构数据
+    获取主机和节点的树结构，并根据主机的操作系统类型返回相应的图标信息
+    :param request: HTTP请求对象
+    :return: 包含节点和主机的树形结构的JSON响应
     """
     try:
-        tree_data = build_tree_structure()
-        return JsonResponse({"treeData": tree_data})
+        # 查询所有节点，预取相关联的主机
+        nodes = Node.objects.prefetch_related(
+            Prefetch('hosts', queryset=Host.objects.all())
+        ).all()
+
+        # 定义递归函数构建节点树
+        def build_tree(node):
+            # 获取子节点
+            children = node.children.all()
+            # 获取主机节点
+            hosts = node.hosts.all()
+
+            # 构建当前节点
+            node_data = {
+                'key': str(node.id),  # 作为唯一标识
+                'title': node.name,  # 显示节点名称
+                'children': [],  # 初始化children为空
+                'icon': 'folder',  # 为文件夹节点设置图标
+                'isLeaf': False  # 确保所有文件夹节点（非主机节点）是非叶子节点
+            }
+
+            # 先添加主机作为叶子节点，并根据操作系统类型选择图标
+            for host in hosts:
+                host_icon = 'linux' if host.operating_system.lower() == 'linux' else 'windows'
+                node_data['children'].append({
+                    'key': str(host.id),
+                    'title': f"{host.name}",
+                    'isLeaf': True,  # 设置为叶子节点
+                    'icon': host_icon  # 返回操作系统图标信息
+                })
+
+            # 递归处理子节点，子节点在叶子节点后添加
+            for child in children:
+                node_data['children'].append(build_tree(child))
+
+            return node_data
+
+        # 查找根节点（无父节点的节点）
+        root_nodes = nodes.filter(parent__isnull=True)
+
+        # 构建树结构
+        tree_data = [build_tree(root) for root in root_nodes]
+
+        return JsonResponse({'treeData': tree_data}, status=200)
+
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        return JsonResponse({'error': str(e)}, status=500)

@@ -43,8 +43,8 @@
                 {{ tab.title }}
               </a-tag>
             </div>
-            <!-- 创建每个终端容器 -->
-            <div v-for="tab in tabs" :key="tab.key" v-show="tab.key === activeTabKey" class="terminal-container" :ref="setTerminalRef(tab.key)"></div>
+            <!-- 终端容器，显示当前激活的终端 -->
+            <div v-if="currentHostId" ref="terminalContainer" class="terminal-container"></div>
             <!-- 重新连接按钮 -->
             <div class="reconnect-button" v-if="currentHostId">
               <a-button type="primary" @click="reconnectTerminal">重新连接</a-button>
@@ -70,10 +70,11 @@
   const tabs = ref([]);
   const currentHostId = ref(null);
   const activeTabKey = ref(null); // 追踪当前活动的标签
-  const terminalRefs = ref({}); // 用于存储每个标签页的终端容器引用
-  let terminals = {}; // 用于存储每个标签的终端实例
-  let fitAddons = {}; // 用于存储终端的FitAddon实例
-  let sockets = {}; // 用于存储每个终端的 WebSocket 实例
+  const terminalContainer = ref(null);
+  
+  let terminals = {}; // 用于存储所有的终端实例
+  let fitAddons = {}; // 用于存储所有终端的FitAddon实例
+  let socket = null; 
   
   const { appContext } = getCurrentInstance();
   const wsServerAddress = appContext.config.globalProperties.$wsServerAddress;
@@ -91,13 +92,6 @@
     }
   };
   
-  // 设置终端引用
-  const setTerminalRef = (key) => (el) => {
-    if (el) {
-      terminalRefs.value[key] = el;
-    }
-  };
-  
   const handleExpand = (keys) => {
     expandedKeys.value = keys;
   };
@@ -110,8 +104,9 @@
   const handleSelect = async (selectedKeys, info) => {
     if (info.node.isLeaf) {
       addTab(info.node.title, info.node.key);
+      currentHostId.value = info.node.key;
       await nextTick();
-      switchTab(info.node.key);  // 切换到新打开的标签页
+      reconnectTerminal(info.node.key); // 为特定主机ID重连终端
     }
   };
   
@@ -119,22 +114,21 @@
   const handleCollapse = (collapse) => (collapsed.value = collapse);
   
   // 初始化指定的终端
-  const initializeTerminal = async (hostId) => {
-    // 检查当前终端是否已经存在，如果存在则不重新初始化
-    if (terminals[hostId]) return;
-  
-    await nextTick(); // 确保 DOM 更新完成
-    const terminalContainer = terminalRefs.value[hostId];
-  
-    if (!terminalContainer) {
+  const initializeTerminal = (hostId) => {
+    if (!terminalContainer.value) {
       console.error('终端容器未挂载，无法初始化终端。');
+      return;
+    }
+  
+    // 如果该终端已经存在，直接切换到该终端
+    if (terminals[hostId]) {
       return;
     }
   
     const fitAddon = new FitAddon();
     const terminal = new Terminal();
     terminal.loadAddon(fitAddon);
-    terminal.open(terminalContainer);
+    terminal.open(terminalContainer.value);
     fitAddon.fit();
   
     terminals[hostId] = terminal;
@@ -142,13 +136,12 @@
   
     // 监听终端输入
     terminal.onData((data) => {
-      if (sockets[hostId]) {
-        sockets[hostId].send(data);
+      if (socket) {
+        socket.send(data);
       }
     });
   
-    const socket = new WebSocket(`${wsServerAddress}/ws/ssh/${hostId.replace(/-/g, '')}/`);
-    sockets[hostId] = socket;
+    socket = new WebSocket(`${wsServerAddress}/ws/ssh/${hostId.replace(/-/g, '')}/`);
   
     socket.onopen = () => {
       const { cols, rows } = terminal;
@@ -170,24 +163,21 @@
     };
   };
   
-  // 切换到不同的标签时显示对应的终端，不需要重新连接
+  // 切换到不同的标签时显示对应的终端
   const switchTab = async (key) => {
     activeTabKey.value = key;
     currentHostId.value = key;
     await nextTick();
-    if (!terminals[key]) {
-      initializeTerminal(key); // 初始化新的终端
-    }
+    reconnectTerminal(key);
   };
   
   // 重新连接指定的终端
-  const reconnectTerminal = () => {
-    if (sockets[activeTabKey.value]) sockets[activeTabKey.value].close();
-    if (terminals[activeTabKey.value]) terminals[activeTabKey.value].dispose();
-    terminals[activeTabKey.value] = null;
-    fitAddons[activeTabKey.value] = null;
-    sockets[activeTabKey.value] = null;
-    initializeTerminal(activeTabKey.value);
+  const reconnectTerminal = (hostId) => {
+    if (socket) socket.close();
+    if (terminals[hostId]) terminals[hostId].dispose();
+    terminals[hostId] = null;
+    fitAddons[hostId] = null;
+    initializeTerminal(hostId);
   };
   
   // 添加Tab标签
@@ -201,24 +191,15 @@
   // 移除Tab标签
   const removeTab = (tab) => {
     tabs.value = tabs.value.filter((t) => t.key !== tab.key);
-  
-    // 清理终端和 WebSocket
-    if (terminals[tab.key]) {
-      terminals[tab.key].dispose();
-      delete terminals[tab.key];
-    }
-    if (sockets[tab.key]) {
-      sockets[tab.key].close();
-      delete sockets[tab.key];
-    }
+    delete terminals[tab.key]; // 删除对应的终端实例
   };
   
   // 窗口大小变化时调整终端
   const handleResize = () => {
-    if (fitAddons[currentHostId.value] && sockets[currentHostId.value] && sockets[currentHostId.value].readyState === WebSocket.OPEN) {
+    if (fitAddons[currentHostId.value] && socket && socket.readyState === WebSocket.OPEN) {
       fitAddons[currentHostId.value].fit();
       const { cols, rows } = terminals[currentHostId.value];
-      sockets[currentHostId.value].send(JSON.stringify({ cols, rows }));
+      socket.send(JSON.stringify({ cols, rows }));
     }
   };
   
@@ -228,82 +209,8 @@
   });
   
   onBeforeUnmount(() => {
-    // 关闭所有 WebSocket 连接并释放资源
-    Object.keys(sockets).forEach((key) => {
-      if (sockets[key]) {
-        sockets[key].close();
-      }
-    });
+    if (socket) socket.close();
     window.removeEventListener('resize', handleResize);
   });
   </script>
-  
-  <style scoped>
-  /* 样式保持不变 */
-  .terminal-header {
-    text-align: center;
-    color: #fff;
-    height: 30px;
-    line-height: 30px;
-    background-color: #7dbcea;
-  }
-  
-  .terminal-container {
-    height: calc(100vh - 60px);
-    width: 100%;
-    background-color: black;
-  }
-  
-  .terminal-sidebar {
-    height: calc(100vh - 30px);
-  }
-  
-  .sidebar-content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .tree-view {
-    flex: 1 0 90%;
-    overflow-y: auto;
-  }
-  
-  .terminal-content {
-    min-height: 280px;
-    background: #000000;
-  }
-  
-  .tab-bar {
-    height: 30px;
-    display: flex;
-    align-items: center;
-    padding-left: 5px;
-    background-color: #f5f5f5;
-  }
-  
-  .reconnect-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-  
-  .header-title {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .tree-title {
-    display: flex;
-    align-items: center;
-  }
-  
-  .title-text {
-    padding-left: 2px;
-  }
-  
-  :deep(:where(.css-dev-only-do-not-override-19iuou).ant-tree .ant-tree-indent-unit) {
-    width: 20px !important;
-  }
-  </style>
   

@@ -118,14 +118,14 @@ const router = createRouter({
             breadcrumbName: '站点监控'
            } 
         },
-        { 
-          path: '/web-terminal', 
-          component: () => import('@/components/Terminal/WebTerminal.vue'), 
-          meta: { 
-            requiresAuth: true, 
-            breadcrumbName: 'web终端' 
-          } 
-        },
+        // { 
+        //   path: '/web-terminal', 
+        //   component: () => import('@/components/Terminal/WebTerminal.vue'), 
+        //   meta: { 
+        //     requiresAuth: true, 
+        //     breadcrumbName: 'web终端' 
+        //   } 
+        // },
         { 
           path: '/ci-cd-system',
           component: () => import('@/components/CI_CDSystem/CI_CDSystem.vue'), 
@@ -202,6 +202,14 @@ const router = createRouter({
     },
     {
       path: '/web-terminal/:hostId', 
+      component: () => import('@/components/Terminal/WebShellTerminal.vue'), 
+      meta: { 
+        requiresAuth: true, 
+        breadcrumbName: 'web终端' 
+      } 
+    },    
+    {
+      path: '/web-terminal', 
       component: () => import('@/components/Terminal/WebShellTerminal.vue'), 
       meta: { 
         requiresAuth: true, 

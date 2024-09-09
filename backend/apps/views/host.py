@@ -5,6 +5,7 @@ from rest_framework import serializers
 import json
 import paramiko
 import io
+import uuid
 
 # 节点序列化器，用于验证和序列化 Node 模型的数据
 class NodeSerializer(serializers.ModelSerializer):
@@ -61,11 +62,14 @@ class HostView(APIView):
         # 构建响应数据
         data = []
         for host in current_page_data:
+            # 查询关联的节点
+            node_name = host.node.name if host.node else None  # 如果没有关联节点，返回None
+            
             data.append({
-                'id': host.id,
+                'id': str(host.id),  # 将UUID转换为字符串
                 'name': host.name,
                 'status': host.status,
-                'node': host.node.name,  # 返回节点名称
+                'node': node_name,  # 返回节点名称
                 'operating_system': host.operating_system,
                 'network': host.network,
                 'protocol': host.protocol,
@@ -93,55 +97,69 @@ class HostView(APIView):
         """
         处理POST请求，用于创建新的主机
         """
-        # 自动设置操作系统字段
+        node_id = request.data.get('node')
+
+        # 检查 node_id 是否存在
+        if not node_id:
+            return Response({'error': 'Node ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 前端UUID带有连字符，直接处理，不去除连字符
+        try:
+            node = get_object_or_404(Node, pk=node_id)
+        except Node.DoesNotExist:
+            return Response({'error': 'Invalid Node UUID'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 根据协议类型自动设置操作系统
         protocol = request.data.get('protocol', '')
         if protocol == 'SSH':
             request.data['operating_system'] = 'Linux'
         elif protocol == 'RDP':
             request.data['operating_system'] = 'Windows'
-        
+
+        # 序列化并验证表单数据
         serializer = HostSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            host = serializer.save()
+
+            # 将主机与节点关联
+            host.node = node  # 关联节点
+            host.save()  # 保存更新后的 host
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk):
         """
-        处理PUT请求，更新现有主机
+        更新现有主机，并根据传入的节点 ID 更新关联
         """
-        # 根据主键获取主机对象，如果不存在则返回404
         host = get_object_or_404(Host, pk=pk)
-        
-        # 自动设置操作系统字段
+        node_id = request.data.get('node_id')
+
         protocol = request.data.get('protocol', '')
         if protocol == 'SSH':
             request.data['operating_system'] = 'Linux'
         elif protocol == 'RDP':
             request.data['operating_system'] = 'Windows'
 
-        # 使用model_to_dict记录更新前的数据
-        before_data = model_to_dict(host)
-
-        # 序列化并验证更新的数据
         serializer = HostSerializer(host, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save()
+            host = serializer.save()
 
-            # 使用model_to_dict记录更新后的数据
-            after_data = model_to_dict(host)
+            # 更新主机与节点的关联关系
+            if node_id:
+                node = get_object_or_404(Node, pk=node_id)
+                host.node = node  # 更新关联节点
+                host.save()
 
-            # 返回更新后的主机数据
-            return Response(after_data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         """
-        处理DELETE请求，删除现有主机
+        删除主机及其关联节点
         """
-        # 根据主键获取主机对象，如果不存在则返回404
         host = get_object_or_404(Host, pk=pk)
 
         # 使用model_to_dict记录删除前的数据
@@ -150,7 +168,6 @@ class HostView(APIView):
         # 删除主机
         host.delete()
 
-        # 返回删除前的主机数据
         return Response(host_data, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -270,7 +287,7 @@ class NodeSelectionView(APIView):
 
     def get(self, request):
         """
-        处理GET请求，返回节点的简要信息列表。
+        处理GET请求，返回节点信息列表
         """
         nodes = Node.objects.all()
         serializer = NodeSerializer(nodes, many=True)

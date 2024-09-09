@@ -1,3 +1,5 @@
+# middleware_log.py
+
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.timezone import now
 from django.forms.models import model_to_dict
@@ -5,7 +7,7 @@ from .models import OperationLog, User, Credential, DomainMonitor, Host
 from .utils import CustomTokenAuthentication
 import json
 from datetime import datetime
-
+from uuid import UUID
 
 class OperationLogMiddleware(MiddlewareMixin):
     """
@@ -18,12 +20,15 @@ class OperationLogMiddleware(MiddlewareMixin):
         '/api/credentials/': '凭据管理',
         '/api/asset-management/hosts/': '主机管理',
         '/api/asset-management/databases/': '数据库管理',
-        '/api/monitor_domains/':'站点监控',
+        '/api/monitor_domains/': '站点监控',
         '/api/hosts/': '主机列表',
         # 其他API接口映射
     }
 
     def process_view(self, request, view_func, view_args, view_kwargs):
+        """
+        在视图处理请求之前执行，记录操作前的数据。
+        """
         # 跳过不需要Token认证的请求，例如登录请求
         if request.path == '/api/login/':
             return None
@@ -46,7 +51,7 @@ class OperationLogMiddleware(MiddlewareMixin):
             'request_interface': request.path,
             'request_method': request.method,
             'ip_address': self.get_client_ip(request),
-            'before_change': json.dumps(before_change_data, ensure_ascii=False) if before_change_data else '{}',
+            'before_change': json.dumps(self.clean_data(before_change_data), ensure_ascii=False) if before_change_data else '{}',
             'create_time': now(),
         }
 
@@ -54,6 +59,9 @@ class OperationLogMiddleware(MiddlewareMixin):
         request.operation_data = self.operation_data
 
     def process_response(self, request, response):
+        """
+        在视图处理响应之后执行，记录操作后的数据。
+        """
         # 如果请求没有被捕获或者用户未认证，直接返回响应
         if not hasattr(request, 'operation_data') or not self.user:
             return response
@@ -65,8 +73,10 @@ class OperationLogMiddleware(MiddlewareMixin):
                 request.operation_data['after_change'] = '{}'
             else:
                 after_change_data = self.get_after_data(request, response)
-                request.operation_data['after_change'] = json.dumps(after_change_data, ensure_ascii=False)
+                # 在这里转换 UUID 类型为字符串
+                request.operation_data['after_change'] = json.dumps(self.clean_data(after_change_data), ensure_ascii=False)
             
+            # 创建操作日志
             OperationLog.objects.create(**request.operation_data)
 
         return response
@@ -120,7 +130,6 @@ class OperationLogMiddleware(MiddlewareMixin):
             if 'pk' in view_kwargs:
                 # 通过检查view_func名称或请求路径来确定我们正在处理的模型
                 if 'credential' in request.path:
-                    # 在数据之前处理凭证
                     try:
                         credential = Credential.objects.get(pk=view_kwargs['pk'])
                         credential_dict = model_to_dict(credential)
@@ -128,21 +137,13 @@ class OperationLogMiddleware(MiddlewareMixin):
                         for key, value in credential_dict.items():
                             if isinstance(value, datetime):
                                 credential_dict[key] = value.isoformat()
-                        # 过滤掉敏感字段，如密钥或密码
-                        if 'password' in credential_dict:
-                            credential_dict['password'] = '***'
-                        if 'key' in credential_dict:
-                            credential_dict['key'] = '****'  # 避免显示实际密钥
-                        if 'key_password' in credential_dict:
-                            credential_dict['key_password'] = '****'
-                        if 'KeySecret' in credential_dict:
-                            credential_dict['KeySecret'] = '****'  # 避免显示实际KeySecret
+                        # 过滤掉敏感字段
+                        credential_dict = self.clean_sensitive_data(credential_dict)
                         return credential_dict
                     except Credential.DoesNotExist:
                         return None
 
                 elif 'monitor_domain' in request.path:
-                    # 在数据之前处理DomainMonitor
                     try:
                         monitor = DomainMonitor.objects.get(pk=view_kwargs['pk'])
                         monitor_dict = model_to_dict(monitor)
@@ -155,7 +156,6 @@ class OperationLogMiddleware(MiddlewareMixin):
                         return None
                     
                 elif 'host' in request.path:
-                    # 在数据之前处理Host
                     try:
                         host = Host.objects.get(pk=view_kwargs['pk'])
                         host_dict = model_to_dict(host)
@@ -169,7 +169,6 @@ class OperationLogMiddleware(MiddlewareMixin):
 
         return None
 
-
     def get_after_data(self, request, response):
         """
         获取操作后的数据，如果返回的是JSON响应体，则直接返回，如果不是，则返回状态码和文本。
@@ -177,23 +176,36 @@ class OperationLogMiddleware(MiddlewareMixin):
         try:
             if 'application/json' in response['Content-Type']:
                 after_data = response.data
-                # Convert datetime fields to string
+                # 转换日期时间字段为字符串
                 if isinstance(after_data, dict):
-                    for key, value in after_data.items():
-                        if isinstance(value, datetime):
-                            after_data[key] = value.isoformat()
-                    # 过滤掉password字段
-                    if 'password' in after_data:
-                        after_data['password'] = ''
-                    # 过滤掉敏感字段，如密钥或密码
-                    if 'key' in after_data:
-                        after_data['key'] = '****'  # 避免显示实际密钥
-                    if 'key_password' in after_data:
-                        after_data['key_password'] = '****'
-                    if 'KeySecret' in after_data:
-                        after_data['KeySecret'] = '****'  # 避免显示实际KeySecret
+                    after_data = self.clean_data(after_data)
                 return after_data
             else:
                 return f"响应状态码: {response.status_code}, 响应内容: {response.content.decode('utf-8')}"
         except Exception as e:
             return f"获取变更后数据失败: {str(e)}"
+
+    def clean_data(self, data):
+        """
+        清理数据，处理不能序列化的数据类型（例如UUID）。
+        将UUID转换为字符串。
+        """
+        if isinstance(data, dict):
+            cleaned_data = {}
+            for key, value in data.items():
+                if isinstance(value, UUID):
+                    cleaned_data[key] = str(value)  # 转换UUID为字符串
+                else:
+                    cleaned_data[key] = value
+            return cleaned_data
+        return data
+
+    def clean_sensitive_data(self, data):
+        """
+        清理敏感信息，如密码、密钥等。
+        """
+        sensitive_fields = ['password', 'key', 'key_password', 'KeySecret']
+        for field in sensitive_fields:
+            if field in data:
+                data[field] = '****'  # 掩盖敏感信息
+        return data

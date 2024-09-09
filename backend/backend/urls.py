@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_data
+from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -29,5 +29,5 @@ urlpatterns = [
     path('api/hosts/<str:pk>/delete/', HostView.as_view(), name='hosts-delete'),  # 配置删除主机的API路径
     path('api/hosts/credentials_selection/', CredentialSelectionView.as_view(), name='credential-selection'),  # 配置选择凭据的API路径
     path('api/hosts/test_connection/', TestConnectionView.as_view(), name='test-connection'),  # 配置测试连接的API路径
-    path('api/terminal/get_tree/', get_tree_data, name='get-terminal-tree'),  # 配置获取终端树的API路径
+    path('api/terminal/get_tree_structure/', get_tree_structure, name='get_tree_structure'),  # 配置获取终端树的API路径
 ]

@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 class User(models.Model):
     """
@@ -184,34 +185,37 @@ class DomainMonitor(models.Model):
     def __str__(self):
         return f"{self.name} - {self.domain}"
 
+
 class Node(models.Model):
     """
-    节点模型，存储节点信息
+    树节点模型，存储节点信息
     """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # 使用 UUID 作为主键
     name = models.CharField(max_length=150, verbose_name="节点名称")  # 节点名称
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children', verbose_name="父节点")  # 自引用外键，允许为空
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
 
     class Meta:
         db_table = 't_node'  # 指定数据库表名为 t_node
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
 class Host(models.Model):
     """
     主机模型，存储主机信息
     """
-
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # 使用 UUID 作为主键
     name = models.CharField(max_length=150, verbose_name="主机名称")  # 主机名称
     status = models.BooleanField(default=False, verbose_name="连接状态")  # 是否可连接
-    node = models.ForeignKey(Node, on_delete=models.CASCADE, verbose_name="节点")  # 关联节点
     operating_system = models.CharField(max_length=50, verbose_name="操作系统")  # 操作系统
     network = models.GenericIPAddressField(verbose_name="IP地址")  # IP地址
     protocol = models.CharField(max_length=10, verbose_name="协议")  # 协议
     port = models.IntegerField(verbose_name="端口")  # 端口
-    account_type = models.ForeignKey(Credential, on_delete=models.CASCADE, verbose_name="关联凭据")  # 关联凭据
+    account_type = models.ForeignKey(Credential, null=True, blank=True, on_delete=models.CASCADE, verbose_name="关联凭据")  # 关联凭据，允许为空
     remarks = models.TextField(null=True, blank=True, verbose_name="备注")  # 备注
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
+    node = models.ForeignKey(Node, null=True, blank=True, on_delete=models.CASCADE, related_name='hosts', verbose_name="所属节点")  # 关联节点，允许为空
 
     class Meta:
         db_table = 't_host'  # 指定数据库表名为 t_host

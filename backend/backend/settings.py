@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-aq1$o05s3&m=0)yq-j1z_7xu7nk)0v_dp9^(9b9048n&1!^e+^
 DEBUG = True
 
 # 允许的主机名列表，对于公开的生产环境需要设置具体的域名或IP地址
-ALLOWED_HOSTS = ['172.17.102.34','localhost','192.168.5.35']  # 添加允许的主机名
+ALLOWED_HOSTS = ['172.17.102.34','localhost','192.168.5.44']  # 添加允许的主机名
 
 # Django 应用配置，包括Django自身和第三方应用
 INSTALLED_APPS = [
@@ -147,14 +147,14 @@ CORS_ORIGIN_WHITELIST = [
     'http://172.17.102.34:8080',
     'http://localhost:8080',
     'http://127.0.0.1:8080',
-    'http://192.168.5.35:8080',
+    'http://192.168.5.44:8080',
 ]
 CSRF_TRUSTED_ORIGINS = [
     'http://172.17.102.34:8080',
     'http://localhost:8080', 
     'http://127.0.0.1:8080',
     'http://172.17.102.34:8080',
-    'http://192.168.5.35:8080',
+    'http://192.168.5.44:8080',
     ]
 
 # 日志配置，用于应用程序的日志管理

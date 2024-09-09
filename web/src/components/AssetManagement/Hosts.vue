@@ -23,13 +23,9 @@
     </div>
 
     <!-- 创建主机的模态框 -->
-    <a-modal v-model:open="isCreateModalVisible" title="新建主机" @ok="handleCreateOk" @cancel="handleCreateCancel" @open="resetCreateForm">
-        <a-form 
-            :model="createForm" 
-            :rules="createRules" 
-            ref="createFormRef"
-            layout="vertical"
-        >
+    <a-modal v-model:open="isCreateModalVisible" title="新建主机" @ok="handleCreateOk" @cancel="handleCreateCancel"
+        @open="resetCreateForm">
+        <a-form :model="createForm" :rules="createRules" ref="createFormRef" layout="vertical">
             <a-form-item label="名称" name="name" :rules="createRules.name">
                 <a-input v-model:value="createForm.name" placeholder="请输入主机名称" id="Create_Hosts" />
             </a-form-item>
@@ -46,7 +42,8 @@
                         <a-input v-model:value="createForm.network" placeholder="请输入IP地址" style="width: 70%" />
                     </a-form-item-rest>
                     <a-form-item-rest>
-                        <a-input-number v-model:value="createForm.port" :min="1" :max="65535" placeholder="请输入端口号" style="width: 30%" />
+                        <a-input-number v-model:value="createForm.port" :min="1" :max="65535" placeholder="请输入端口号"
+                            style="width: 30%" />
                     </a-form-item-rest>
                 </a-input-group>
             </a-form-item>
@@ -57,22 +54,17 @@
                 </a-radio-group>
             </a-form-item>
             <a-form-item label="账户类型" name="account_type" :rules="createRules.account_type">
-                <a-select v-model:value="createForm.account_type" placeholder="请选择账户类型" :disabled="isAccountTypeDisabled">
-                    <a-select-option 
-                        v-for="credential in filteredCredentials" 
-                        :key="credential.id" 
-                        :value="credential.id"
-                        :disabled="isCredentialTypeDisabled(credential.type)">
+                <a-select v-model:value="createForm.account_type" placeholder="请选择账户类型"
+                    :disabled="isAccountTypeDisabled">
+                    <a-select-option v-for="credential in filteredCredentials" :key="credential.id"
+                        :value="credential.id" :disabled="isCredentialTypeDisabled(credential.type)">
                         {{ credential.name }}
                     </a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item label="节点" name="node" :rules="createRules.node">
                 <a-select v-model:value="createForm.node" placeholder="请选择节点">
-                    <a-select-option 
-                        v-for="node in availableNodes" 
-                        :key="node.id" 
-                        :value="node.id">
+                    <a-select-option v-for="node in availableNodes" :key="node.id" :value="node.id">
                         {{ node.name }}
                     </a-select-option>
                 </a-select>
@@ -95,13 +87,9 @@
     </a-modal>
 
     <!-- 编辑主机的模态框 -->
-    <a-modal v-model:open="isEditModalVisible" title="编辑主机" @ok="handleEditOk" @cancel="handleEditCancel" @open="prepareEditForm">
-        <a-form 
-            :model="editForm" 
-            :rules="editRules" 
-            ref="editFormRef"
-            layout="vertical"
-        >
+    <a-modal v-model:open="isEditModalVisible" title="编辑主机" @ok="handleEditOk" @cancel="handleEditCancel"
+        @open="prepareEditForm">
+        <a-form :model="editForm" :rules="editRules" ref="editFormRef" layout="vertical">
             <a-form-item label="名称" name="name" :rules="editRules.name">
                 <a-input v-model:value="editForm.name" placeholder="请输入主机名称" id="Edit_Hosts" />
             </a-form-item>
@@ -118,7 +106,8 @@
                         <a-input v-model:value="editForm.network" placeholder="请输入IP地址" style="width: 70%" />
                     </a-form-item-rest>
                     <a-form-item-rest>
-                        <a-input-number v-model:value="editForm.port" :min="1" :max="65535" placeholder="请输入端口号" style="width: 30%" />
+                        <a-input-number v-model:value="editForm.port" :min="1" :max="65535" placeholder="请输入端口号"
+                            style="width: 30%" />
                     </a-form-item-rest>
                 </a-input-group>
             </a-form-item>
@@ -130,21 +119,15 @@
             </a-form-item>
             <a-form-item label="账户类型" name="account_type" :rules="editRules.account_type">
                 <a-select v-model:value="editForm.account_type" placeholder="请选择账户类型" :disabled="isAccountTypeDisabled">
-                    <a-select-option 
-                        v-for="credential in filteredCredentials" 
-                        :key="credential.id" 
-                        :value="credential.id"
-                        :disabled="isCredentialTypeDisabled(credential.type)">
+                    <a-select-option v-for="credential in filteredCredentials" :key="credential.id"
+                        :value="credential.id" :disabled="isCredentialTypeDisabled(credential.type)">
                         {{ credential.name }}
                     </a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item label="节点" name="node" :rules="editRules.node">
                 <a-select v-model:value="editForm.node" placeholder="请选择节点">
-                    <a-select-option 
-                        v-for="node in availableNodes" 
-                        :key="node.id" 
-                        :value="node.id">
+                    <a-select-option v-for="node in availableNodes" :key="node.id" :value="node.id">
                         {{ node.name }}
                     </a-select-option>
                 </a-select>
@@ -160,17 +143,17 @@
                 <div>
                     <!-- 取消和确认 -->
                     <a-button key="cancel" @click="handleEditCancel">取消</a-button>
-                    <a-button key="submit" type="primary"  @click="handleEditOk">确认</a-button>
+                    <a-button key="submit" type="primary" @click="handleEditOk">确认</a-button>
                 </div>
             </div>
         </template>
     </a-modal>
     <!-- 打开新建凭据模态框并且结束调用handleProtocolChange方法请求最新凭据列表 -->
-    <CreateCredentialModal ref="createCredentialModalRef" @refresh="handleProtocolChange"/>
+    <CreateCredentialModal ref="createCredentialModalRef" @refresh="handleProtocolChange" />
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, h } from 'vue' 
+import { ref, reactive, onMounted, h } from 'vue'
 import { message, Tag, Modal, Popconfirm, Badge } from 'ant-design-vue';
 import axios from 'axios';  // 引入axios用于请求后端API
 import { showPermissionWarning, checkPermission } from '@/components/Global/PermissonWarning.vue'
@@ -327,10 +310,10 @@ const handleCredentialOptionChange = () => {
 
 // 显示创建模态框
 const showCreateModal = () => {
-        isCreateModalVisible.value = true;
-        handleProtocolChange();  // 根据协议更新凭据
-        resetCreateForm();  // 重置新建表单
-        fetchNodes(); // 获取节点列表
+    isCreateModalVisible.value = true;
+    handleProtocolChange();  // 根据协议更新凭据
+    resetCreateForm();  // 重置新建表单
+    fetchNodes(); // 获取节点列表
 };
 
 // 显示编辑模态框并填充表单数据
@@ -341,20 +324,24 @@ const showEditModal = (record) => {
     fetchNodes(); // 获取节点列表
 };
 const prepareEditForm = (record) => {
-  // 设置要编辑的当前记录
-  currentHost.value = record;
+    // 设置要编辑的当前记录
+    currentHost.value = record;
 
-  // 用所选记录的数据填充表单字段
-  editForm.name = record.name;
-  editForm.protocol = record.protocol;
-  editForm.network = record.network;
-  editForm.port = record.port;
-  editForm.account_type = record.account_type;
-  editForm.node = record.node;
-  editForm.remarks = record.remarks;
+    // 用所选记录的数据填充表单字段
+    editForm.name = record.name;
+    editForm.protocol = record.protocol;
+    editForm.network = record.network;
+    editForm.port = record.port;
+    editForm.account_type = record.account_type;
 
-  // 确保根据协议启用/禁用帐户类型
-  handleProtocolChange();
+    // Here, you should set the node ID, not the name
+    const node = availableNodes.value.find(n => n.name === record.node);
+    editForm.node = node ? node.id : '';  // Set the node ID
+
+    editForm.remarks = record.remarks;
+
+    // 确保根据协议启用/禁用帐户类型
+    handleProtocolChange();
 };
 
 // 重置新建表单的数据
@@ -421,7 +408,7 @@ const handleEditOk = () => {
                 const selectedCredential = filteredCredentials.value.find(
                     (credential) => credential.name === editForm.account_type
                 );
-                
+
                 // 确保account_type设置为ID，而不是名称
                 const formData = { ...editForm };
                 formData.account_type = selectedCredential ? selectedCredential.id : null;
@@ -459,16 +446,16 @@ const handleEditCancel = () => {
 
 // 表格列定义
 const columns = [
-    {
-        title: '编号',  
-        dataIndex: 'id',
-        // width: 100,
-        showSorterTooltip: false,
-        sorter: (a, b) => a.id - b.id,  // 前端编号排序
-        customRender: ({ text }) => h('div', {
-            style: 'background-color: #314659; color: white; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;'
-        }, text)
-    },
+    // {
+    //     title: '编号',  
+    //     dataIndex: 'id',
+    //     // width: 100,
+    //     showSorterTooltip: false,
+    //     sorter: (a, b) => a.id - b.id,  // 前端编号排序
+    //     customRender: ({ text }) => h('div', {
+    //         style: 'background-color: #314659; color: white; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;'
+    //     }, text)
+    // },
     {
         title: '名称',
         dataIndex: 'name',
@@ -622,7 +609,7 @@ const handleDeleteHost = async (id) => {
             // 处理请求错误
             message.error('主机删除失败');
         }
-    })  
+    })
 };
 
 const handleTestConnection = async () => {
@@ -724,6 +711,7 @@ onMounted(() => {
 .button_font {
     font-size: 12px;
 }
+
 /* 修改 input的addonBefore 和 placeholder 的字体大小 */
 .ant-input-group-addon,
 .ant-input::placeholder,
