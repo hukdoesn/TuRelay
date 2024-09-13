@@ -1,8 +1,10 @@
 <template>
   <a-layout-sider v-model:collapsed="collapsed" collapsible theme="light">
     <div class="logo" @click="JumpToHome">
-      <img src="@/assets/svg/可爱太空猫1.svg" alt="Logo" class="logo-img" />
-      <span v-if="!collapsed" class="logo-text">TuRelay</span>
+      <!-- <img src="@/assets/svg/点睛.svg" alt="Logo" class="logo-img" /> -->
+      <img v-if="collapsed" src="@/assets/svg/logo.svg" alt="Logo" class="logo-img" />
+      <img v-else src="@/assets/svg/主页logo3.svg" alt="Logo" class="logo-img" />
+      <!-- <span v-if="!collapsed" class="logo-text">TuRelay</span> -->
     </div>
     <a-menu
       :selectedKeys="selectedKeys"
@@ -124,6 +126,7 @@ import {
   DesktopOutlined,
   FileOutlined,
 } from '@ant-design/icons-vue';
+import IconFont from '@/icons';  // 引入 IconFont 组件
 
 const collapsed = ref(false);
 const selectedKeys = ref([]);
@@ -172,15 +175,15 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   height: 32px;
-  margin: 16px;
+  margin: 12px;
   background: rgba(255, 255, 255, 0.3);
   /* 点击 */
   cursor: pointer;
 }
 
 .logo-img {
-  height: 24px;
-  margin-right: 6px;
+  height: 28px;
+  /* margin-right: 6px; */
 }
 
 .logo-text {

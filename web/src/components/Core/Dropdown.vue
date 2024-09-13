@@ -1,6 +1,6 @@
 <template>
-    <IconFont type="icon-chongwuxiaolian" class="icon"/>
-    <!-- <img src="@/assets/svg/demo.svg" alt=""> -->
+    <!-- <IconFont type="icon-chongwuxiaolian" class="icon"/> -->
+    <!-- <img src="@/assets/svg/不点睛.svg" alt=""> -->
     <a-dropdown>
       <a href="javascript:;" class="ant-dropdown-link" style="color: inherit;" @click.prevent>
         {{ Name }}
