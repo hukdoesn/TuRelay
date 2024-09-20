@@ -2,7 +2,7 @@
     <a-layout>
         <!-- 顶部布局，用于显示标题 -->
         <a-layout-header class="terminal-header">
-            <img src="@/assets/svg/terminal_logo.svg" alt="Logo" class="logo-img" />
+            <img src="@/assets/svg/turelay_logo.svg" alt="Logo" class="logo-img" />
         </a-layout-header>
         <a-layout>
             <!-- 侧边栏布局，包含树形结构 -->
@@ -628,7 +628,7 @@ onBeforeUnmount(() => {
 }
 
 .logo-img {
-    height: 31px;
+    height: 25px;
 }
 
 .tree-title {
@@ -758,7 +758,7 @@ onBeforeUnmount(() => {
 }
 
 /* 终端内容左边距 */
-:deep(.xterm-dom-renderer-owner-1 .xterm-rows) {
+:deep( .xterm-rows) {
     padding-left: 10px !important;
 }
 </style>
