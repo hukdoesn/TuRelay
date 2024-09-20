@@ -160,6 +160,10 @@ import { showPermissionWarning, checkPermission } from '@/components/Global/Perm
 import IconFont from '@/icons'
 import CreateCredentialModal from '@/components/UserManagement/module/CreateCredentialModal.vue' // 引入创建凭据模态框组件
 
+import { useRouter } from 'vue-router';  // Import useRouter
+
+const router = useRouter();  // Initialize the router
+
 // 引用模态框组件的实例
 const createCredentialModalRef = ref(null);
 
@@ -669,8 +673,9 @@ const resetFilters = () => {
     fetchHosts();
 }
 
+// 打开Web终端并传递hostId
 const openWebTerminal = (hostId) => {
-    window.open(`/web-terminal/${hostId}`, '_blank');
+    window.open(`/web-terminal?hostId=${hostId}`, '_blank');  // 新窗口打开Web终端
 };
 
 // 初次加载时获取主机列表

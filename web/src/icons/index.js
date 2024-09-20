@@ -2,7 +2,7 @@ import { createFromIconfontCN } from '@ant-design/icons-vue';
 
 // 替换为您在 iconfont.cn 上的真实 scriptUrl
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_4637855_7nm1ngmwzhx.js'
+  scriptUrl: '//at.alicdn.com/t/c/font_4637855_3hp66hakos.js'
 });
 
 export default IconFont; 

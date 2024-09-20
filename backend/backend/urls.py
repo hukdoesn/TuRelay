@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure
+from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -30,4 +30,9 @@ urlpatterns = [
     path('api/hosts/credentials_selection/', CredentialSelectionView.as_view(), name='credential-selection'),  # 配置选择凭据的API路径
     path('api/hosts/test_connection/', TestConnectionView.as_view(), name='test-connection'),  # 配置测试连接的API路径
     path('api/terminal/get_tree_structure/', get_tree_structure, name='get_tree_structure'),  # 配置获取终端树的API路径
+        # 文件管理相关的路由
+    path('api/terminal/files/<str:host_id>/', FileListView.as_view()),
+    path('api/terminal/upload/<str:host_id>/', FileUploadView.as_view()),
+    path('api/terminal/download/<str:host_id>/', FileDownloadView.as_view()),
+    path('api/terminal/delete/<str:host_id>/', FileDeleteView.as_view()),
 ]
