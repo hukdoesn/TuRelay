@@ -1,22 +1,8 @@
-version: '3'
-
 services:
   guacd:
     image: guacamole/guacd
     container_name: guacd
     platform: linux/amd64
-    networks:
-      - huk_net
-    restart: always
-
-  mysql:
-    image: mysql:latest  # 请确认你使用的MySQL版本
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: 1234567xx
-      MYSQL_DATABASE: guacamole
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 1234567xx
     networks:
       - huk_net
     restart: always
@@ -37,7 +23,6 @@ services:
       - huk_net
     depends_on:
       - guacd
-      - mysql
     restart: always
 
 networks:

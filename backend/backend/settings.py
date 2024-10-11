@@ -14,7 +14,14 @@ SECRET_KEY = 'django-insecure-aq1$o05s3&m=0)yq-j1z_7xu7nk)0v_dp9^(9b9048n&1!^e+^
 DEBUG = True
 
 # 允许的主机名列表，对于公开的生产环境需要设置具体的域名或IP地址
-ALLOWED_HOSTS = ['172.17.102.34','localhost','192.168.5.53']  # 添加允许的主机名
+ALLOWED_HOSTS = ['172.17.102.69','localhost','192.168.5.13','192.168.0.104']  # 添加允许的主机名
+
+# Guacamole 服务器配置
+GUACAMOLE_URL = 'http://172.17.102.69:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改
+GUACAMOLE_USERNAME = 'guacadmin'  # Guacamole 管理员用户名，默认是 'guacadmin'
+GUACAMOLE_PASSWORD = 'guacadmin'  # Guacamole 管理员密码，默认是 'guacadmin'
+
+
 
 # Django 应用配置，包括Django自身和第三方应用
 INSTALLED_APPS = [
@@ -144,24 +151,31 @@ SIMPLE_JWT = {
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
-    'http://172.17.102.34:8080',
+    'http://172.17.102.69:8080',
     'http://localhost:8080',
     'http://127.0.0.1:8080',
-    'http://192.168.5.53:8080',
+    'http://192.168.5.82:8080',
+    'http://192.168.5.13:8080',
+    'http://192.168.5.13:8081',
     'http://192.168.222.86:8080',
+    'http://192.168.0.104:8080'
 ]
 CSRF_TRUSTED_ORIGINS = [
-    'http://172.17.102.34:8080',
+    'http://172.17.102.69:8080',
     'http://localhost:8080', 
     'http://127.0.0.1:8080',
     'http://172.17.102.34:8080',
-    'http://192.168.5.53:8080',
+    'http://192.168.5.82:8080',
+    'http://192.168.5.13:8080',
+    'http://192.168.5.13:8081',
     'http://192.168.222.86:8080',
+    'http://192.168.0.104:8080'
     ]
 
 # 日志配置，用于应用程序的日志管理
 cur_path = os.path.dirname(os.path.realpath(__file__))  # 当前文件的路径
 log_path = os.path.join(os.path.dirname(cur_path), 'Log')  # 日志文件存放路径
+
 
 # LOGGING = {
 #     'version': 1,

@@ -46,3 +46,37 @@ def user_has_view_permission(user):
         if rp.permission.code == 'view':
             return True
     return False
+
+from apps.utils import CustomTokenAuthentication
+from channels.db import database_sync_to_async
+from channels.middleware import BaseMiddleware
+from django.contrib.auth.models import AnonymousUser
+import urllib.parse
+
+@database_sync_to_async
+def get_user(token_key):
+    # Use your CustomTokenAuthentication to get the user
+    auth = CustomTokenAuthentication()
+    try:
+        validated_token = auth.get_validated_token(token_key)
+        user = auth.get_user(validated_token)
+        return user
+    except Exception as e:
+        return AnonymousUser()
+
+class TokenAuthMiddleware(BaseMiddleware):
+    async def __call__(self, scope, receive, send):
+        # Extract the token from the query string
+        query_string = scope['query_string'].decode()
+        query_params = urllib.parse.parse_qs(query_string)
+        token_list = query_params.get('token', [])
+        token = token_list[0] if token_list else None
+
+        if token:
+            # Authenticate the user using your CustomTokenAuthentication
+            user = await get_user(token)
+            scope['user'] = user
+        else:
+            scope['user'] = AnonymousUser()
+
+        return await super().__call__(scope, receive, send)
