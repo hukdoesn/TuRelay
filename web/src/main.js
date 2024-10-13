@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import Guacamole from 'guacamole-common-js'; // 引入 guacamole-common-js
 
 // 配置 axios
-// axios.defaults.baseURL = 'http://172.17.102.69:8100'; // 根据您的后端服务地址修改
+// axios.defaults.baseURL = 'http://172.17.103.120:8100'; // 根据您的后端服务地址修改
 //  axios.defaults.baseURL = 'http://192.168.0.104:8100';
 axios.defaults.baseURL = 'http://192.168.5.13:8100';
 // axios.defaults.baseURL = 'http://localhost:8100'; // 根据您的后端服务地址修改
@@ -27,11 +27,11 @@ app.config.globalProperties.$axios = axios;
 // 定义 WebSocket 服务器地址为全局属性
 app.config.globalProperties.$wsServerAddress = 'ws://192.168.5.13:8100';
 // app.config.globalProperties.$wsServerAddress = 'ws://192.168.0.104:8100';
-// app.config.globalProperties.$wsServerAddress = 'ws://172.17.102.69:8100';
+// app.config.globalProperties.$wsServerAddress = 'ws://172.17.103.120:8100';
 
 // app.config.globalProperties.$wsServerAddress = 'ws://192.168.5.82:8081/guacamole';
 // app.config.globalProperties.$guacamoleUrl = 'http://192.168.0.104:8081/guacamole';
-app.config.globalProperties.$guacamoleUrl = 'http://172.17.102.69:8081/guacamole';
+app.config.globalProperties.$guacamoleUrl = 'http://172.17.103.120:8081/guacamole';
 
 // 将 dayjs 添加到 Vue 实例的全局属性中
 app.config.globalProperties.$dayjs = dayjs;

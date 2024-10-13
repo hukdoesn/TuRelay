@@ -110,7 +110,7 @@ import { DownOutlined, CaretLeftOutlined, DeleteOutlined } from '@ant-design/ico
 import axios from 'axios';
 import IconFont from '@/icons';
 import { useRoute } from 'vue-router';
-import WebrdsTerminal from './WebrdsTerminal.vue'; // 引入新的 WebrdsTerminal 组件
+import WebrdsTerminal from './WebrdpTerminal.vue'; // 引入新的 WebrdsTerminal 组件
 
 // 声明响应式变量
 const treeData = ref([]);

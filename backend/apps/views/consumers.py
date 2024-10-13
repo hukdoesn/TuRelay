@@ -25,6 +25,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
     """
 
     async def connect(self):
+        
         self.host_id = self.scope['url_route']['kwargs']['host_id']  # 从 URL 中获取主机 ID
 
         # 异步获取主机和凭据信息

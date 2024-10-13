@@ -14,10 +14,10 @@ SECRET_KEY = 'django-insecure-aq1$o05s3&m=0)yq-j1z_7xu7nk)0v_dp9^(9b9048n&1!^e+^
 DEBUG = True
 
 # 允许的主机名列表，对于公开的生产环境需要设置具体的域名或IP地址
-ALLOWED_HOSTS = ['172.17.102.69','localhost','192.168.5.13','192.168.0.104']  # 添加允许的主机名
+ALLOWED_HOSTS = ['172.17.103.120', 'localhost', '192.168.5.13', '192.168.0.104', '127.0.0.1']  # 添加允许的主机名
 
 # Guacamole 服务器配置
-GUACAMOLE_URL = 'http://172.17.102.69:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改
+GUACAMOLE_URL = 'http://172.17.103.120:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改
 GUACAMOLE_USERNAME = 'guacadmin'  # Guacamole 管理员用户名，默认是 'guacadmin'
 GUACAMOLE_PASSWORD = 'guacadmin'  # Guacamole 管理员密码，默认是 'guacadmin'
 
@@ -26,7 +26,7 @@ GUACAMOLE_PASSWORD = 'guacadmin'  # Guacamole 管理员密码，默认是 'guaca
 # Django 应用配置，包括Django自身和第三方应用
 INSTALLED_APPS = [
     'django.contrib.admin',   # 管理界面
-    'django.contrib.auth',    # 认证系统
+    'django.contrib.auth',    # 认证系
     'django.contrib.contenttypes', # 内容类型框架
     'django.contrib.sessions', # 会话框架
     'django.contrib.messages', # 消息框架
@@ -84,9 +84,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [
-                'redis://127.0.0.1:6379/1',  # Ensure this is a single string
-            ],
+            "hosts": [('127.0.0.1', 6379)],
         },
     },
 }
@@ -133,7 +131,7 @@ TIME_ZONE = 'Asia/Shanghai' # 设置时区
 USE_I18N = True  # 启用Django的国际化支持
 USE_L10N = True # 启用本地化
 
-# 启用时区支持，USE_TZ 设置为 True 时，django 会使用默认时区 America/Chicago，设置为 False 时，需要配置 TIME_ZONE
+# 启时区支持，USE_TZ 设置为 True 时，django 会使用默认时区 America/Chicago，设置为 False 时，需要配置 TIME_ZONE
 USE_TZ = False
 
 # 静态文件服务的URL前缀
@@ -151,7 +149,7 @@ SIMPLE_JWT = {
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
-    'http://172.17.102.69:8080',
+    'http://172.17.103.120:8080',
     'http://localhost:8080',
     'http://127.0.0.1:8080',
     'http://192.168.5.82:8080',
@@ -161,7 +159,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://192.168.0.104:8080'
 ]
 CSRF_TRUSTED_ORIGINS = [
-    'http://172.17.102.69:8080',
+    'http://172.17.103.120:8080',
     'http://localhost:8080', 
     'http://127.0.0.1:8080',
     'http://172.17.102.34:8080',

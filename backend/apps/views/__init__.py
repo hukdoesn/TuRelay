@@ -9,6 +9,5 @@ from .host import HostView, CredentialSelectionView, TestConnectionView, NodeSel
 from .consumers import SSHConsumer
 from .terminal_tree import get_tree_structure
 from .consumers import FileListView, FileUploadView, FileDownloadView, FileDeleteView
-from .rdp_consumers import RDPConnectView
-from .rdp_consumers import RDPConnectView
+from .rdp_consumers import RDPConsumer
 # from .check_permission import check_permissions
