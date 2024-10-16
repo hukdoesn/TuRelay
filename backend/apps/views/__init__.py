@@ -10,4 +10,5 @@ from .consumers import SSHConsumer
 from .terminal_tree import get_tree_structure
 from .consumers import FileListView, FileUploadView, FileDownloadView, FileDeleteView
 from .rdp_consumers import GuacamoleConsumer
+from .command_log import CommandLogView
 # from .check_permission import check_permissions

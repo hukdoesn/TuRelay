@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView
+from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -35,5 +35,6 @@ urlpatterns = [
     path('api/terminal/upload/<str:host_id>/', FileUploadView.as_view()),
     path('api/terminal/download/<str:host_id>/', FileDownloadView.as_view()),
     path('api/terminal/delete/<str:host_id>/', FileDeleteView.as_view()),
+    path('api/command_logs/', CommandLogView.as_view(), name='command_logs'),
     # path('api/terminal/rdp/<str:host_id>/', RDPConnectView.as_view(), name='rdp_connect'),
 ]

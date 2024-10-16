@@ -3,7 +3,7 @@
     <div class="logo" @click="JumpToHome">
       <!-- <img src="@/assets/svg/点睛.svg" alt="Logo" class="logo-img" /> -->
       <img v-if="collapsed" src="@/assets/svg/logo.svg" alt="Logo" class="logo-img" />
-      <img v-else src="@/assets/svg/主页logo3.svg" alt="Logo" class="logo-img" />
+      <img v-else src="@/assets/svg/turelay.svg" alt="Logo" class="logo-img" />
       <!-- <span v-if="!collapsed" class="logo-text">TuRelay</span> -->
     </div>
     <a-menu

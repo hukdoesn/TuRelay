@@ -13,17 +13,22 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
         host = await self.get_host(self.host_id)
         credential = await self.get_credential(host)
 
-        # 实例化 GuacamoleClient 并连接
+        # 实例化 GuacamoleClient 并连接 guacd
         self.guac_client = GuacamoleClient()
-        self.connection_id = self.guac_client.connect(
-            protocol='rdp',
-            hostname=host.network,
-            username=credential.account, 
-            password=credential.password,
-            port=host.port,
-        )
-
-        await self.accept()
+        try:
+            self.connection_id = self.guac_client.connect(
+                protocol='rdp',
+                hostname=host.network,
+                username=credential.account, 
+                password=credential.password,
+                port=host.port,
+            )
+            await self.accept()
+        except Exception as e:
+            # 连接失败时返回错误并关闭连接
+            await self.close(code=1011)
+            print(f"Connection to guacd failed: {e}")
+            return
 
         # 启动任务来转发 guacd 到 WebSocket 的数据
         self.guac_to_web_task = asyncio.create_task(self.guac_to_web())
@@ -50,8 +55,10 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def get_host(self, host_id):
+        """异步获取主机信息"""
         return Host.objects.get(id=host_id)
 
     @sync_to_async
     def get_credential(self, host):
+        """异步获取凭据信息"""
         return Credential.objects.get(id=host.account_type_id)

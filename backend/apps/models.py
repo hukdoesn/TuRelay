@@ -231,7 +231,8 @@ class CommandLog(models.Model):
     """
     username = models.CharField(max_length=150, verbose_name="用户名")  # 执行命令的用户名
     command = models.TextField(verbose_name="执行的命令")  # 记录执行过的命令
-    hosts = models.CharField(max_length=255, verbose_name="执行主机")  # 记录执行的主机名+IP
+    hosts = models.CharField(max_length=255, verbose_name="执行主机")  # 记录执行的主机名
+    network = models.CharField(null=True, blank=True, max_length=255, verbose_name="执行主机IP")  # 记录执行的主机IP
     credential = models.CharField(max_length=150, verbose_name="使用的凭据")  # 记录执行命令当前使用账号凭据名称
     create_time = models.DateTimeField(default=timezone.now, verbose_name="创建时间")  # 执行时间
 

@@ -18,6 +18,16 @@ let guac = null;     // Guacamole 客户端实例
 
 const error = ref(null);  // 错误信息
 
+// 函数：发送有效的分辨率
+const sendValidSize = (guac, width, height, dpi) => {
+  if (width > 0 && height > 0) {
+    guac.sendSize(width, height, dpi);
+  } else {
+    console.error('Invalid window size detected:', width, height);
+    guac.sendSize(1024, 768, dpi);  // 发送默认的分辨率
+  }
+};
+
 onMounted(() => {
   const initialWidth = window.innerWidth;
   const initialHeight = window.innerHeight;
@@ -41,14 +51,14 @@ onMounted(() => {
       const displayElement = guac.getDisplay().getElement();
       document.getElementById('terminal').appendChild(displayElement);
 
-      // 设置初始分辨率
-      guac.sendSize(initialWidth, initialHeight, initialDPI); // 发送初始宽度、高度和 DPI
+      // 设置初始分辨率并发送
+      sendValidSize(guac, initialWidth, initialHeight, initialDPI);
 
       // 自动调整显示大小以适应窗口
       window.addEventListener('resize', () => {
         const width = window.innerWidth;
         const height = window.innerHeight;
-        guac.sendSize(width, height, initialDPI);
+        sendValidSize(guac, width, height, initialDPI);
       });
 
       // 启动连接并接收来自 guacd 的数据

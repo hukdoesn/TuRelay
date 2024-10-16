@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'channels_redis',
 ]
 
+GUACD_HOST = '172.17.103.120'
+GUACD_PORT = 4822
+
 # Django 中间件配置，处理请求和响应的钩子框架
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware', # 安全相关的中间件

@@ -163,8 +163,9 @@ class SSHConsumer(AsyncWebsocketConsumer):
                 username=self.username,
                 command=command_to_save,
                 # hosts拼接network
-                hosts=f"{self.host.name} ({self.host.network})",
-                # hosts=self.host.name,
+                # hosts=f"{self.host.name} ({self.host.network})",
+                hosts=self.host.name,
+                network=self.host.network,
                 credential=self.credential.account,
                 create_time=datetime.datetime.now()
             )
