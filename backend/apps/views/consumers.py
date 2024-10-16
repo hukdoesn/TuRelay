@@ -2,7 +2,7 @@ import paramiko
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.shortcuts import get_object_or_404
-from apps.models import Host, Credential
+from apps.models import Host, Credential, Token, User, CommandLog  # Import your models
 from asgiref.sync import sync_to_async
 import io
 import logging
@@ -15,6 +15,8 @@ from rest_framework import status
 import stat
 import datetime
 import os
+import urllib.parse  # For parsing query parameters
+import re  # For regular expressions
 
 # 获取日志记录器实例
 logger = logging.getLogger('log')
@@ -24,9 +26,47 @@ class SSHConsumer(AsyncWebsocketConsumer):
     SSHConsumer 处理 WebSocket 连接，以使用 Paramiko 根据存储在数据库中的主机凭据建立 SSH 会话。
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # 初始化属性
+        self.last_input_char = None  # 记录上一次输入的字符
+        self.command_buffer = ''
+        self.is_command_executed = False  # 标记是否执行了命令
+        self.in_shell_prompt = False  # 标记是否在 shell 提示符
+        self.in_editor = False  # 标记是否在编辑器中
+
+        # 定义一个正则表达式来匹配 shell 提示符
+        self.shell_prompt_regex = re.compile(r'[^@]+@[^:]+:[^\$#]*[#$]\s?$')
+
     async def connect(self):
-        
-        self.host_id = self.scope['url_route']['kwargs']['host_id']  # 从 URL 中获取主机 ID
+        # 从 URL 中获取主机 ID
+        self.host_id = self.scope['url_route']['kwargs']['host_id']
+
+        # 从查询参数中获取 token
+        query_string = self.scope['query_string'].decode('utf-8')
+        query_params = urllib.parse.parse_qs(query_string)
+        token = query_params.get('token', [None])[0]
+
+        if not token:
+            await self.send_text_data('认证失败：未提供令牌。\n')
+            await self.close()
+            return
+
+        # 验证令牌并获取用户名
+        try:
+            # 假设 Token 表有字段 'token' 和 'user_id'
+            token_obj = await sync_to_async(Token.objects.get)(token=token)
+            self.user = await sync_to_async(User.objects.get)(id=token_obj.user_id)
+            self.username = self.user.username
+        except Token.DoesNotExist:
+            await self.send_text_data('认证失败：无效的令牌。\n')
+            await self.close()
+            return
+        except User.DoesNotExist:
+            await self.send_text_data('认证失败：用户不存在。\n')
+            await self.close()
+            return
 
         # 异步获取主机和凭据信息
         self.host = await sync_to_async(get_object_or_404)(Host, id=self.host_id)
@@ -52,11 +92,83 @@ class SSHConsumer(AsyncWebsocketConsumer):
                 # 调整终端大小
                 self.ssh_channel.resize_pty(width=data['cols'], height=data['rows'])
             elif hasattr(self, 'ssh_channel'):
-                self.ssh_channel.send(text_data)  # 通过 SSH 通道发送数据到服务器
+                # 将客户端输入的数据发送到 SSH 通道
+                self.ssh_channel.send(text_data)
+
+                # 更新命令缓冲区
+                await self.update_command_buffer(text_data)
+
+                # 记录最后一个输入的字符
+                if text_data:
+                    self.last_input_char = text_data[-1]
         except (json.JSONDecodeError, TypeError):
             # 如果数据不是 JSON 或不能迭代，则视为普通的命令输入
             if hasattr(self, 'ssh_channel'):
                 self.ssh_channel.send(text_data)
+
+                # 更新命令缓冲区
+                await self.update_command_buffer(text_data)
+
+                # 记录最后一个输入的字符
+                if text_data:
+                    self.last_input_char = text_data[-1]
+
+    async def update_command_buffer(self, data):
+        """
+        更新命令缓冲区，处理用户输入的数据，包括特殊键。
+        """
+        for char in data:
+            if not self.in_shell_prompt:
+                # 未检测到 shell 提示符，不记录输入
+                continue
+
+            if self.in_editor:
+                # 在编辑器中，不记录输入
+                continue
+
+            if char == '\r' or char == '\n':
+                # 用户按下回车键，标记命令已执行
+                self.is_command_executed = True
+                # 保存当前命令缓冲区
+                await self.save_command_log()
+                # 重置命令缓冲区
+                self.command_buffer = ''
+                self.in_shell_prompt = False  # 等待下一个提示符
+            elif char == '\x7f':
+                # 处理退格键
+                self.command_buffer = self.command_buffer[:-1]
+            elif ord(char) == 9:
+                # Tab 键，等待服务器返回自动补全内容
+                pass
+            else:
+                # 添加输入的字符到命令缓冲区
+                self.command_buffer += char
+
+    async def save_command_log(self):
+        """
+        保存执行的命令到 CommandLog 表中。
+        """
+        command = self.command_buffer.strip()
+        if command:
+            # 检测是否进入编辑器，如 vi、vim
+            if command.startswith('vi ') or command.startswith('vim '):
+                self.in_editor = True  # 进入编辑器
+                # 只记录进入编辑器的命令，不记录后续内容
+                command_to_save = command
+            else:
+                command_to_save = command
+
+            # 创建命令日志记录
+            await sync_to_async(CommandLog.objects.create)(
+                username=self.username,
+                command=command_to_save,
+                # hosts拼接network
+                hosts=f"{self.host.name} ({self.host.network})",
+                # hosts=self.host.name,
+                credential=self.credential.account,
+                create_time=datetime.datetime.now()
+            )
+            logger.info('命令已记录: 用户=%s, 命令=%s', self.username, command_to_save)
 
     async def establish_ssh_connection(self):
         """
@@ -114,18 +226,68 @@ class SSHConsumer(AsyncWebsocketConsumer):
     async def receive_ssh_data(self):
         """
         持续从 SSH 通道读取数据并将其发送到 WebSocket。
+        同时检测 shell 提示符和处理自动补全的内容。
         """
         try:
+            buffer = ''
             while True:
                 if self.ssh_channel.recv_ready():
-                    # 处理接收到的数据，使用 'replace' 以确保不会因无法解码的字符导致崩溃
+                    # 接收数据
                     data = self.ssh_channel.recv(1024).decode('utf-8', errors='replace')
                     await self.send(text_data=data)
+
+                    # 累积缓冲区数据
+                    buffer += data
+
+                    # 检测 shell 提示符
+                    if self.shell_prompt_regex.search(buffer):
+                        self.in_shell_prompt = True
+                        buffer = ''  # 重置缓冲区
+
+                        # 如果之前在编辑器中，现在退出了编辑器
+                        if self.in_editor:
+                            self.in_editor = False
+                    else:
+                        # 继续累积缓冲区
+                        pass
+
+                    # 更新命令缓冲区
+                    await self.update_command_buffer_from_ssh(data)
                 await asyncio.sleep(0.1)
         except Exception as e:
             await self.send_text_data(f'连接错误: {str(e)}\n')
             logger.error('SSH 数据接收错误: %s (主机ID=%s)', str(e), self.host_id)
             await self.close()
+
+    async def update_command_buffer_from_ssh(self, data):
+        """
+        从 SSH 服务器返回的数据中更新命令缓冲区，处理自动补全的内容。
+        """
+        if not data:
+            return
+
+        if self.in_editor:
+            # 在编辑器中，不记录任何输出
+            return
+
+        # 如果之前检测到命令已执行，则重置标志
+        if self.is_command_executed:
+            self.is_command_executed = False
+            return
+
+        # 处理自动补全的情况
+        # 检查是否有自动补全的内容
+        # 这里假设自动补全的内容紧跟在用户输入后返回
+        if self.last_input_char and ord(self.last_input_char) == 9:  # 上一次输入是 Tab 键
+            # 移除 ANSI 转义序列
+            ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+            clean_data = ansi_escape.sub('', data)
+
+            # 只保留可打印字符
+            printable_data = ''.join(filter(lambda x: x.isprintable(), clean_data))
+
+            # 添加到命令缓冲区
+            self.command_buffer += printable_data
 
     async def send_text_data(self, message):
         """
@@ -133,6 +295,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
         """
         await self.send(text_data=message)
         logger.debug('发送到 WebSocket 的消息: %s', message.strip())
+
 
 
 # 文件管理相关的视图

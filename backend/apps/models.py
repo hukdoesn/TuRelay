@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from django.utils import timezone
 
 class User(models.Model):
     """
@@ -85,7 +86,7 @@ class Token(models.Model):
     """
     令牌模型，存储用户的认证令牌
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")  # 关联到 User 模型
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用��")  # 关联到 User 模型
     token = models.CharField(max_length=500, verbose_name="令牌")  # 令牌字符串
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
 
@@ -222,3 +223,20 @@ class Host(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.operating_system} - {self.network}"
+
+# 添加新的模型
+class CommandLog(models.Model):
+    """
+    命令日志模型，记录用户执行的命令信息
+    """
+    username = models.CharField(max_length=150, verbose_name="用户名")  # 执行命令的用户名
+    command = models.TextField(verbose_name="执行的命令")  # 记录执行过的命令
+    hosts = models.CharField(max_length=255, verbose_name="执行主机")  # 记录执行的主机名+IP
+    credential = models.CharField(max_length=150, verbose_name="使用的凭据")  # 记录执行命令当前使用账号凭据名称
+    create_time = models.DateTimeField(default=timezone.now, verbose_name="创建时间")  # 执行时间
+
+    class Meta:
+        db_table = 't_command_log'  # 指定数据库表名为 t_command_log
+
+    def __str__(self):
+        return f"{self.username} - {self.hosts} - {self.command[:50]}"

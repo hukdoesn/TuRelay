@@ -1,10 +1,9 @@
 <template>
-  <div class="rdp-container" ref="rdpContainer"></div>
-  <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div id="terminal" style="width: 100%; height: 100%;"></div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { onMounted, ref, onBeforeUnmount } from 'vue';
 import Guacamole from 'guacamole-common-js';
 
 const props = defineProps({
@@ -14,120 +13,113 @@ const props = defineProps({
   },
 });
 
-const errorMessage = ref('');
-let guacClient = null;
-let tunnel = null;
-let reconnectAttempts = 0;
-const maxReconnectAttempts = 3;
+let socket = null;   // WebSocket 连接
+let guac = null;     // Guacamole 客户端实例
 
-const rdpContainer = ref(null);
-
-function initializeConnection() {
-  const wsUrl = `ws://192.168.5.13:8100/ws/rdp/${props.hostId}/`;
-  console.log("WebSocket URL:", wsUrl);
-  tunnel = new Guacamole.WebSocketTunnel(wsUrl);
-  
-  tunnel.onerror = function(status) {
-    console.error("Tunnel error:", status);
-    errorMessage.value = `连接错误: ${status.code} - ${status.message}`;
-    attemptReconnect();
-  };
-
-  guacClient = new Guacamole.Client(tunnel);
-
-  rdpContainer.value.appendChild(guacClient.getDisplay().getElement());
-
-  guacClient.onerror = function(error) {
-    console.error("Client error:", error);
-    errorMessage.value = `客户端错误: ${error.message}`;
-    attemptReconnect();
-  };
-
-  guacClient.onstatechange = (state) => {
-    console.log("Guacamole client state changed:", state);
-    if (state === Guacamole.Client.State.IDLE) {
-      console.log("Guacamole client is idle");
-    } else if (state === Guacamole.Client.State.CONNECTING) {
-      console.log("Guacamole client is connecting");
-    } else if (state === Guacamole.Client.State.CONNECTED) {
-      console.log("Guacamole client is connected");
-      reconnectAttempts = 0;  // 重置重连尝试次数
-    } else if (state === Guacamole.Client.State.DISCONNECTING) {
-      console.log("Guacamole client is disconnecting");
-    } else if (state === Guacamole.Client.State.DISCONNECTED) {
-      console.log("Guacamole client is disconnected");
-      if (guacClient.getErrorMessage()) {
-        errorMessage.value = guacClient.getErrorMessage();
-      } else {
-        errorMessage.value = 'RDP 连接已关闭。';
-      }
-      attemptReconnect();
-    }
-  };
-
-  guacClient.connect();
-}
-
-function attemptReconnect() {
-  if (reconnectAttempts < maxReconnectAttempts) {
-    reconnectAttempts++;
-    console.log(`Attempting to reconnect (${reconnectAttempts}/${maxReconnectAttempts})...`);
-    setTimeout(() => {
-      if (guacClient) {
-        guacClient.disconnect();
-      }
-      initializeConnection();
-    }, 5000);  // 5秒后尝试重连
-  } else {
-    console.error("Max reconnection attempts reached.");
-    errorMessage.value = "无法重新连接到 RDP 服务器。请刷新页面重试。";
-  }
-}
-
-let heartbeatInterval;
-
-function startHeartbeat() {
-  heartbeatInterval = setInterval(() => {
-    if (guacClient && guacClient.getState() === Guacamole.Client.State.CONNECTED) {
-      guacClient.sendKeyEvent(1, 0x00);  // 发送一个无害的按键事件作为心跳
-    }
-  }, 5000);  // 每5秒发送一次心跳
-}
-
-function stopHeartbeat() {
-  if (heartbeatInterval) {
-    clearInterval(heartbeatInterval);
-  }
-}
+const error = ref(null);  // 错误信息
 
 onMounted(() => {
-  initializeConnection();
-  startHeartbeat();
+  const initialWidth = window.innerWidth;
+  const initialHeight = window.innerHeight;
+  const initialDPI = 96; // 常规 DPI 值
+
+  // 建立 WebSocket 连接，将 hostId 发送给后端
+  socket = new WebSocket(`ws://localhost:8100/ws/guacamole/${props.hostId.replace(/-/g, '')}/`);
+
+  // 处理 WebSocket 连接打开时的逻辑
+  socket.onopen = function () {
+    console.log('WebSocket connection opened for hostId:', props.hostId);
+  };
+
+  // 处理收到来自 WebSocket 的消息（来自 guacd）
+  socket.onmessage = function (event) {
+    if (!guac) {
+      // 初始化 Guacamole 客户端
+      guac = new Guacamole.Client(new Guacamole.WebSocketTunnel(socket));
+
+      // 将 Guacamole 显示的内容渲染到 #terminal 容器中
+      const displayElement = guac.getDisplay().getElement();
+      document.getElementById('terminal').appendChild(displayElement);
+
+      // 设置初始分辨率
+      guac.sendSize(initialWidth, initialHeight, initialDPI); // 发送初始宽度、高度和 DPI
+
+      // 自动调整显示大小以适应窗口
+      window.addEventListener('resize', () => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        guac.sendSize(width, height, initialDPI);
+      });
+
+      // 启动连接并接收来自 guacd 的数据
+      guac.connect();
+
+      // 处理连接状态变化
+      guac.onstatechange = (state) => {
+        if (state === Guacamole.Client.State.CONNECTED) {
+          console.log('Connected to remote desktop via Guacamole');
+        } else if (state === Guacamole.Client.State.DISCONNECTED) {
+          console.log('Disconnected from remote desktop');
+          error.value = 'Disconnected from remote desktop';
+        }
+      };
+
+      // 处理显示上的错误
+      guac.onerror = (err) => {
+        console.error('Error in Guacamole client:', err);
+        error.value = err.message;
+      };
+    }
+
+    // 将所有收到的消息传递给 Guacamole 客户端
+    guac.receive(event.data);
+  };
+
+  // 处理 WebSocket 连接关闭时的逻辑
+  socket.onclose = function () {
+    console.log('WebSocket connection closed');
+    if (guac) {
+      guac.disconnect();
+      guac = null;
+    }
+  };
+
+  // 处理 WebSocket 错误
+  socket.onerror = function (err) {
+    console.error('WebSocket error:', err);
+    error.value = 'WebSocket connection error';
+  };
+
+  // 捕捉键盘按键并发送给后端
+  window.addEventListener('keydown', (event) => {
+    if (guac) {
+      guac.sendKeyEvent(1, event.keyCode); // 按键按下事件
+    }
+  });
+
+  window.addEventListener('keyup', (event) => {
+    if (guac) {
+      guac.sendKeyEvent(0, event.keyCode); // 按键松开事件
+    }
+  });
 });
 
+// 组件卸载时清理资源
 onBeforeUnmount(() => {
-  if (guacClient) {
-    guacClient.disconnect();
+  if (guac) {
+    guac.disconnect();
+    guac = null;
   }
-  stopHeartbeat();
+  if (socket) {
+    socket.close();
+  }
 });
 </script>
 
 <style scoped>
-.rdp-container {
+#terminal {
   width: 100%;
   height: 100%;
-  background: #000;
-  position: relative;
-}
-
-.error-message {
-  color: red;
-  text-align: center;
-  padding: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  background-color: black;
 }
 </style>

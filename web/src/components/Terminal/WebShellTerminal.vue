@@ -254,8 +254,10 @@ const initializeTerminal = async (uniqueTabKey) => {
     }
   });
 
+  const token = localStorage.getItem('accessToken');
+  const socket = new WebSocket(`${wsServerAddress}/ws/ssh/${hostId.replace(/-/g, '')}/?token=${token}`);
   // 创建 WebSocket 时仅使用原始 hostId
-  const socket = new WebSocket(`${wsServerAddress}/ws/ssh/${hostId.replace(/-/g, '')}/`);
+  // const socket = new WebSocket(`${wsServerAddress}/ws/ssh/${hostId.replace(/-/g, '')}/`);
   sockets[uniqueTabKey] = socket;
 
   socket.onopen = () => {
@@ -678,12 +680,12 @@ onBeforeUnmount(() => {
   padding-left: 2px;
 }
 
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-tree .ant-tree-indent-unit) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tree .ant-tree-indent-unit) {
   width: 20px !important;
 }
 
 /* tab标签页间距 */
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-tag) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag) {
   margin-inline-end: 5px;
   border-radius: 2px;
   border: none;
@@ -691,16 +693,16 @@ onBeforeUnmount(() => {
 }
 
 /* tree 样式 */
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-tree) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tree) {
   color: rgba(255, 255, 255);
   background: #191C20;
 }
 
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-layout .ant-layout-sider) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-layout .ant-layout-sider) {
   background: #191C20;
 }
 
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-layout .ant-layout-sider-trigger) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-layout .ant-layout-sider-trigger) {
   background: #191C20;
 }
 
@@ -752,17 +754,17 @@ onBeforeUnmount(() => {
 }
 
 /* 鼠标悬停tab，tab icon图标颜色更改为白色 */
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-tag.inactive-tab:hover .ant-tag-close-icon) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag.inactive-tab:hover .ant-tag-close-icon) {
   color: #FFFFFF !important;
 }
 
 /* 活跃tab icon图标（白色）*/
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-tag.active-tab .ant-tag-close-icon) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag.active-tab .ant-tag-close-icon) {
   color: #ffffff !important;
 }
 
 /* 不活跃tab icon图标（白色降低透明度） */
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-tag.inactive-tab .ant-tag-close-icon) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag.inactive-tab .ant-tag-close-icon) {
   color: #FFFFFF66 !important;
 }
 
@@ -777,22 +779,22 @@ onBeforeUnmount(() => {
 }
 
 /* 重新连接button */
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-btn) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-btn) {
   color: #FFFFFF66;
 }
 
 /* 悬浮重新连接文字颜色 */
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-btn:hover) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-btn:hover) {
   color: #FFFFFF;
 }
 
 /* 悬浮重新连接背景颜色 */
-:deep(:where(.css-dev-only-do-not-override-19iuou).ant-btn:hover) {
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-btn:hover) {
   background-color: #1e2023;
 }
 
 /* logo左边距 */
-:where(.css-dev-only-do-not-override-19iuou).ant-layout .ant-layout-header {
+:where(.css-dev-only-do-not-override-17yhhjv).ant-layout .ant-layout-header {
   padding-inline: 8px !important;
 }
 
