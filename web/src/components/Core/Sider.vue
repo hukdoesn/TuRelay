@@ -76,6 +76,9 @@
         <a-menu-item key="/alert-management/alert-rules">
           <router-link to="/alert-management/alert-rules">报警规则</router-link>
         </a-menu-item>
+        <a-menu-item key="alert-managemanet/command-alert">
+          <router-link to="/alert-management/command-alert">命令报警</router-link>
+        </a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="/audit-management">
         <template #title>

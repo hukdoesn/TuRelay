@@ -118,14 +118,6 @@ const router = createRouter({
             breadcrumbName: '站点监控'
            } 
         },
-        // { 
-        //   path: '/web-terminal', 
-        //   component: () => import('@/components/Terminal/WebTerminal.vue'), 
-        //   meta: { 
-        //     requiresAuth: true, 
-        //     breadcrumbName: 'web终端' 
-        //   } 
-        // },
         { 
           path: '/ci-cd-system',
           component: () => import('@/components/CI_CDSystem/CI_CDSystem.vue'), 
@@ -149,6 +141,14 @@ const router = createRouter({
             requiresAuth: true, 
             breadcrumbName: '报警规则' 
           } 
+        },
+        {
+          path: '/alert-management/command-alert',
+          component: () => import('@/components/AlertManagement/CommandAlert.vue'),
+          meta: {
+            requiresAuth: true,
+            breadcrumbName: '命令报警'
+          }
         },
         { 
           path: '/audit-management/command-records', 

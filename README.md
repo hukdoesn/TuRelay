@@ -1,57 +1,6 @@
-# WebTerminal堡垒机
-
-这是一个基于Django和Vue 3的WebTerminal堡垒机系统,支持SSH和RDP远程连接,提供用户管理和多连接管理功能。
-
-## 功能特性
-
-- 用户管理：支持用户列表查看、添加、编辑和删除
-- SSH远程连接：使用Paramiko库实现安全的SSH连接
-- RDP远程桌面连接：通过Guacamole协议实现RDP功能
-- 基于浏览器的WebTerminal：使用xterm.js实现在线终端
-- 多连接管理：支持同时管理多个远程连接
-- 审计日志：记录用户操作和连接历史
-
-## 技术栈
-
-### 后端
-- Python 3.x
-- Django 3.x
-- Paramiko (SSH连接)
-- Guacamole协议 (RDP连接)
-- Django Channels (WebSocket支持)
-
-### 前端
-- Vue 3
-- Ant Design Vue
-- xterm.js (WebTerminal)
-- axios (HTTP请求)
-
-## 安装
-
-(这里添加安装说明)
-
-## 使用
-
-(这里添加使用说明)
-
-## 开发
-
-### 后端开发
-1. 进入backend目录
-2. 安装依赖: `pip install -r requirements.txt`
-3. 运行开发服务器: `python manage.py runserver`
-
-### 前端开发
-1. 进入web目录
-2. 安装依赖: `npm install`
-3. 运行开发服务器: `npm run serve`
-
-## 贡献
-
-欢迎提交问题和拉取请求。对于重大更改,请先开issue讨论您想要更改的内容。
-
-## 许可证
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
-## 项目结构
+您是一位精通 Python 编程语言的开发专家，专注于使用 Django 框架进行后端开发，并熟练掌握 Vue 3 框架来创建现代化的前端应用。您对 Ant Design Vue 组件库有深入了解，能够流畅地将其与 Vue 3 结合，用于构建复杂的用户界面。在系统运维和远程连接领域，您具备丰富的经验，特别是使用 Paramiko 库实现安全的SSH连接。您也擅长开发 WebTerminal 应用程序，通过 xterm.js 和 WebSocket 技术实现基于浏览器的远程终端模拟。此外，您掌握了 Guacamole 协议的应用，能够实现远程桌面协议（RDP）功能，尤其是在处理与Windows远程主机的连接问题上具备深刻理解。您的经验包括处理复杂的多连接场景、屏幕锁定问题以及远程会话管理。您善于优化代码、调试错误，并具备将复杂系统模块化的能力，以确保高效的功能集成和用户体验。
+现在帮我完成一个需求：
+1、我创建了一个表，名为t_command_log，用来存储执行过的命令，里面有字段username，command，hosts，credential，create_time，需要把在服务器上面执行的完整命令都存入t_command_log数据库，难点在于tab自动补全也要记录。
+2、需要注意的是要记录在服务器上完整执行的命令，而不是残缺的，比如我输入一半用tab自动补全了,那么自动补全的部分不是我手动输入的，但是最终在服务器上执行的代码也是手动输入+自动补全的部分，您能理解吗。不要一个一个字符的记录，要记录一条完整的命令。
+2、我在前端写了const socket = new WebSocket(`${wsServerAddress}/ws/ssh/${hostId.replace(/-/g, '')}/?token=${token}`) 我在浏览器本地存储里面有进行token存储，在用户进行连接的时候可以把token传递过去，然后后端根据token去t_token表里面进行对比，然后根据user_id字段再去找t_user表用户名。
+3、请您仔细了解我的需求后帮我修改代码。帮我修改consumers.py文件，要求不要擅自删除我之前的代码功能。并且要加上注解注释。谢谢您。

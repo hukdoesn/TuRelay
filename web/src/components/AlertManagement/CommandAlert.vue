@@ -1,18 +1,18 @@
 <template>
     <div class="content_table">
         <div class="input_tools">
-            <a-input class="input_item" addonBefore="名称"  placeholder="请输入名称" />
-            <a-input class="input_item" addonBefore="通知类型" placeholder="请输入通知类型" />
+            <a-input class="input_item" addonBefore="主机名称"  placeholder="请输入主机名" />
+            <a-input class="input_item" addonBefore="规则名称" placeholder="请输入规则名称" />
         </div>
         <div class="button_tools">
             <a-button class="button_font">重置</a-button>
             <a-button class="button_font" type="primary">查询</a-button>
         </div>
     </div>
-    <!-- 新建报警联系人按钮 -->
+    <!-- 新建命令报警按钮 -->
     <div class="button_create">
-        <span>报警联系人</span>
-        <a-button @click="showCreateModal" class="button_item button_font" type="primary">新建报警联系人</a-button>
+        <span>命令报警</span>
+        <a-button @click="showCreateModal" class="button_item button_font" type="primary">新建规则</a-button>
     </div>
     <div class="table_main">
         <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
@@ -58,29 +58,32 @@ const columns = [
         width: 100,
     },
     {
-        title: '创建人',
-        dataIndex: 'create_user',
+        title: '命令规则',
+        dataIndex: 'command_rule',
         width: 130,
     },
     {
-        title: '通知类型',
-        dataIndex: 'notify_type',
+        title: '关联主机',
+        dataIndex: 'links_host',
         width: 100,
     },
     {
-        title: 'WebHook',
-        dataIndex: 'webhook',
+        title: '告警联系人',
+        dataIndex: 'alert_contact',
         width: 120,
+    },
+    {
+        title: '是否告警',
+        dataIndex: 'is_alert',
+        width: 100,
+        customRender: ({ text }) => h('div', {
+            style: 'display: flex; align-items: center; justify-content: center;'
+        }, text ? '是' : '否')
     },
     {
         title: '创建时间',
         dataIndex: 'create_time',
         width: 120,
-    },
-    {
-        title: '操作',
-        dataIndex: 'operation',
-        width: 100,
     },
 ]
 
