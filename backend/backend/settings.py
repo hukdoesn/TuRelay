@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-aq1$o05s3&m=0)yq-j1z_7xu7nk)0v_dp9^(9b9048n&1!^e+^
 DEBUG = True
 
 # 允许的主机名列表，对于公开的生产环境需要设置具体的域名或IP地址
-ALLOWED_HOSTS = ['172.17.103.120', 'localhost', '192.168.5.13', '192.168.0.104', '127.0.0.1']  # 添加允许的主机名
+ALLOWED_HOSTS = ['172.17.103.120', 'localhost', '192.168.5.13', '192.168.222.86', '127.0.0.1']  # 添加允许的主机名
 
 # Guacamole 服务器配置
 GUACAMOLE_URL = 'http://172.17.103.120:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改

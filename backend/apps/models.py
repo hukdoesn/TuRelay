@@ -17,7 +17,7 @@ class User(models.Model):
     update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")  # 更新时间
 
     class Meta:
-        db_table = 't_user'  # 指定数据库表名为 t_user
+        db_table = 't_user'  # 指定数库表名为 t_user
 
     def __str__(self):
         return self.username
@@ -86,7 +86,7 @@ class Token(models.Model):
     """
     令牌模型，存储用户的认证令牌
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用��")  # 关联到 User 模型
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用")  # 关联到 User 模型
     token = models.CharField(max_length=500, verbose_name="令牌")  # 令牌字符串
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
 
@@ -241,3 +241,39 @@ class CommandLog(models.Model):
 
     def __str__(self):
         return f"{self.username} - {self.hosts} - {self.command[:50]}"
+
+# 在文件的适当位置添加以下代码
+
+class AlertContact(models.Model):
+    """
+    告警联系人模型，存储告警联系人的基本信息
+    """
+    name = models.CharField(max_length=150, unique=True, verbose_name="告警联系人名称")
+    creator = models.CharField(max_length=150, verbose_name="创建人")
+    notify_type = models.CharField(max_length=50, verbose_name="通知类型")  # 钉钉、企微、飞书
+    webhook = models.URLField(max_length=255, verbose_name="Webhook链接")
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+
+    class Meta:
+        db_table = 't_alert_contacts'  # 指定数据库表名为 t_alert_contacts
+
+    def __str__(self):
+        return self.name
+
+class CommandAlert(models.Model):
+    """
+    命令告警模型，用于设置命令告警规则
+    """
+    name = models.CharField(max_length=150, unique=True, verbose_name="告警名称")
+    command_rule = models.TextField(null=True, blank=True,verbose_name="命令规则")
+    hosts = models.TextField(null=True, blank=True,verbose_name="关联主机")  # 存储主机名，用逗���分隔
+    alert_contacts = models.TextField(null=True, blank=True, verbose_name="告警联系人")  # 存储联系人名称，用逗号分隔
+    is_active = models.BooleanField(null=True, blank=True, default=True, verbose_name="是否告警")
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+
+    class Meta:
+        db_table = 't_command_alert'
+
+    def __str__(self):
+        return self.name
+

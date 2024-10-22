@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView
+from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -36,5 +36,15 @@ urlpatterns = [
     path('api/terminal/download/<str:host_id>/', FileDownloadView.as_view()),
     path('api/terminal/delete/<str:host_id>/', FileDeleteView.as_view()),
     path('api/command_logs/', CommandLogView.as_view(), name='command_logs'),
+    path('api/alert_contacts/', AlertContactView.as_view(), name='alert_contacts-list'),
+    path('api/alert_contacts/create/', AlertContactView.as_view(), name='alert_contacts-create'),
+    path('api/alert_contacts/<str:name>/update/', AlertContactView.as_view(), name='update_alert_contact'),
+    path('api/alert_contacts/<str:name>/delete/', AlertContactView.as_view(), name='delete_alert_contact'),
+    path('api/command_alerts/', CommandAlertView.as_view(), name='command-alert-list'),
+    path('api/command_alerts/create/', CommandAlertView.as_view(), name='command-alert-create'),
+    path('api/command_alerts/<int:id>/update/', CommandAlertView.as_view(), name='command-alert-update'),
+    path('api/command_alerts/<int:id>/delete/', CommandAlertView.as_view(), name='command-alert-delete'),
+    path('api/command_alerts/hosts/', HostListView.as_view(), name='host-list'),
+    path('api/command_alerts/alert_contacts/', AlertContactList.as_view(), name='alert-contact-list'),
     # path('api/terminal/rdp/<str:host_id>/', RDPConnectView.as_view(), name='rdp_connect'),
 ]

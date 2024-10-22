@@ -131,7 +131,7 @@ const router = createRouter({
           component: () => import('@/components/AlertManagement/AlertContacts.vue'), 
           meta: { 
             requiresAuth: true, 
-            breadcrumbName: '报警联系人' 
+            breadcrumbName: '告警联系人' 
           } 
         },
         { 
@@ -147,7 +147,7 @@ const router = createRouter({
           component: () => import('@/components/AlertManagement/CommandAlert.vue'),
           meta: {
             requiresAuth: true,
-            breadcrumbName: '命令报警'
+            breadcrumbName: '命令告警'
           }
         },
         { 

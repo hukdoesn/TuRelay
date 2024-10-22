@@ -71,13 +71,13 @@
           <span>报警管理</span>
         </template>
         <a-menu-item key="/alert-management/alert-contacts">
-          <router-link to="/alert-management/alert-contacts">报警联系人</router-link>
+          <router-link to="/alert-management/alert-contacts">告警联系人</router-link>
         </a-menu-item>
         <a-menu-item key="/alert-management/alert-rules">
           <router-link to="/alert-management/alert-rules">报警规则</router-link>
         </a-menu-item>
         <a-menu-item key="alert-managemanet/command-alert">
-          <router-link to="/alert-management/command-alert">命令报警</router-link>
+          <router-link to="/alert-management/command-alert">命令告警</router-link>
         </a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="/audit-management">
