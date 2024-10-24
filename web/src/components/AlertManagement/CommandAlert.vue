@@ -45,6 +45,12 @@
         <a-form-item label="规则名称" name="name">
           <a-input v-model:value="createForm.name" placeholder="请输入规则名称" />
         </a-form-item>
+        <a-form-item label="匹配类型" name="match_type">
+          <a-radio-group v-model:value="createForm.match_type">
+            <a-radio value="exact">精准匹配</a-radio>
+            <a-radio value="fuzzy">模糊匹配</a-radio>
+          </a-radio-group>
+        </a-form-item>
         <a-form-item label="命令规则" name="command_rule">
           <a-textarea v-model:value="createForm.command_rule" :rows="4"
             placeholder="请输入命令规则，每行一个，例如：&#10;ls -l&#10;ps aux" />
@@ -76,12 +82,18 @@
         <a-form-item label="规则名称" name="name">
           <a-input v-model:value="editForm.name" placeholder="请输入规则名称" />
         </a-form-item>
+        <a-form-item label="匹配类型" name="match_type">
+          <a-radio-group v-model:value="editForm.match_type">
+            <a-radio value="exact">精准匹配</a-radio>
+            <a-radio value="fuzzy">模糊匹配</a-radio>
+          </a-radio-group>
+        </a-form-item>
         <a-form-item label="命令规则" name="command_rule">
           <a-textarea v-model:value="editForm.command_rule" :rows="4"
             placeholder="请输入命令规则，每行一个，例如：&#10;ls -l&#10;ps aux" />
         </a-form-item>
         <a-form-item label="关联主机" name="hosts">
-          <a-select v-model:value="editForm.hosts" mode="multiple" placeholder="请选��关联主机">
+          <a-select v-model:value="editForm.hosts" mode="multiple" placeholder="请选关联主机">
             <a-select-option v-for="host in hostOptions" :key="host.id" :value="host.id">
               {{ host.name }}
             </a-select-option>
@@ -136,7 +148,7 @@ const columns = [
     {
         title: '编号',
         dataIndex: 'displayId',
-        width: 70,
+        width: 80,
         showSorterTooltip: false,
         sorter: (a, b) => a.displayId - b.displayId,
         customRender: ({ text }) => h('div', {
@@ -149,9 +161,15 @@ const columns = [
         width: 100,
     },
     {
+        title: '匹配类型',
+        dataIndex: 'match_type',
+        width: 120,
+        customRender: ({ text }) => text === 'exact' ? '精准匹配' : '模糊匹配'
+    },
+    {
         title: '命令规则',
         dataIndex: 'command_rule',
-        width: 130,
+        width: 200,
         customRender: ({ text }) => {
             return text.join(', ');
         }
@@ -159,7 +177,7 @@ const columns = [
     {
         title: '关联主机',
         dataIndex: 'host_names',
-        width: 200,
+        width: 280,
         customRender: ({ text }) => {
             const hostNames = Array.isArray(text) ? text : [];
             return h('div', {
@@ -232,6 +250,7 @@ const createForm = reactive({
     hosts: [],
     alert_contacts: [], // 修改为数组
     is_active: true,
+    match_type: 'exact',
 })
 
 // 编辑命令告警规则表单
@@ -242,6 +261,7 @@ const editForm = reactive({
     hosts: [],
     alert_contacts: [],
     is_active: true,
+    match_type: 'exact',
 })
 
 // 表单规则
@@ -258,6 +278,9 @@ const formRules = {
     ],
     alert_contacts: [
         { required: true, message: '请选择告警联系人', trigger: 'change' }
+    ],
+    match_type: [
+        { required: true, message: '请选择匹配类型', trigger: 'change' }
     ],
 }
 
@@ -416,7 +439,7 @@ const showEditModal = (record) => {
     editModalVisible.value = true
 }
 
-// 处理编��命令告警规则
+// 处理编命令告警规则
 const handleEditOk = async () => {
     try {
         await editFormRef.value.validateFields()
@@ -537,3 +560,4 @@ onMounted(() => {
     font-size: 12px !important;
 }
 </style>
+

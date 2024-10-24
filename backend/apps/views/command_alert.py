@@ -9,10 +9,11 @@ class CommandAlertSerializer(serializers.ModelSerializer):
     command_rule = serializers.ListField(child=serializers.CharField(), required=False)
     host_names = serializers.SerializerMethodField()
     alert_contact_names = serializers.SerializerMethodField()
+    match_type = serializers.ChoiceField(choices=[('exact', '精准匹配'), ('fuzzy', '模糊匹配')], default='exact')
 
     class Meta:
         model = CommandAlert
-        fields = ['id', 'name', 'command_rule', 'hosts', 'alert_contacts', 'is_active', 'create_time', 'host_names', 'alert_contact_names']
+        fields = ['id', 'name', 'command_rule', 'hosts', 'alert_contacts', 'is_active', 'create_time', 'host_names', 'alert_contact_names', 'match_type']
 
     def get_host_names(self, obj):
         host_ids = obj.hosts.split(',') if obj.hosts else []

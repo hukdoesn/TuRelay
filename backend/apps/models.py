@@ -266,10 +266,11 @@ class CommandAlert(models.Model):
     """
     name = models.CharField(max_length=150, unique=True, verbose_name="告警名称")
     command_rule = models.TextField(null=True, blank=True,verbose_name="命令规则")
-    hosts = models.TextField(null=True, blank=True,verbose_name="关联主机")  # 存储主机名，用逗���分隔
+    hosts = models.TextField(null=True, blank=True,verbose_name="关联主机")  # 存储主机名，用逗号分隔
     alert_contacts = models.TextField(null=True, blank=True, verbose_name="告警联系人")  # 存储联系人名称，用逗号分隔
     is_active = models.BooleanField(null=True, blank=True, default=True, verbose_name="是否告警")
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    match_type = models.CharField(max_length=20, choices=[('exact', '精准匹配'), ('fuzzy', '模糊匹配')], default='exact', verbose_name="匹配类型")
 
     class Meta:
         db_table = 't_command_alert'
