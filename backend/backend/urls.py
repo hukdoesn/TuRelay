@@ -42,6 +42,7 @@ urlpatterns = [
     path('api/alert_contacts/<str:name>/delete/', AlertContactView.as_view(), name='delete_alert_contact'),
     path('api/command_alerts/', CommandAlertView.as_view(), name='command-alert-list'),
     path('api/command_alerts/create/', CommandAlertView.as_view(), name='command-alert-create'),
+    path('api/command_alerts/<int:id>/', CommandAlertView.as_view(), name='command-alert-detail'),
     path('api/command_alerts/<int:id>/update/', CommandAlertView.as_view(), name='command-alert-update'),
     path('api/command_alerts/<int:id>/delete/', CommandAlertView.as_view(), name='command-alert-delete'),
     path('api/command_alerts/hosts/', HostListView.as_view(), name='host-list'),

@@ -148,7 +148,18 @@ const router = createRouter({
           meta: {
             requiresAuth: true,
             breadcrumbName: '命令告警'
-          }
+          },
+          children: [
+            {
+              path: ':id',
+              name: 'commandAlertDetail',
+              component: () => import('@/components/AlertManagement/CommandAlertDetail.vue'),
+              meta: {
+                requiresAuth: true,
+                breadcrumbName: '命令告警详情'
+              }
+            }
+          ]
         },
         { 
           path: '/audit-management/command-records', 

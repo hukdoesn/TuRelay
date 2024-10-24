@@ -66,46 +66,51 @@ class CommandAlertView(APIView):
     authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        """
-        处理GET请求，返回命令告警规则列表，支持按主机名和规则名称进行筛选，并提供分页功能。
-        """
-        host = request.GET.get('host', '')
-        name = request.GET.get('name', '')
+    def get(self, request, id=None):
+        if id:
+            command_alert = get_object_or_404(CommandAlert, id=id)
+            serializer = CommandAlertSerializer(command_alert)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            """
+            处理GET请求，返回命令告警规则列表，支持按主机名和规则名称进行筛选，并提供分页功能。
+            """
+            host = request.GET.get('host', '')
+            name = request.GET.get('name', '')
 
-        command_alerts = CommandAlert.objects.all().order_by('-create_time')
+            command_alerts = CommandAlert.objects.all().order_by('-create_time')
 
-        if host:
-            host_ids = Host.objects.filter(name__icontains=host).values_list('id', flat=True)
-            command_alerts = command_alerts.filter(hosts__in=host_ids)
-        if name:
-            command_alerts = command_alerts.filter(name__icontains=name)
+            if host:
+                host_ids = Host.objects.filter(name__icontains=host).values_list('id', flat=True)
+                command_alerts = command_alerts.filter(hosts__in=host_ids)
+            if name:
+                command_alerts = command_alerts.filter(name__icontains=name)
 
-        page = request.GET.get('page', 1)
-        page_size = request.GET.get('page_size', 10)
+            page = request.GET.get('page', 1)
+            page_size = request.GET.get('page_size', 10)
 
-        paginator = Paginator(command_alerts, page_size)
+            paginator = Paginator(command_alerts, page_size)
 
-        try:
-            current_page_data = paginator.page(page)
-        except PageNotAnInteger:
-            current_page_data = paginator.page(1)
-        except EmptyPage:
-            current_page_data = paginator.page(paginator.num_pages)
+            try:
+                current_page_data = paginator.page(page)
+            except PageNotAnInteger:
+                current_page_data = paginator.page(1)
+            except EmptyPage:
+                current_page_data = paginator.page(paginator.num_pages)
 
-        serializer = CommandAlertSerializer(current_page_data, many=True)
+            serializer = CommandAlertSerializer(current_page_data, many=True)
 
-        pagination = {
-            'current_page': current_page_data.number,
-            'total_pages': paginator.num_pages,
-            'total_items': paginator.count,
-            'page_size': int(page_size),
-        }
+            pagination = {
+                'current_page': current_page_data.number,
+                'total_pages': paginator.num_pages,
+                'total_items': paginator.count,
+                'page_size': int(page_size),
+            }
 
-        return Response({
-            'results': serializer.data,
-            'pagination': pagination
-        }, status=status.HTTP_200_OK)
+            return Response({
+                'results': serializer.data,
+                'pagination': pagination
+            }, status=status.HTTP_200_OK)
 
     def post(self, request):
         """
