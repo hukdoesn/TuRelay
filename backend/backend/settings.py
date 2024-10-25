@@ -245,3 +245,35 @@ log_path = os.path.join(os.path.dirname(cur_path), 'Log')  # 日志文件存放�
 #         },
 #     }
 # }
+
+# 命令告警配置
+COMMAND_ALERT = {
+    'ENABLED': True,
+    'LOG_LEVEL': 'WARNING',
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'log': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}

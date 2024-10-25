@@ -2,7 +2,7 @@ import paramiko
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.shortcuts import get_object_or_404
-from apps.models import Host, Credential, Token, User, CommandLog  # Import your models
+from apps.models import Host, Credential, Token, User, CommandLog, CommandAlert
 from asgiref.sync import sync_to_async
 import io
 import logging
@@ -17,6 +17,7 @@ import datetime
 import os
 import urllib.parse  # For parsing query parameters
 import re  # For regular expressions
+from apps.alert_utils.command_alert_handler import check_command_alert
 
 # 获取日志记录器实例
 logger = logging.getLogger('log')
@@ -42,6 +43,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # 从 URL 中获取主机 ID
         self.host_id = self.scope['url_route']['kwargs']['host_id']
+        logger.debug(f"尝试连接到主机ID: {self.host_id}")
 
         # 从查询参数中获取 token
         query_string = self.scope['query_string'].decode('utf-8')
@@ -49,21 +51,24 @@ class SSHConsumer(AsyncWebsocketConsumer):
         token = query_params.get('token', [None])[0]
 
         if not token:
+            logger.warning("连接失败: 未提供令牌")
             await self.send_text_data('认证失败：未提供令牌。\n')
             await self.close()
             return
 
         # 验证令牌并获取用户名
         try:
-            # 假设 Token 表有字段 'token' 和 'user_id'
             token_obj = await sync_to_async(Token.objects.get)(token=token)
             self.user = await sync_to_async(User.objects.get)(id=token_obj.user_id)
             self.username = self.user.username
+            logger.debug(f"用户 {self.username} 认证成功")
         except Token.DoesNotExist:
+            logger.warning(f"连接失败: 无效的令牌 {token}")
             await self.send_text_data('认证失败：无效的令牌。\n')
             await self.close()
             return
         except User.DoesNotExist:
+            logger.warning(f"连接失败: 用户不存在 (令牌: {token})")
             await self.send_text_data('认证失败：用户不存在。\n')
             await self.close()
             return
@@ -72,9 +77,11 @@ class SSHConsumer(AsyncWebsocketConsumer):
         self.host = await sync_to_async(get_object_or_404)(Host, id=self.host_id)
         self.credential_id = await sync_to_async(lambda: self.host.account_type.id)()
         self.credential = await sync_to_async(get_object_or_404)(Credential, id=self.credential_id)
+        logger.debug(f"获取到主机信息: {self.host.name}, 凭据ID: {self.credential_id}")
 
         # 接受 WebSocket 连接
         await self.accept()
+        logger.debug(f"WebSocket 连接已接受")
 
         # 初始化 SSH 连接
         await self.establish_ssh_connection()
@@ -119,29 +126,26 @@ class SSHConsumer(AsyncWebsocketConsumer):
         """
         for char in data:
             if not self.in_shell_prompt:
-                # 未检测到 shell 提示符，不记录输入
+                logger.debug(f"未检测到 shell 提示符,跳过命令记录")
                 continue
 
             if self.in_editor:
-                # 在编辑器中，不记录输入
+                logger.debug(f"在编辑器中,跳过命令记录")
                 continue
 
             if char == '\r' or char == '\n':
-                # 用户按下回车键，标记命令已执行
                 self.is_command_executed = True
-                # 保存当前命令缓冲区
+                logger.info(f"检测到命令执行: {self.command_buffer}")
                 await self.save_command_log()
-                # 重置命令缓冲区
+                await self.check_command_alert()
                 self.command_buffer = ''
-                self.in_shell_prompt = False  # 等待下一个提示符
+                self.in_shell_prompt = False
             elif char == '\x7f':
-                # 处理退格键
                 self.command_buffer = self.command_buffer[:-1]
             elif ord(char) == 9:
-                # Tab 键，等待服务器返回自动补全内容
+                logger.debug("检测到 Tab 键,等待自动补全")
                 pass
             else:
-                # 添加输入的字符到命令缓冲区
                 self.command_buffer += char
 
     async def save_command_log(self):
@@ -150,37 +154,45 @@ class SSHConsumer(AsyncWebsocketConsumer):
         """
         command = self.command_buffer.strip()
         if command:
-            # 检测是否进入编辑器，如 vi、vim
             if command.startswith('vi ') or command.startswith('vim '):
-                self.in_editor = True  # 进入编辑器
-                # 只记录进入编辑器的命令，不记录后续内容
+                self.in_editor = True
                 command_to_save = command
+                logger.info(f"进入编辑器模式: {command_to_save}")
             else:
                 command_to_save = command
 
-            # 创建命令日志记录
             await sync_to_async(CommandLog.objects.create)(
                 username=self.username,
                 command=command_to_save,
-                # hosts拼接network
-                # hosts=f"{self.host.name} ({self.host.network})",
                 hosts=self.host.name,
                 network=self.host.network,
                 credential=self.credential.account,
                 create_time=datetime.datetime.now()
             )
-            logger.info('命令已记录: 用户=%s, 命令=%s', self.username, command_to_save)
+            logger.info(f'命令已记录: 用户={self.username}, 主机={self.host.name}, 命令={command_to_save}')
+
+    async def check_command_alert(self):
+        command = self.command_buffer.strip()
+        if command:
+            logger.debug(f"开始检查命令告警: 用户={self.username}, 主机={self.host.name}, 命令={command}")
+            alert_result = await check_command_alert(self.host.id, command, self.username)
+            if alert_result:
+                logger.warning(f'命令告警触发: 用户={self.username}, 主机={self.host.name}, 命令={command}')
+                # 告警通知已经在 check_command_alert 函数中发送
+            else:
+                logger.debug(f'命令未触发告警: 用户={self.username}, 主机={self.host.name}, 命令={command}')
 
     async def establish_ssh_connection(self):
         """
         使用主机凭据建立 SSH 连接。
         """
+        logger.debug(f"开始建立 SSH 连接到主机: {self.host.name}")
         self.ssh_client = paramiko.SSHClient()
         self.ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         try:
             if self.credential.type == '密码':
-                # 使用密码认证连接
+                logger.debug(f"使用密码认证连接到主机: {self.host.network}")
                 await sync_to_async(self.ssh_client.connect)(
                     self.host.network,
                     port=self.host.port,
@@ -189,7 +201,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
                     timeout=10
                 )
             elif self.credential.type == '密钥':
-                # 使用密钥认证连接
+                logger.debug(f"使用密钥认证连接到主机: {self.host.network}")
                 key_file = io.StringIO(self.credential.key)
                 pkey = paramiko.RSAKey.from_private_key(key_file, password=self.credential.key_password)
                 await sync_to_async(self.ssh_client.connect)(
@@ -200,10 +212,12 @@ class SSHConsumer(AsyncWebsocketConsumer):
                     timeout=10
                 )
             else:
+                logger.error(f"不支持的凭据类型: {self.credential.type}")
                 await self.send_text_data('不支持的凭据类型。\n')
                 await self.close()
                 return
 
+            logger.debug(f"SSH 连接成功建立")
             # 使用指定终端大小启动 shell
             self.ssh_channel = self.ssh_client.invoke_shell(term='xterm', width=80, height=24)
             self.ssh_channel.settimeout(0.0)
@@ -212,16 +226,16 @@ class SSHConsumer(AsyncWebsocketConsumer):
             asyncio.create_task(self.receive_ssh_data())
 
         except paramiko.AuthenticationException:
+            logger.error(f'SSH 认证失败: 主机ID={self.host_id}')
             await self.send_text_data('认证失败。\n')
-            logger.error('SSH 认证失败: 主机ID=%s', self.host_id)
             await self.close()
         except paramiko.SSHException as e:
+            logger.error(f'SSH 错误: {str(e)} (主机ID={self.host_id})')
             await self.send_text_data(f'SSH 错误: {str(e)}\n')
-            logger.error('SSH 错误: %s (主机ID=%s)', str(e), self.host_id)
             await self.close()
         except Exception as e:
+            logger.error(f'意外错误: {str(e)} (主机ID={self.host_id})')
             await self.send_text_data(f'意外错误: {str(e)}\n')
-            logger.error('意外错误: %s (主机ID=%s)', str(e), self.host_id)
             await self.close()
 
     async def receive_ssh_data(self):
@@ -271,7 +285,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
             # 在编辑器中，不记录任何输出
             return
 
-        # 如果之前检测到命令已执行，则重置标志
+        # 如果之前检测到命令已执行，则置标志
         if self.is_command_executed:
             self.is_command_executed = False
             return
@@ -358,7 +372,7 @@ class FileListView(APIView):
             # 获取指定路径下的文件列表
             file_list = sftp_client.listdir_attr(path)
 
-            # 定义格式化文件大小的函数
+            # 定义��式化文件大小的函数
             def format_size(size):
                 units = ['B', 'KB', 'MB', 'GB', 'TB']
                 index = 0
@@ -376,7 +390,7 @@ class FileListView(APIView):
                 uids.add(file_attr.st_uid)
                 gids.add(file_attr.st_gid)
 
-            # 创建 UID 到用户名的映射
+            # 创建 UID 到用户名的映
             uid_to_user = {}
             if uids:
                 # 构建命令，使用 getent passwd 获取用户名
@@ -494,7 +508,7 @@ class FileUploadView(APIView):
 
             # 确定上传路径
             if path == '~':
-                # 获取用户的home目录
+                # 获取用��的home目录
                 path = sftp_client.normalize('.')
 
             # 上传文件到指定目录
@@ -633,3 +647,8 @@ class FileDeleteView(APIView):
         except Exception as e:
             logger.error('文件删除错误: %s (主机ID=%s)', str(e), host_id)
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
