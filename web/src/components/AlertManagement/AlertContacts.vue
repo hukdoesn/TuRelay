@@ -22,7 +22,7 @@
 
     <!-- 新建告警联系人模态框 -->
     <a-modal v-model:open="createModalVisible" title="新建告警联系人" @ok="handleCreateOk" @cancel="handleCreateCancel">
-        <a-form :model="createForm" :rules="formRules" ref="createFormRef" labelAlign="right" :labelCol="{ span: 6 }"layout="vertical" >
+        <a-form :model="createForm" :rules="formRules" ref="createFormRef" labelAlign="right" :labelCol="{ span: 6 }" layout="vertical" >
             <a-form-item label="名称" name="name">
                 <a-input v-model:value="createForm.name" placeholder="请输入名称" />
             </a-form-item>

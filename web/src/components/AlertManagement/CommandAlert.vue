@@ -63,7 +63,7 @@
           </a-select>
         </a-form-item>
         <a-form-item label="告警联系人" name="alert_contacts">
-          <a-select v-model:value="createForm.alert_contacts" mode="multiple" placeholder="请选择告警联系人">
+          <a-select v-model:value="createForm.alert_contacts" placeholder="请选择告警联系人">
             <a-select-option v-for="contact in alertContactOptions" :key="contact.id" :value="contact.id">
               {{ contact.name }}
             </a-select-option>
@@ -158,7 +158,7 @@ const columns = [
     {
         title: '名称',
         dataIndex: 'name',
-        width: 100,
+        width: 150,
     },
     {
         title: '匹配类型',
@@ -430,16 +430,17 @@ const handleCreateCancel = () => {
 
 // 显示编辑命令告警规则模态框
 const showEditModal = (record) => {
-    editForm.id = record.id
-    editForm.name = record.name
-    editForm.command_rule = record.command_rule.join('\n')
-    editForm.hosts = record.hosts
-    editForm.alert_contacts = record.alert_contacts
-    editForm.is_active = record.is_active
-    editModalVisible.value = true
+    editForm.id = record.id;
+    editForm.name = record.name;
+    editForm.command_rule = record.command_rule.join('\n');
+    editForm.hosts = record.hosts;
+    editForm.alert_contacts = record.alert_contacts;
+    editForm.is_active = record.is_active;
+    editForm.match_type = record.match_type; // 确保这行正确设置
+    editModalVisible.value = true;
 }
 
-// 处理编命令告警规则
+// 处理编辑命令告警规则
 const handleEditOk = async () => {
     try {
         await editFormRef.value.validateFields()
