@@ -27,7 +27,7 @@
                 <a-input v-model:value="createForm.name" placeholder="请输入名称" />
             </a-form-item>
             <a-form-item label="通知类型" name="notify_type">
-                <a-select v-model:value="createForm.notify_type" placeholder="请选择通知类型">
+                <a-select v-model:value="createForm.notify_type" placeholder="请选择通知类型" >
                     <a-select-option value="钉钉">钉钉</a-select-option>
                     <a-select-option value="企微">企微</a-select-option>
                     <a-select-option value="飞书">飞书</a-select-option>
@@ -168,7 +168,7 @@ const columns = [
 // 新建告警联系人表单
 const createForm = reactive({
     name: '',
-    notify_type: '',
+    notify_type: null,
     webhook: '',
 })
 
@@ -177,7 +177,7 @@ const editForm = reactive({
     id: null,
     originalName: '', // 保存原始名称
     name: '',
-    notify_type: '',
+    notify_type: null,
     webhook: '',
 })
 
@@ -248,7 +248,7 @@ const handleTableChange = (pagination) => {
 // 重置新建告警联系人表单
 const resetCreateForm = () => {
     createForm.name = ''
-    createForm.notify_type = ''
+    createForm.notify_type = null
     createForm.webhook = ''
     if (createFormRef.value) {
         createFormRef.value.resetFields()
@@ -322,6 +322,7 @@ const handleEditOk = async () => {
 // 取消编辑告警联系人
 const handleEditCancel = () => {
     editModalVisible.value = false
+    editForm.notify_type = null  // Set to null
     editFormRef.value.resetFields()
 }
 

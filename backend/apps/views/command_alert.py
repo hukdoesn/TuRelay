@@ -5,7 +5,7 @@ import json
 
 class CommandAlertSerializer(serializers.ModelSerializer):
     hosts = serializers.ListField(child=serializers.CharField(), required=False)
-    alert_contacts = serializers.ListField(child=serializers.IntegerField(), required=False)
+    alert_contacts = serializers.CharField(required=False)  # 改为 CharField
     command_rule = serializers.ListField(child=serializers.CharField(), required=False)
     host_names = serializers.SerializerMethodField()
     alert_contact_names = serializers.SerializerMethodField()
@@ -28,7 +28,7 @@ class CommandAlertSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['hosts'] = instance.hosts.split(',') if instance.hosts else []
-        representation['alert_contacts'] = [int(id) for id in instance.alert_contacts.split(',')] if instance.alert_contacts else []
+        representation['alert_contacts'] = instance.alert_contacts  # 直接返回字符串
         representation['command_rule'] = json.loads(instance.command_rule) if instance.command_rule else []
         return representation
 
@@ -36,8 +36,7 @@ class CommandAlertSerializer(serializers.ModelSerializer):
         hosts = validated_data.pop('hosts', [])
         validated_data['hosts'] = ','.join(str(host) for host in hosts)
         
-        alert_contacts = validated_data.pop('alert_contacts', [])
-        validated_data['alert_contacts'] = ','.join(str(contact) for contact in alert_contacts)
+        # alert_contacts 已经是字符串，不需要处理
         
         command_rules = validated_data.get('command_rule', [])
         validated_data['command_rule'] = json.dumps(command_rules)
@@ -49,9 +48,7 @@ class CommandAlertSerializer(serializers.ModelSerializer):
             hosts = validated_data.pop('hosts')
             validated_data['hosts'] = ','.join(str(host) for host in hosts)
         
-        if 'alert_contacts' in validated_data:
-            alert_contacts = validated_data.pop('alert_contacts')
-            validated_data['alert_contacts'] = ','.join(str(contact) for contact in alert_contacts)
+        # alert_contacts 已经是字符串，不需要处理
         
         if 'command_rule' in validated_data:
             command_rules = validated_data['command_rule']

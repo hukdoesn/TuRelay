@@ -800,7 +800,8 @@ onBeforeUnmount(() => {
 
 /* 终端内容左边距 */
 :deep(.xterm-rows) {
-  padding-left: 10px !important;
+  /* padding-left: 10px !important; */
+  padding: 0px 0px 10px 10px !important;
 }
 </style>
 

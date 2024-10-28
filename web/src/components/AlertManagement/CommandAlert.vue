@@ -63,8 +63,11 @@
           </a-select>
         </a-form-item>
         <a-form-item label="告警联系人" name="alert_contacts">
-          <a-select v-model:value="createForm.alert_contacts" placeholder="请选择告警联系人">
-            <a-select-option v-for="contact in alertContactOptions" :key="contact.id" :value="contact.id">
+          <a-select 
+            v-model:value="createForm.alert_contacts" 
+            placeholder="请选择告警联系人"
+          >
+            <a-select-option v-for="contact in alertContactOptions" :key="contact.id" :value="contact.id.toString()">
               {{ contact.name }}
             </a-select-option>
           </a-select>
@@ -100,8 +103,11 @@
           </a-select>
         </a-form-item>
         <a-form-item label="告警联系人" name="alert_contacts">
-          <a-select v-model:value="editForm.alert_contacts" placeholder="请选择告警联系人">
-            <a-select-option v-for="contact in alertContactOptions" :key="contact.id" :value="contact.id">
+          <a-select 
+            v-model:value="editForm.alert_contacts" 
+            placeholder="请选择告警联系人"
+          >
+            <a-select-option v-for="contact in alertContactOptions" :key="contact.id" :value="contact.id.toString()">
               {{ contact.name }}
             </a-select-option>
           </a-select>
@@ -248,7 +254,7 @@ const createForm = reactive({
     name: '',
     command_rule: '',
     hosts: [],
-    alert_contacts: [], // 修改为数组
+    alert_contacts: undefined, // 改为单个值
     is_active: true,
     match_type: 'exact',
 })
@@ -259,7 +265,7 @@ const editForm = reactive({
     name: '',
     command_rule: '',
     hosts: [],
-    alert_contacts: [],
+    alert_contacts: undefined, // 改为单个值
     is_active: true,
     match_type: 'exact',
 })
@@ -321,7 +327,7 @@ const fetchCommandAlerts = async () => {
         }))
         paginationOptions.total = response.data.pagination.total_items
     } catch (error) {
-        message.error('获取命令告警规则列表失败')
+        message.error('获命令告警规则列表失败')
         console.error('Error fetching command alerts:', error)
     }
 }
@@ -383,7 +389,7 @@ const resetCreateForm = () => {
     createForm.name = ''
     createForm.command_rule = ''
     createForm.hosts = []
-    createForm.alert_contacts = []
+    createForm.alert_contacts = undefined // 重置为单个值
     createForm.is_active = true
     if (createFormRef.value) {
         createFormRef.value.resetFields()
@@ -405,7 +411,7 @@ const handleCreateOk = async () => {
             ...createForm,
             command_rule: createForm.command_rule.split('\n').filter(rule => rule.trim() !== ''),
             hosts: createForm.hosts,
-            alert_contacts: createForm.alert_contacts, // 这里不需要修改，因为现在它已经是一个数组
+            alert_contacts: createForm.alert_contacts // 直接使用单个值
         }
         const response = await axios.post('/api/command_alerts/create/', formData, {
             headers: {
@@ -430,14 +436,14 @@ const handleCreateCancel = () => {
 
 // 显示编辑命令告警规则模态框
 const showEditModal = (record) => {
-    editForm.id = record.id;
-    editForm.name = record.name;
-    editForm.command_rule = record.command_rule.join('\n');
-    editForm.hosts = record.hosts;
-    editForm.alert_contacts = record.alert_contacts;
-    editForm.is_active = record.is_active;
-    editForm.match_type = record.match_type; // 确保这行正确设置
-    editModalVisible.value = true;
+    editForm.id = record.id
+    editForm.name = record.name
+    editForm.command_rule = record.command_rule.join('\n')
+    editForm.hosts = record.hosts
+    editForm.alert_contacts = record.alert_contacts // 直接使用单个值
+    editForm.is_active = record.is_active
+    editForm.match_type = record.match_type
+    editModalVisible.value = true
 }
 
 // 处理编辑命令告警规则
@@ -449,7 +455,7 @@ const handleEditOk = async () => {
             ...editForm,
             command_rule: editForm.command_rule.split('\n').filter(rule => rule.trim() !== ''),
             hosts: editForm.hosts,
-            alert_contacts: Array.isArray(editForm.alert_contacts) ? editForm.alert_contacts : [editForm.alert_contacts].filter(Boolean),
+            alert_contacts: editForm.alert_contacts // 直接使用单个值
         }
         const response = await axios.put(`/api/command_alerts/${editForm.id}/update/`, formData, {
             headers: {
