@@ -29,7 +29,6 @@ def get_dingtalk_message(username, hostname, host_ip, command, command_alert):
 def get_wecom_message(username, hostname, host_ip, command, command_alert):
     """企业微信消息模板"""
     return f"""## 🚨 命令告警通知
----
 检测到潜在的敏感操作，请及时关注！
 📌 执行详情：
 > 👤 执行用户：{username}

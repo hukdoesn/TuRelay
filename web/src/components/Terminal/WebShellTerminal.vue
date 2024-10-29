@@ -63,7 +63,7 @@
       </a-layout>
     </a-layout>
     <!-- 文件管理抽屉 -->
-    <a-drawer v-model:open="isFileManagerVisible" title="文件管理" :width="900" :destroyOnClose="true"
+    <a-drawer v-model:open="isFileManagerVisible" title="文件管理" :width="900" :destroyOnClose="true" :getContainer="false"
       @close="handleDrawerClose">
       <!-- 文件列表和上传下载功能 -->
       <div class="file-manager-content">
@@ -234,12 +234,17 @@ const initializeTerminal = async (uniqueTabKey) => {
   const fitAddon = new FitAddon();
   const terminal = new Terminal({
     theme: {
-      background: '#1e202366', // 设置背景颜色
-      foreground: '#ffffff', // 设置字体颜色
+      background: '#1e2023', // 确保背景色与容器一致
+      foreground: '#ffffff',
     },
-    cursorBlink: true, // 光标闪烁
-    cursorStyle: 'bar', // 光标样式
-    cursorWidth: 1, // 光标宽度
+    cursorBlink: true,
+    cursorStyle: 'bar',
+    cursorWidth: 1,
+    scrollback: 1000, // 设置滚动历史
+    fontSize: 14, // 设置字体大小
+    fontFamily: 'Menlo, Monaco, "Courier New", monospace', // 设置等宽字体
+    letterSpacing: 0,
+    lineHeight: 1.2, // 增加行高以改善可读性
   });
   terminal.loadAddon(fitAddon);
   terminal.open(terminalContainer);
@@ -627,12 +632,16 @@ onBeforeUnmount(() => {
 .full-terminal {
   width: 100%;
   height: 100%;
+  padding: 5px 10px 15px 10px;
+  box-sizing: border-box;
+  background-color: #1e2023;
 }
 
 .terminal-container {
   height: calc(100vh - 60px);
   width: 100%;
   background-color: #1e2023;
+  overflow: hidden; /* 防止出现滚动条时的白色间隙 */
 }
 
 .terminal-sidebar {
@@ -798,36 +807,15 @@ onBeforeUnmount(() => {
   padding-inline: 8px !important;
 }
 
-/* 终端内容左边距 */
-:deep(.xterm-rows) {
-  /* padding-left: 10px !important; */
-  padding: 0px 0px 10px 10px !important;
-}
-</style>
-
-<style>
-/* 文件管理drawer抽屉*/
-.ant-drawer .ant-drawer-content {
-  width: 100%;
+/* 添加 xterm 相关样式 */
+:deep(.xterm) {
+  padding: 0;
   height: 100%;
-  overflow: auto;
-  /* background: #21222b; */
-  background: #1f1f1f;
-  pointer-events: auto;
 }
 
-/* 文件管理drawer关闭按钮 */
-.ant-drawer .ant-drawer-close {
-  color: #ffffffD9;
-}
-
-.ant-drawer .ant-drawer-close:hover {
-  color: #ffffff;
-}
-
-/* 文件管理drawer标题 */
-.ant-drawer .ant-drawer-title {
-  color: #ffffffD9;
+:deep(.xterm-viewport) {
+  background-color: #1e2023 !important; /* 确保滚动时背景色一致 */
+  overflow-y: auto !important; /* 使用 auto 替代 scroll */
 }
 
 /* 文件管理 */
@@ -836,6 +824,28 @@ onBeforeUnmount(() => {
   align-items: center;
   margin-bottom: 20px;
   gap: 10px;
+}
+
+/* 文件管理drawer抽屉*/
+:deep(.ant-drawer-content) {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: #1f1f1f;
+    pointer-events: auto;
+}
+
+/* 文件管理drawer关闭按钮 */
+:deep(.ant-drawer-close) {
+  color: #ffffffD9;
+}
+:deep(.ant-drawer-close:hover) {
+  color: #ffffff;
+}
+
+/* 文件管理drawer标题 */
+:deep(.ant-drawer-title) {
+  color: #ffffffD9;
 }
 
 /* 操作按钮的样式（返回、上传、下载、删除） */
@@ -850,107 +860,81 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
   /* Include border in the element's total width */
 }
-
 .action-button:hover {
   background-color: #141414 !important;
   color: #FFFFFF !important;
   border: solid 1px #353535 !important;
 }
 
+/* path路径输入框 */
 .current-path-input {
-  /* flex-grow: 1; */
   background: #141414 !important;
   border-color: #303030 !important;
   color: #ffffff !important;
 }
 
-/* Set the background color of the entire table to #141414 and the text color to #ffffffD9 */
-.ant-table {
+/* 表格背景颜色 */
+:deep(.ant-table) {
   background-color: #141414 !important;
-  /* Table background color */
   color: #ffffffD9 !important;
-  /* Table text color */
 }
 
-/* Change the background color and text color of the table header */
-.ant-table-thead>tr>th {
+/* 更改表格标题的背景颜色和文本颜色*/
+:deep(.ant-table-thead>tr>th) {
   background-color: #141414 !important;
-  /* Header background color */
   color: #ffffffD9 !important;
-  /* Header text color */
   border-top: none !important;
-  /* Remove all borders */
   border-bottom: none !important;
   border-bottom: 1px solid #303030 !important;
-  /* Dividing line below header */
 }
 
-/* If needed, target the cell content inside the header */
-.ant-table-thead>tr>th .ant-table-cell {
+:deep(.ant-table-thead>tr>th .ant-table-cell) {
   background-color: #141414 !important;
   color: #ffffffD9 !important;
 }
 
-.ant-table-thead tr th::before {
+:deep(.ant-table-thead tr th::before) {
   background: #303030 !important;
 }
 
-
-/* Set the background color of table rows to #141414 and text color to #ffffffD9 */
-.ant-table-tbody>tr>td {
+/* 表格行颜色*/
+:deep(.ant-table-tbody>tr>td) {
   background-color: #141414 !important;
-  /* Row background color */
   color: #ffffffD9 !important;
-  /* Row text color */
 }
 
-/* Change the background color of a row when the mouse hovers over it to #424242 */
-.ant-table-tbody>tr:hover>td {
+/* 鼠标悬停背景颜色 */
+:deep(.ant-table-tbody>tr:hover>td) {
   background-color: #1f1f1f !important;
-  /* Row hover background color */
 }
 
-/* Set the dividing line (border) between table rows to #424242 */
-.ant-table-tbody>tr>td {
+/* 表格行之间的分界线 */
+:deep(.ant-table-tbody>tr>td) {
   border: none !important;
-  /* Remove all borders */
   border-bottom: 1px solid #303030 !important;
-  /* Row dividing line color */
 }
 
-/* Customize the appearance of the checkbox */
-
-/* Unchecked checkbox state */
-.ant-checkbox-inner {
+/* 复选框 */
+:deep(.ant-checkbox-inner) {
   background-color: #141414 !important;
-  /* Checkbox background when unchecked */
   border-color: #424242 !important;
-  /* Checkbox border when unchecked */
 }
 
-/* Checked checkbox state */
-.ant-checkbox-checked .ant-checkbox-inner {
+:deep(.ant-checkbox-checked .ant-checkbox-inner) {
   background-color: #424242 !important;
-  /* Checkbox background when checked */
   border-color: #424242 !important;
-  /* Checkbox border when checked */
 }
 
-/* Change the color of the checkmark inside the checkbox */
-.ant-checkbox-checked .ant-checkbox-inner::after {
+:deep(.ant-checkbox-checked .ant-checkbox-inner::after) {
   border-color: #ffffffD9 !important;
-  /* Checkmark color */
 }
 
-/* Checkbox hover state */
-.ant-checkbox:hover .ant-checkbox-inner {
+:deep(.ant-checkbox:hover .ant-checkbox-inner) {
   border-color: #1f1f1f !important;
-  /* Checkbox border color on hover */
 }
 
-/* Checkbox focus state */
-.ant-checkbox-input:focus+.ant-checkbox-inner {
+/* 复选框焦点状态 */
+:deep(.ant-checkbox-input:focus+.ant-checkbox-inner) {
   border-color: #1f1f1f !important;
-  /* Checkbox border color when focused */
 }
 </style>
