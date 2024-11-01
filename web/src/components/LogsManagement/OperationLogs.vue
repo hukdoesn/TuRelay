@@ -48,7 +48,7 @@ const filters = reactive({
 })
 
 // 表格滚动选项
-const tableScroll = { y: 500 }
+const tableScroll = { y: 600 }
 
 // 表格列定义
 const columns = [

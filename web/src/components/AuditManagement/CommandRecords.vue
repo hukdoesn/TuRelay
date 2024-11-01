@@ -66,7 +66,7 @@ const columns = [
         dataIndex: 'hosts',
         width: 170,
         customRender: ({ text }) => h(Tag, { 
-            // color: 'processing',
+            color: 'processing',
             style: {  },
             bordered: false
         }, () => h('span', text))
@@ -103,10 +103,12 @@ const fetchCommandRecords = async () => {
             }
         })
         
+        // 直接使用当前数据的索引+1作为编号，这样每页都会从1开始
         data.value = response.data.data.items.map((commandLog, index) => ({
             ...commandLog,
-            id: (paginationOptions.current - 1) * paginationOptions.pageSize + index + 1,
+            id: index + 1  // 每页都从1开始编号
         }))
+        
         paginationOptions.total = response.data.data.total
     } catch (error) {
         message.error('获取命令记录列表失败')

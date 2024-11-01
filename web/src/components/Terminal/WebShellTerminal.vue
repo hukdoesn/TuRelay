@@ -2,7 +2,7 @@
   <a-layout>
     <!-- 顶部布局，用于显示标题 -->
     <a-layout-header class="terminal-header">
-      <img src="@/assets/svg/turelay_logo.svg" alt="Logo" class="logo-img" />
+      <img src="@/assets/svg/turelay_logo.svg" alt="Logo" class="logo-img" @click="goToDashboard" />
     </a-layout-header>
     <a-layout>
       <!-- 侧边栏布局，包含树形结构 -->
@@ -111,6 +111,9 @@ import axios from 'axios';
 import IconFont from '@/icons';
 import { useRoute } from 'vue-router';
 import WebrdsTerminal from './WebrdpTerminal.vue'; // 引入新的 WebrdsTerminal 组件
+import { WebglAddon } from 'xterm-addon-webgl';
+import { SearchAddon } from 'xterm-addon-search';
+import { useRouter } from 'vue-router';  // 引入 useRouter
 
 // 声明响应式变量
 const treeData = ref([]);
@@ -127,7 +130,7 @@ let fitAddons = {}; // 存储终端的 FitAddon 实例
 let sockets = {}; // 存储每个终端的 WebSocket 实例
 const originalHostIds = {}; // 存储原始 hostId 以便创建 WebSocket 时使用
 
-// 获取全局属性
+// 获取全属性
 const { appContext } = getCurrentInstance();
 const wsServerAddress = appContext.config.globalProperties.$wsServerAddress; // 获取全局定义的 WebSocket 服务器地址
 
@@ -136,6 +139,15 @@ const route = useRoute();
 
 // 当前路径，默认为根目录 '/'
 const currentPath = ref('/');
+
+// 获取路由实例
+const router = useRouter();
+
+// 添加跳转到首页的方法
+const goToDashboard = () => {
+  const baseUrl = window.location.origin;  // 获取当前网站的根URL
+  window.open(`${baseUrl}/dashboard`, '_blank');
+};
 
 // 获取树状结构数据，从后端 API 请求并填充 treeData
 const fetchTreeData = async () => {
@@ -234,17 +246,36 @@ const initializeTerminal = async (uniqueTabKey) => {
   const fitAddon = new FitAddon();
   const terminal = new Terminal({
     theme: {
-      background: '#1e2023', // 确保背景色与容器一致
-      foreground: '#ffffff',
+      foreground: '#ffffff', // 字体
+      background: '#1e2023', // 背景色
+      cursor: '#ffffff', // 设置光标
+      selection: 'rgba(255, 255, 255, 0.3)',
+      black: '#000000',
+      brightBlack: '#808080',
+      red: '#ce2f2b',
+      brightRed: '#f44a47',
+      green: '#00b976',
+      brightGreen: '#05d289',
+      yellow: '#e0d500',
+      brightYellow: '#f4f628',
+      magenta: '#bd37bc',
+      brightMagenta: '#d86cd8',
+      blue: '#1d6fca',
+      brightBlue: '#358bed',
+      cyan: '#00a8cf',
+      brightCyan: '#19b8dd',
+      white: '#e5e5e5',
+      brightWhite: '#ffffff'
     },
     cursorBlink: true,
     cursorStyle: 'bar',
     cursorWidth: 1,
-    scrollback: 1000, // 设置滚动历史
+    scrollback: 10000, // 设置滚动历史
     fontSize: 14, // 设置字体大小
     fontFamily: 'Menlo, Monaco, "Courier New", monospace', // 设置等宽字体
     letterSpacing: 0,
     lineHeight: 1.2, // 增加行高以改善可读性
+    cursorBlink: true,    // 光标闪烁
   });
   terminal.loadAddon(fitAddon);
   terminal.open(terminalContainer);
@@ -275,17 +306,75 @@ const initializeTerminal = async (uniqueTabKey) => {
   };
 
   socket.onclose = (event) => {
-    if (!event.wasClean) {
-      terminal.write('\r\n*** 连接已关闭 ***\r\n');
+    const createMessage = (title, messages) => {
+      const lines = [
+        '\r\n',
+        title,
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        ...messages,
+        '\r\n'
+      ];
+      return lines.join('\r\n');
+    };
+
+    let title = '';
+    let messages = [];
+
+    if (event.code === 4000) {
+      title = '会话超时断开';
+      messages = [
+        '连接已自动断开',
+        '原因: 空闲时间超过10分钟',
+        '',
+        '点击右上角的重新连接按钮以恢复连接'
+      ];
+    } else if (event.wasClean) {
+      title = '连接已关闭';
+      messages = [
+        '连接已正常关闭',
+        '',
+        '点击右上角的重新连接按钮以重新建立连接'
+      ];
+    } else {
+      title = '连接异常断开';
+      messages = [
+        '连接意外中断',
+        event.reason ? `原因: ${event.reason}` : '原因: 未知错误',
+        '',
+        '点击右上角的重新连接按钮以重试'
+      ];
     }
+
+    terminal.write(createMessage(title, messages));
   };
 
-  socket.onerror = (event) => {
-    terminal.write('\r\n*** 连接错误，请稍后再试 ***\r\n');
+  socket.onerror = (error) => {
+    const createMessage = (title, messages) => {
+      const lines = [
+        '\r\n',
+        title,
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        ...messages,
+        '\r\n'
+      ];
+      return lines.join('\r\n');
+    };
+
+    const title = '连接错误';
+    const messages = [
+      '无法建立与服务器的连接',
+      '',
+      '请检查网络连接是否正常',
+      '如果问题持续存在请联系系统管理员',
+      '',
+      '点击右上角的重新连接按钮以重试'
+    ];
+
+    terminal.write(createMessage(title, messages));
   };
 };
 
-// 切换到不同的标签时仅切换显示
+// 切换不同的标签时仅切换显示
 const switchTab = async (uniqueTabKey) => {
   activeTabKey.value = uniqueTabKey;
   currentHostId.value = uniqueTabKey;
@@ -333,7 +422,7 @@ const addTabWithUniqueName = (title, hostId, connectionType) => {
     if (connectionType === 'ssh') {
       initializeTerminal(uniqueTabKey);
     }
-    // 对于 RDP，不需要初始化，WebrdsTerminal.vue 会处理
+    // 对于 RDP不需要初始化，WebrdsTerminal.vue 会处理
   });
 };
 
@@ -678,6 +767,8 @@ onBeforeUnmount(() => {
 
 .logo-img {
   height: 25px;
+  cursor: pointer;  /* 添加鼠标指针样式 */
+  transition: opacity 0.3s;  /* 添加过渡效果 */
 }
 
 .tree-title {
@@ -762,7 +853,7 @@ onBeforeUnmount(() => {
   cursor: pointer;
 }
 
-/* 鼠标悬停tab，tab icon图标颜色更改为白色 */
+/* 标悬停tab，tab icon图标颜色更改为白色 */
 :deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag.inactive-tab:hover .ant-tag-close-icon) {
   color: #FFFFFF !important;
 }
@@ -787,7 +878,7 @@ onBeforeUnmount(() => {
   /* 将按钮容器靠右对齐 */
 }
 
-/* 重新连接button */
+/* 新连接button */
 :deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-btn) {
   color: #FFFFFF66;
 }
@@ -815,7 +906,7 @@ onBeforeUnmount(() => {
 
 :deep(.xterm-viewport) {
   background-color: #1e2023 !important; /* 确保滚动时背景色一致 */
-  overflow-y: auto !important; /* 使用 auto 替代 scroll */
+  overflow-y: auto !important; /* 用 auto 替代 scroll */
 }
 
 /* 文件管理 */
