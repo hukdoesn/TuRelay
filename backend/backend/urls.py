@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView
+from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -48,4 +48,6 @@ urlpatterns = [
     path('api/command_alerts/hosts/', HostListView.as_view(), name='host-list'),
     path('api/command_alerts/alert_contacts/', AlertContactList.as_view(), name='alert-contact-list'),
     # path('api/terminal/rdp/<str:host_id>/', RDPConnectView.as_view(), name='rdp_connect'),
+    path('api/asset_nodes/', AssetNodesView.as_view(), name='asset-nodes'),
+    path('api/asset_nodes/<str:pk>/', AssetNodesView.as_view(), name='asset-node-detail'),
 ]

@@ -15,10 +15,13 @@
             <!-- 使用图标来区分叶子节点和非叶子节点 -->
             <template #title="{ title, dataRef }">
               <span class="tree-title">
-                <!-- 如果是叶子节点，使用根据操作系统选择的图标，否则根据展开状态选择图标 -->
                 <icon-font
-                  :type="dataRef.isLeaf ? getLeafNodeIcon(dataRef) : expandedKeys.includes(dataRef.key) ? 'icon-folder-open' : 'icon-folder'" />
-                <span class="title-text">{{ title }}</span>
+                  :type="dataRef.isLeaf ? getLeafNodeIcon(dataRef) : expandedKeys.includes(dataRef.key) ? 'icon-folder-open' : 'icon-folder'"
+                  class="folder-icon"
+                />
+                <span class="title-text">
+                  {{ dataRef.isLeaf ? title : title }}
+                </span>
               </span>
             </template>
             <template #switcherIcon="{ switcherCls }">
@@ -778,6 +781,19 @@ onBeforeUnmount(() => {
 
 .title-text {
   padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.folder-icon {
+  color: #1890ff;
+  font-size: 18px;
+}
+
+.host-count {
+  color: #7f7f7f;
+  font-size: 12px;
 }
 
 :deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tree .ant-tree-indent-unit) {

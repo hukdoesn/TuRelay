@@ -134,13 +134,22 @@ class HostView(APIView):
         更新现有主机，并根据传入的节点 ID 更新关联
         """
         host = get_object_or_404(Host, pk=pk)
-        node_id = request.data.get('node_id')
+        node_id = request.data.get('node')
 
         protocol = request.data.get('protocol', '')
         if protocol == 'SSH':
             request.data['operating_system'] = 'Linux'
         elif protocol == 'RDP':
             request.data['operating_system'] = 'Windows'
+
+        # 处理 account_type，确保它是一个有效的凭据 ID
+        account_type = request.data.get('account_type')
+        if account_type:
+            try:
+                credential = get_object_or_404(Credential, pk=account_type)
+                request.data['account_type'] = credential.id
+            except Credential.DoesNotExist:
+                return Response({'error': 'Invalid credential ID'}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = HostSerializer(host, data=request.data, partial=True)
         if serializer.is_valid():

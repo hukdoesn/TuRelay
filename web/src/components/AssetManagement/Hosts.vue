@@ -14,7 +14,10 @@
     <!-- 新建主机按钮 -->
     <div class="button_create">
         <span>主机管理</span>
-        <a-button @click="showCreateModal" class="button_item button_font" type="primary">新建主机</a-button>
+        <div class="button_group">
+            <a-button @click="showNodeTreeModal" class="button_item button_font" >节点管理</a-button>
+            <a-button @click="showCreateModal" class="button_item button_font" type="primary">新建主机</a-button>
+        </div>
     </div>
     <!-- 显示主机的表格 -->
     <div class="table_main">
@@ -150,6 +153,15 @@
     </a-modal>
     <!-- 打开新建凭据模态框并且结束调用handleProtocolChange方法请求最新凭据列表 -->
     <CreateCredentialModal ref="createCredentialModalRef" @refresh="handleProtocolChange" />
+
+    <!-- 添加节点树模态框 -->
+    <a-modal
+        v-model:open="nodeTreeModalVisible"
+        title="节点管理"
+        :footer="null"
+    >
+        <NodeTree ref="nodeTreeRef" />
+    </a-modal>
 </template>
 
 <script setup>
@@ -159,6 +171,7 @@ import axios from 'axios';  // 引入axios用于请求后端API
 import { showPermissionWarning, checkPermission } from '@/components/Global/PermissonWarning.vue'
 import IconFont from '@/icons'
 import CreateCredentialModal from '@/components/UserManagement/module/CreateCredentialModal.vue' // 引入创建凭据模态框组件
+import NodeTree from './module/NodeTree.vue';
 
 import { useRouter } from 'vue-router';  // Import useRouter
 
@@ -247,7 +260,7 @@ const isEditModalVisible = ref(false);    // 编辑模态框的显示状态
 // 凭据选项控制
 const credentialOption = ref('existing');
 
-// 控制账户类型选择框的禁用状态
+// ���制账户类型选择框的禁用状态
 const isAccountTypeDisabled = ref(true);
 
 // 过滤后的凭据列表（根据协议类型筛选）
@@ -401,21 +414,18 @@ const handleCreateOk = () => {
 // 存储当前选中的主机数据
 const currentHost = ref(null);
 
-// 编辑主机的提交处理函数
+// 编辑主机的交处理函数
 const handleEditOk = () => {
     checkPermission(() => {
         editFormRef.value.validate().then(async () => {
             try {
                 const token = localStorage.getItem('accessToken');
 
-                // 在发送请求之前，将account_type转换为ID
-                const selectedCredential = filteredCredentials.value.find(
-                    (credential) => credential.name === editForm.account_type
-                );
-
-                // 确保account_type设置为ID，而不是名称
+                // 确保 account_type 是凭据的 ID
                 const formData = { ...editForm };
-                formData.account_type = selectedCredential ? selectedCredential.id : null;
+                
+                // 如果需要，打印看看发送的数据
+                console.log('Sending data:', formData);
 
                 await axios.put(`/api/hosts/${currentHost.value.id}/update/`, formData, {
                     headers: {
@@ -463,12 +473,12 @@ const columns = [
     {
         title: '名称',
         dataIndex: 'name',
-        // width: 150,
+        width: 150,
     },
     {
         title: '状态',
         dataIndex: 'status',
-        width: 100,
+        width: 150,
         customRender: ({ record }) => {
             const status = record.status ? 'success' : 'error';
             const text = record.status ? '成功' : '失败';
@@ -481,12 +491,12 @@ const columns = [
     {
         title: '节点',
         dataIndex: 'node',
-        // width: 170,
+        width: 200,
     },
     {
         title: '操作系统',
         dataIndex: 'operating_system',
-        // width: 150,
+        width: 180,
         customRender: ({ record }) => {
             let iconType = '';
             switch (record.protocol) {
@@ -506,7 +516,7 @@ const columns = [
     {
         title: 'IP地址',
         dataIndex: 'network',
-        // width: 170,
+        width: 200,
         customRender: ({ record }) => {
             const ip = record.network;  // 获取IP
             const port = record.port;   // 获取端口
@@ -516,7 +526,7 @@ const columns = [
     {
         title: '协议',
         dataIndex: 'protocol',
-        // width: 130,
+        width: 150,
         customRender: ({ record }) => {
             let color = '';
             if (record.protocol === 'SSH') {
@@ -532,12 +542,12 @@ const columns = [
     {
         title: '创建时间',
         dataIndex: 'create_time',
-        // width: 190,
+        width: 190,
     },
     {
         title: '操作',
         dataIndex: 'crud',
-        // width: 170,
+        width: 170,
         customRender: ({ record }) => h('div', { style: 'display: flex; align-items: center; justify-content: left; gap: 12px;' }, [
             h(IconFont, { type: 'icon-zhongduan', style: { fontSize: '18px', cursor: 'pointer' }, onClick: () => openWebTerminal(record.id) }),
             h('span', { style: 'color: rgb(22,119,255); cursor: pointer;', onClick: () => showEditModal(record) }, '编辑'),
@@ -571,7 +581,7 @@ const fetchNodes = async () => {
 // 获取主机列表
 const fetchHosts = async () => {
     try {
-        // 从localStorage获取Token
+        // 从localStorage获Token
         const token = localStorage.getItem('accessToken')
         // 发送请求获取主机列表
         const response = await axios.get('/api/hosts/', {
@@ -683,6 +693,15 @@ onMounted(() => {
     fetchHosts();
     fetchNodes(); // 获取节点列表
 })
+
+// 添加节点树相关的响应式变量
+const nodeTreeModalVisible = ref(false);
+const nodeTreeRef = ref(null);
+
+// 显示节点树模态框
+const showNodeTreeModal = () => {
+    nodeTreeModalVisible.value = true;
+};
 </script>
 
 <style>
@@ -722,5 +741,11 @@ onMounted(() => {
 .ant-input::placeholder,
 .ant-table-thead {
     font-size: 12px !important;
+}
+
+/* 添加按钮组样式 */
+.button_group {
+    display: flex;
+    gap: 8px;
 }
 </style>

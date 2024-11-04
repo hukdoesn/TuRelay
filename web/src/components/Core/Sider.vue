@@ -47,7 +47,9 @@
           <router-link to="/asset-management/hosts">主机列表</router-link>
         </a-menu-item>
         <a-menu-item key="/asset-management/databases">
-          <router-link to="/asset-management/databases">数据库</router-link>
+          <router-link to="/asset-management/databases">
+            <span class="developing-feature">数据库</span>
+          </router-link>
         </a-menu-item>
         <a-menu-item key="/asset-management/websites">
           <router-link to="/asset-management/websites">站点监控</router-link>
@@ -62,7 +64,7 @@
       <a-menu-item key="/ci-cd-system">
         <router-link to="/ci-cd-system">
           <file-outlined />
-          <span>CI/CD系统</span>
+          <span class="developing-feature">CI/CD系统</span>
         </router-link>
       </a-menu-item>
       <a-sub-menu key="/alert-management">
@@ -128,6 +130,7 @@ import {
   UserOutlined,
   DesktopOutlined,
   FileOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons-vue';
 import IconFont from '@/icons';  // 引入 IconFont 组件
 
@@ -191,5 +194,29 @@ onMounted(() => {
 
 .logo-text {
   transition: opacity 0.3s ease;
+}
+
+.developing-feature {
+  text-decoration: line-through 1.4px;
+  color: #00000040;
+}
+
+.developing-feature:hover {
+  color: #000000;
+}
+
+.menu-item-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.info-icon {
+  font-size: 14px;
+  color: #00000040;
+}
+
+.info-icon:hover {
+  color: #1890ff;
 }
 </style>

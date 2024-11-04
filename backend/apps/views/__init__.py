@@ -13,4 +13,4 @@ from .rdp_consumers import GuacamoleConsumer
 from .command_log import CommandLogView
 from .alert_contacts import AlertContactView
 from .command_alert import AlertContactList,HostListView, CommandAlertView
-# from .check_permission import check_permissions
+from .asset_nodes import AssetNodesView

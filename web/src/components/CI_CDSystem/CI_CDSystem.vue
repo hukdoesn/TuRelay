@@ -1,3 +1,3 @@
 <template>
-    <div>7</div>
+    <div></div>
 </template>
