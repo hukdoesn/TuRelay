@@ -29,7 +29,9 @@
           <router-link to="/user-management/user-list">用户列表</router-link>
         </a-menu-item>
         <a-menu-item key="/user-management/user-groups">
-          <router-link to="/user-management/user-groups">用户组</router-link>
+          <router-link to="/user-management/user-groups">
+            <span class="developing-feature">用户组</span>
+          </router-link>
         </a-menu-item>
         <a-menu-item key="/user-management/lock-record">
           <router-link to="/user-management/lock-record">锁定记录</router-link>
@@ -76,7 +78,9 @@
           <router-link to="/alert-management/alert-contacts">告警联系人</router-link>
         </a-menu-item>
         <a-menu-item key="/alert-management/alert-rules">
-          <router-link to="/alert-management/alert-rules">报警规则</router-link>
+          <router-link to="/alert-management/alert-rules">
+            <span class="developing-feature">报警规则</span>
+          </router-link>
         </a-menu-item>
         <a-menu-item key="alert-managemanet/command-alert">
           <router-link to="/alert-management/command-alert">命令告警</router-link>
