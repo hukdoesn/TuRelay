@@ -5,6 +5,7 @@ from apps.utils import (
 )
 from django.contrib.auth.hashers import check_password
 from user_agents import parse
+from .mfa_auth import MFAUtil
 
 class LoginView(APIView):
     """
@@ -14,6 +15,7 @@ class LoginView(APIView):
         data = request.data  # 获取请求数据
         username = data.get('username')  # 获取请求中的用户名
         password = data.get('password')  # 获取请求中的密码
+        otp_code = data.get('otp_code')  # 获取OTP验证码
         client_ip = request.META.get('REMOTE_ADDR')  # 获取客户端 IP 地址
 
         user_agent_string = request.META.get('HTTP_USER_AGENT')  # 获取浏览器信息
@@ -91,6 +93,41 @@ class LoginView(APIView):
             )
             return JsonResponse({'status': 'password_incorrect', 'message': '密码错误'}, status=401)
 
+        # 密码验证通过后，检查MFA
+        if check_password(password, user.password):
+            # 检查是否启用了MFA
+            if user.mfa_level == 1:
+                # 如果未绑定MFA
+                if not user.otp_secret_key:
+                    secret_key = MFAUtil.generate_secret()
+                    qr_code = MFAUtil.generate_qr_code(username, secret_key)
+                    return JsonResponse({
+                        'status': 'mfa_required',
+                        'require_bind': True,
+                        'qr_code': qr_code,
+                        'secret_key': secret_key
+                    }, status=200)
+                
+                # 如果已绑定MFA，验证OTP
+                if not otp_code:
+                    return JsonResponse({
+                        'status': 'mfa_required',
+                        'require_bind': False
+                    }, status=200)
+                
+                if not MFAUtil.verify_otp(user.otp_secret_key, otp_code):
+                    # 记录MFA验证失败日志
+                    LoginLog.objects.create(
+                        user=user,
+                        username=username,
+                        client_ip=client_ip,
+                        login_status=False,
+                        reason="MFA验证失败",
+                        browser_info=browser_info,
+                        os_info=os_info
+                    )
+                    return JsonResponse({'status': 'mfa_invalid', 'message': 'MFA验证码错误'}, status=401)
+
         # 成功登录，重置登录尝试次数
         user_lock.login_count = 0
         user_lock.save()
@@ -132,3 +169,26 @@ class LoginView(APIView):
             'is_read_only': is_read_only,  # 返回权限信息
             'message': '登录成功'
         }, status=200)
+
+# 添加MFA绑定视图
+class MFABindView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        secret_key = request.data.get('secret_key')
+        otp_code = request.data.get('otp_code')
+        
+        try:
+            user = User.objects.get(username=username)
+            
+            # 验证OTP代码
+            if not MFAUtil.verify_otp(secret_key, otp_code):
+                return JsonResponse({'status': 'error', 'message': '验证码错误'}, status=400)
+            
+            # 绑定成功，保存密钥
+            user.otp_secret_key = secret_key
+            user.save()
+            
+            return JsonResponse({'status': 'success', 'message': 'MFA绑定成功'}, status=200)
+            
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': '用户不存在'}, status=404)

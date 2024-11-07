@@ -1,8 +1,9 @@
 from django.urls import path
-from apps.views import LoginView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView
+from apps.views import LoginView, MFABindView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
+    path('api/mfa/bind/', MFABindView.as_view(), name='mfa_bind'),
     # path('api/check_permission/', check_permission, name='check-permission'),  # 配置检查权限的API路径
     path('api/users/create/', CreateUserView.as_view(), name='user-create'),  # 新增用户创建路径
     path('api/users/', UserListView.as_view(), name='user-list'),  # 配置用户列表的API路径

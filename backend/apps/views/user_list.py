@@ -16,10 +16,16 @@ class UserCreateSerializer(serializers.Serializer):
         child=serializers.IntegerField(), allow_empty=True
     )
     status = serializers.BooleanField()
+    mfa_level = serializers.IntegerField(default=0)
 
     def validate_status(self, value):
         # 将 True 转换为 0，将 False 转换为 1
         return 0 if value else 1
+
+    def validate_mfa_level(self, value):
+        if value not in [0, 1]:
+            raise ValidationError("MFA认证等级必须是0或1")
+        return value
 
 # 用户序列化器，用于验证创建和更新用户的请求数据
 class UserUpdateSerializer(serializers.Serializer):
@@ -33,10 +39,16 @@ class UserUpdateSerializer(serializers.Serializer):
     )
     
     status = serializers.BooleanField(required=False)  # 设置为可选字段
+    mfa_level = serializers.IntegerField(default=0)
 
     def validate_status(self, value):
         # 将 True 转换为 0，将 False 转换为 1
         return 0 if value else 1
+
+    def validate_mfa_level(self, value):
+        if value not in [0, 1]:
+            raise ValidationError("MFA认证等级必须是0或1")
+        return value
 
 # 定义新的APIView类，用于获取角色和权限数据
 class RolesPermissionsView(APIView):
@@ -115,6 +127,7 @@ class UserListView(APIView):
                 'mobile': user.mobile,
                 'status': user.status,
                 'create_time': user.create_time,
+                'mfa_level': user.mfa_level,
             })
 
         # 返回分页后的响应数据
@@ -239,90 +252,89 @@ class UserDetailView(APIView):
 
 
 class CreateUserView(APIView):
-    authentication_classes = [CustomTokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
     def post(self, request):
         """
         处理创建用户的请求
         """
         try:
-            print(request.data)  # 打印请求数据以调试
             serializer = UserCreateSerializer(data=request.data)
             if serializer.is_valid():
                 validated_data = serializer.validated_data
                 role = Role.objects.get(id=validated_data['role'])
 
-                # 检查角色是否为“管理员”
+                # 检查角色是否为"管理员"
                 if role.role_name.lower() == 'administrator':
-                    # 如果角色是管理员，则只分配全部权限 (permission_id = 1)
                     permissions = Permission.objects.filter(id=1)
                 else:
-                    # 仅为非管理员角色分配指定的权限
                     permissions = Permission.objects.filter(id__in=validated_data['permissions'])
                 
-                # 创建用户
+                # 创建用户，只设置 mfa_level
                 user = User.objects.create(
                     username=validated_data['username'],
                     name=validated_data['name'],
                     mobile=validated_data['mobile'],
                     password=make_password(validated_data['password']),
                     email=validated_data['email'],
-                    status=validated_data['status']  # 直接使用验证后的 status
+                    status=validated_data['status'],
+                    mfa_level=validated_data['mfa_level']  # 只设置 mfa_level
                 )
                 
                 # 分配角色和权限
                 for permission in permissions:
                     RolePermission.objects.create(user=user, role=role, permission=permission)
 
-                return Response(model_to_dict(user), status=status.HTTP_201_CREATED)  # 返回完整的用户信息
-            else:
-                print(serializer.errors)  # 打印序列化器错误信息以调试
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                # 移除 otp_secret_key 后返回用户信息
+                user_data = model_to_dict(user)
+                if 'otp_secret_key' in user_data:
+                    del user_data['otp_secret_key']
+                    
+                return Response(user_data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(str(e))  # 打印异常信息以调试
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserUpdateView(APIView):
-    authentication_classes = [CustomTokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
     def put(self, request, username):
         """
         处理PUT请求，更新用户信息
         """
         try:
-            # 查找用户
             user = User.objects.get(username=username)
-            before_data = model_to_dict(user)  # 记录更新前的数据
             serializer = UserUpdateSerializer(data=request.data)
             if serializer.is_valid():
                 validated_data = serializer.validated_data
+                
+                # 更新基本信息
                 user.username = validated_data['username']
                 user.name = validated_data['name']
                 user.mobile = validated_data['mobile']
                 user.email = validated_data['email']
+                user.mfa_level = validated_data['mfa_level']  
 
-                # 更新用户角色
+                # 如果MFA等级设置为0（关闭），清空otp_secret_key
+                if validated_data['mfa_level'] == 0:
+                    user.otp_secret_key = None
+
+                # 更新用户角色和权限
                 role = Role.objects.get(id=validated_data['role'])
-
-                # 更新用户权限
                 RolePermission.objects.filter(user=user).delete()
 
-                # 根据角色分配权限
                 if role.role_name.lower() == 'administrator':
-                    # 如果角色是管理员，则只分配全部权限 (permission_id = 1)
                     permissions = Permission.objects.filter(id=1)
                 else:
-                    # 非管理员角色时，分配用户选择的权限
                     permissions = Permission.objects.filter(id__in=validated_data['permissions'])
                 
                 for permission in permissions:
                     RolePermission.objects.create(user=user, role=role, permission=permission)
 
                 user.save()
-                after_data = model_to_dict(user)  # 记录更新后的数据
-                return Response(after_data, status=status.HTTP_200_OK)  # 返回完整的更新后用户信息
+                
+                # 移除 otp_secret_key 后返回用户信息
+                user_data = model_to_dict(user)
+                if 'otp_secret_key' in user_data:
+                    del user_data['otp_secret_key']
+                    
+                return Response(user_data, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({"detail": "用户未找到"}, status=status.HTTP_404_NOT_FOUND)
         except Role.DoesNotExist:

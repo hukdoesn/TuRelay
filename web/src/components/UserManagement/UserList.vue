@@ -28,7 +28,7 @@
     </a-modal>
     <a-modal v-model:open="editModalVisible" title="编辑用户" @ok="handleEditOk" @cancel="handleEditCancel">
         <!-- 编辑用户表单 -->
-        <a-form :model="editForm" labelAlign="right" :labelCol="{ span: 3 }">
+        <a-form :model="editForm" labelAlign="right" :labelCol="{ span: 3 }"  layout="vertical">
             <a-form-item label="用户" name="username" :rules="formRules.username">
                 <a-input :disabled="true" v-model:value="editForm.username" />
             </a-form-item>
@@ -56,12 +56,18 @@
                 </a-radio-group>
             </a-form-item>
             <!-- 根据需要添加其他字段 -->
+            <a-form-item label="MFA认证">
+                <a-radio-group v-model:value="editForm.mfa_level">
+                    <a-radio :value="0">关闭</a-radio>
+                    <a-radio :value="1">开启</a-radio>
+                </a-radio-group>
+            </a-form-item>
         </a-form>
     </a-modal>
     <!-- 新建用户模态框 -->
     <a-modal v-model:open="createUserModalVisible" title="新建用户" @ok="handleCreateUserOk"
         @cancel="handleCreateUserCancel" @open="resetCreateUserForm">
-        <a-form :model="createUserForm" :rules="formRules" ref="createFormRef" labelAlign="right"
+        <a-form :model="createUserForm" :rules="formRules" ref="createFormRef" labelAlign="right"   layout="vertical"
             :labelCol="{ span: 3 }">
             <a-form-item label="用户" name="username" :rules="formRules.username">
                 <a-input v-model:value="createUserForm.username" placeholder="请输入用户名" />
@@ -91,6 +97,12 @@
             </a-form-item>
             <a-form-item label="状态">
                 <a-switch v-model:checked="createUserForm.status" checked-children="启用" un-checked-children="禁用" />
+            </a-form-item>
+            <a-form-item label="MFA认证">
+                <a-radio-group v-model:value="createUserForm.mfa_level">
+                    <a-radio :value="0">关闭</a-radio>
+                    <a-radio :value="1">开启</a-radio>
+                </a-radio-group>
             </a-form-item>
         </a-form>
     </a-modal>
@@ -141,6 +153,7 @@ const editForm = reactive({
     role: '',
     permissions: [],
     // 添加其他字段
+    mfa_level: 0,
 })
 
 // 重置密码模态框相关
@@ -161,6 +174,7 @@ const createUserForm = reactive({
     role: '',
     permissions: [],
     status: true,
+    mfa_level: 0,  // 默认关闭MFA
 })
 
 const formRules = reactive({
@@ -440,14 +454,15 @@ const showEditModal = (record) => {
     editForm.name = record.name;
     editForm.mobile = record.mobile;
     editForm.email = record.email;
+    editForm.mfa_level = record.mfa_level;  // 确保加载当前的 mfa_level 值
 
-    // 从角色字段中提取角色 ID，假设角色格式为 "RoleName - Description"
+    // 从角色字段中提取角色 ID
     const roleId = roles.value.find(role => role.role_name === record.role.split(' - ')[0])?.id;
     editForm.role = roleId;
 
-    // 将后端返回的 permissions 数据转换为权限 ID
+    // 设置权限
     if (record.permissions.length > 0) {
-        editForm.permissions = record.permissions[0].id; // 单选框只支持一个值，取第一个权限的ID
+        editForm.permissions = record.permissions[0].id;
     } else {
         editForm.permissions = null;
     }
@@ -537,7 +552,7 @@ const toggleUserStatus = async (record) => {
 
             // 如果禁用当前用户，清除 token 并重定向到登录页面
             if (newStatus) {
-                if (record.username === currentUsername) { // 假设有一个变量存储当前用户名
+                if (record.username === currentUsername) { // 设有一个变量存储当前用户名
                     localStorage.removeItem('accessToken');
                     router.push('/login');
                     return;
@@ -555,34 +570,36 @@ const toggleUserStatus = async (record) => {
 const handleEditOk = async () => {
     checkPermission(async () => {
         try {
-            // 从localStorage获取Token
-            const token = localStorage.getItem('accessToken')
-            // 发送更新请求
-            await axios.put(`/api/users/${editForm.username}/update/`, {
+            const token = localStorage.getItem('accessToken');
+            // 构建更新数据
+            const updateData = {
                 username: editForm.username,
                 email: editForm.email,
                 name: editForm.name,
                 mobile: editForm.mobile,
                 role: editForm.role,
-                permissions: Array.isArray(editForm.permissions) ? editForm.permissions : [editForm.permissions], // 确保 permissions 是数组
-                // 添加其他字段
-            }, {
+                permissions: Array.isArray(editForm.permissions) ? editForm.permissions : [editForm.permissions],
+                mfa_level: editForm.mfa_level  // 确保包含 mfa_level
+            };
+
+            // 发送更新请求
+            const response = await axios.put(`/api/users/${editForm.username}/update/`, updateData, {
                 headers: {
                     'Authorization': token
                 }
-            })
-            // 更新成功的提示
-            message.success('用户信息更新成功')
-            editModalVisible.value = false
-            // 重新获取用户列表
-            fetchUsers()
+            });
+
+            if (response.status === 200) {
+                message.success('用户信息更新成功');
+                editModalVisible.value = false;
+                fetchUsers();  // 重新获取用户列表
+            }
         } catch (error) {
-            // 更新失败的提示
-            message.error('用户信息更新失败')
-            console.error('Error updating user:', error)
+            message.error('用户信息更新失败');
+            console.error('Error updating user:', error);
         }
-    })
-}
+    });
+};
 
 // 编辑对话框取消
 const handleEditCancel = () => {

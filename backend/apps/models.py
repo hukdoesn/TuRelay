@@ -15,6 +15,8 @@ class User(models.Model):
     login_time = models.DateTimeField(null=True, blank=True, verbose_name="最后登录时间")  # 最后登录时间
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
     update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")  # 更新时间
+    otp_secret_key = models.CharField(max_length=32, null=True, blank=True, verbose_name="OTP密钥")  # 用于存储2FA密钥
+    mfa_level = models.IntegerField(default=0, choices=[(0, '关闭'), (1, '开启')], verbose_name="MFA认证等级")  # MFA认证等级
 
     class Meta:
         db_table = 't_user'  # 指定数库表名为 t_user
@@ -170,7 +172,7 @@ class DomainMonitor(models.Model):
     connectivity = models.BooleanField(default=False, verbose_name="连通性")  # 连通性
     status_code = models.IntegerField(null=True, blank=True, verbose_name="状态码")  # 状态码
     redirection = models.CharField(max_length=255, null=True, blank=True, verbose_name="重定向地址")  # 重定向地址
-    time_consumption = models.FloatField(null=True, blank=True, verbose_name="耗时（秒）")  # 耗时（秒）
+    time_consumption = models.FloatField(null=True, blank=True, verbose_name="耗时（秒）")  # 耗时（秒
     # dns = models.CharField(max_length=255, null=True, blank=True, verbose_name="DNS 信息")  # DNS 信息
     tls_version = models.CharField(max_length=50, null=True, blank=True, verbose_name="TLS 版本")  # TLS 版本
     http_version = models.CharField(max_length=50, null=True, blank=True, verbose_name="HTTP 版本")  # HTTP 版本
@@ -270,7 +272,7 @@ class CommandAlert(models.Model):
     alert_contacts = models.TextField(null=True, blank=True, verbose_name="告警联系人")  # 存储联系人名称，用逗号分隔
     is_active = models.BooleanField(null=True, blank=True, default=True, verbose_name="是否告警")
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
-    match_type = models.CharField(max_length=20, choices=[('exact', '精准匹配'), ('fuzzy', '模糊匹配')], default='exact', verbose_name="匹配类型")
+    match_type = models.CharField(max_length=20, choices=[('exact', '精匹配'), ('fuzzy', '模糊匹配')], default='exact', verbose_name="匹配类型")
 
     class Meta:
         db_table = 't_command_alert'

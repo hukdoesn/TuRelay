@@ -25,12 +25,18 @@ class OperationLogMiddleware(MiddlewareMixin):
         # 其他API接口映射
     }
 
+    # 添加白名单路径
+    WHITELIST_PATHS = [
+        '/api/login/',
+        '/api/mfa/bind/',  # 添加MFA绑定路径到白名单
+    ]
+
     def process_view(self, request, view_func, view_args, view_kwargs):
         """
         在视图处理请求之前执行，记录操作前的数据。
         """
-        # 跳过不需要Token认证的请求，例如登录请求
-        if request.path == '/api/login/':
+        # 检查请求路径是否在白名单中
+        if request.path in self.WHITELIST_PATHS:
             return None
 
         # 仅处理认证后的请求
@@ -187,17 +193,24 @@ class OperationLogMiddleware(MiddlewareMixin):
 
     def clean_data(self, data):
         """
-        清理数据，处理不能序列化的数据类型（例如UUID）。
-        将UUID转换为字符串。
+        清理数据，处理不能序列化的数据类型（例如UUID和datetime）。
         """
         if isinstance(data, dict):
             cleaned_data = {}
             for key, value in data.items():
                 if isinstance(value, UUID):
                     cleaned_data[key] = str(value)  # 转换UUID为字符串
+                elif isinstance(value, datetime):
+                    cleaned_data[key] = value.isoformat()  # 转换datetime为ISO格式字符串
                 else:
-                    cleaned_data[key] = value
+                    cleaned_data[key] = self.clean_data(value)  # 递归处理嵌套的数据
             return cleaned_data
+        elif isinstance(data, (list, tuple)):
+            return [self.clean_data(item) for item in data]  # 处理列表或元组
+        elif isinstance(data, datetime):
+            return data.isoformat()  # 处理单个datetime对象
+        elif isinstance(data, UUID):
+            return str(data)  # 处理单个UUID对象
         return data
 
     def clean_sensitive_data(self, data):

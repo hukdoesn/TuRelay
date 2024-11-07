@@ -1,9 +1,10 @@
 <template>
   <div class="login-container">
-    <!-- <icon-font type="icon-budaiyanjingyanjingyangshi2" class="logo" />  -->
-    <icon-font type="icon-logo" class="logo" /> 
+    <icon-font type="icon-login" class="logo" /> 
     <h1>登录</h1>
-    <form @submit.prevent="submitForm">
+    
+    <!-- 常规登录表单 -->
+    <form v-if="!showMFABind && !showMFAVerify" @submit.prevent="submitForm">
       <div class="form-group">
         <input type="text" placeholder="用户名" v-model="username" required>
       </div>
@@ -12,27 +13,59 @@
       </div>
       <button type="submit" :disabled="!canSubmit" :class="{ 'active': canSubmit }">登录</button>
     </form>
+
+    <!-- MFA绑定界面 -->
+    <div v-if="showMFABind" class="mfa-container">
+      <h2>MFA绑定</h2>
+      <div class="qr-code">
+        <img :src="'data:image/png;base64,' + qrCode" alt="MFA QR Code">
+      </div>
+      <p class="mfa-tip">请使用Google Authenticator扫描二维码</p>
+      <form @submit.prevent="handleMFABind">
+        <div class="form-group">
+          <input type="text" placeholder="请输入验证码" v-model="otpCode" required>
+        </div>
+        <button type="submit" class="active">确认绑定</button>
+      </form>
+    </div>
+
+    <!-- MFA验证界面 -->
+    <div v-if="showMFAVerify" class="mfa-container">
+      <h2>MFA验证</h2>
+      <p class="mfa-tip">请输入Google Authenticator中的验证码</p>
+      <form @submit.prevent="handleMFAVerify">
+        <div class="form-group">
+          <input type="text" placeholder="验证码" v-model="otpCode" required>
+        </div>
+        <button type="submit" class="active">验证</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 import { message } from 'ant-design-vue';
 import axios from 'axios';
-import IconFont from '@/icons';  // 引入 IconFont 组件
+import IconFont from '@/icons';
 
 export default {
   components: {
-    IconFont  // 注册 IconFont 组件
+    IconFont
   },
   data() {
     return {
       username: '',
       password: '',
+      otpCode: '',
+      showMFABind: false,
+      showMFAVerify: false,
+      qrCode: '',
+      secretKey: '',
     };
   },
   computed: {
     canSubmit() {
-      return this.username.length > 0 && this.password.length > 0;      // 按钮启用条件
+      return this.username.length > 0 && this.password.length > 0;
     }
   },
   methods: {
@@ -42,50 +75,80 @@ export default {
           username: this.username,
           password: this.password,
         });
+
+        if (response.data.status === 'mfa_required') {
+          if (response.data.require_bind) {
+            this.showMFABind = true;
+            this.qrCode = response.data.qr_code;
+            this.secretKey = response.data.secret_key;
+          } else {
+            this.showMFAVerify = true;
+          }
+          return;
+        }
+
+        this.handleLoginSuccess(response.data);
+      } catch (error) {
+        this.handleLoginError(error);
+      }
+    },
+
+    async handleMFABind() {
+      try {
+        const response = await axios.post('api/mfa/bind/', {
+          username: this.username,
+          secret_key: this.secretKey,
+          otp_code: this.otpCode
+        });
+
         if (response.status === 200) {
-          const accessToken = response.data.access_token;
-          const refreshToken = response.data.refresh_token;
-          const name = response.data.name; // 获取 name 字段
-          const loginTime = this.$dayjs(); // 获取当前时间
-          const tokenExpiry = loginTime.add(2, 'hour').format(); // 格式化后的token过期时间
-          const isReadOnly = response.data.is_read_only;  // 获取只读权限状态
-          const sessionTimeout = loginTime.add(2, 'hour').format(); // 格式化后的登录超时时间
-
-          localStorage.setItem('accessToken', accessToken);
-          localStorage.setItem('refreshToken', refreshToken);
-          localStorage.setItem('name', name);
-          localStorage.setItem('tokenExpiry', tokenExpiry);
-          localStorage.setItem('isReadOnly', isReadOnly);  // 存储只读权限状态
-          localStorage.setItem('sessionTimeout', sessionTimeout);
-
-          // message.success('登录成功');
-          this.$router.push('/home');
+          message.success('MFA绑定成功');
+          this.showMFABind = false;
+          this.showMFAVerify = true;
+          this.otpCode = '';
         }
       } catch (error) {
-        if (error.response) {
-          // 如果后端返回了特定的错误代码和消息
-          switch (error.response.status) {
-            case 400:
-              message.error('无效的凭据');
-              break;
-            case 401:
-              message.error('密码错误');
-              break;
-            case 403:
-              message.error('账号被锁定，请联系管理员');
-              break;
-            case 404:
-              message.error('找不到用户');
-              break;
-            case 423:
-              message.error('账号被锁定');
-              break;
-            default:
-              message.error('登录请求失败');
-          }
-        } else {
-          message.error('请求无响应');
-        }
+        message.error('MFA绑定失败');
+      }
+    },
+
+    async handleMFAVerify() {
+      try {
+        const response = await axios.post('api/login/', {
+          username: this.username,
+          password: this.password,
+          otp_code: this.otpCode
+        });
+
+        this.handleLoginSuccess(response.data);
+      } catch (error) {
+        this.handleLoginError(error);
+      }
+    },
+
+    handleLoginSuccess(data) {
+      localStorage.setItem('accessToken', data.access_token);
+      localStorage.setItem('refreshToken', data.refresh_token);
+      localStorage.setItem('name', data.name);
+      localStorage.setItem('tokenExpiry', this.$dayjs().add(2, 'hour').format());
+      localStorage.setItem('isReadOnly', data.is_read_only);
+      localStorage.setItem('sessionTimeout', this.$dayjs().add(2, 'hour').format());
+
+      this.$router.push('/home');
+    },
+
+    handleLoginError(error) {
+      if (error.response) {
+        const errorMessages = {
+          400: '无效的凭据',
+          401: error.response.data.status === 'mfa_invalid' ? 'MFA验证码错误' : '密码错误',
+          403: '账号被锁定，请联系管理员',
+          404: '找不到用户',
+          423: '账号被锁定'
+        };
+        message.error(errorMessages[error.response.status] || '登录请求失败');
+      } else {
+        message.error('请求无响应');
       }
     }
   }
@@ -159,5 +222,38 @@ button:disabled {
   background-color: rgba(237, 239, 252, 1);
   color: rgba(166, 172, 205, 1);
   cursor: not-allowed;
+}
+
+.mfa-container {
+  text-align: center;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code {
+  margin: 20px auto;
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.qr-code img {
+  max-width: 200px;
+  height: auto;
+}
+
+.mfa-tip {
+  color: #666;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+h2 {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 </style>

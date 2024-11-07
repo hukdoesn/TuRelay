@@ -1,4 +1,4 @@
-from .login import LoginView
+from .login import LoginView, MFABindView
 from .user_list import UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, UserDetailView
 from .login_log import LoginLogView
 from .operation_log import OperationLogView
@@ -14,3 +14,4 @@ from .command_log import CommandLogView
 from .alert_contacts import AlertContactView
 from .command_alert import AlertContactList,HostListView, CommandAlertView
 from .asset_nodes import AssetNodesView
+from .mfa_auth import MFAUtil
