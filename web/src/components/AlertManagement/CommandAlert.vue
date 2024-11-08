@@ -165,6 +165,10 @@ const columns = [
         title: '名称',
         dataIndex: 'name',
         width: 150,
+        customRender: ({ text, record }) => h('a', {
+            class: 'hover-link',
+            onClick: () => viewDetail(record.id)
+        }, text)
     },
     {
         title: '匹配类型',
@@ -227,7 +231,7 @@ const columns = [
     {
         title: '创建时间',
         dataIndex: 'create_time',
-        width: 120,
+        width: 140,
         customRender: ({ text }) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
     },
     {
@@ -565,6 +569,16 @@ onMounted(() => {
 .ant-input::placeholder,
 .ant-table-thead {
     font-size: 12px !important;
+}
+
+.hover-link {
+    color: rgb(22,119,255);
+    cursor: pointer;
+    transition: color 0.3s ease; /* 添加颜色过渡效果 */
+}
+
+.hover-link:hover {
+    color: rgb(64, 169, 255); /* 鼠标悬浮时的颜色 */
 }
 </style>
 

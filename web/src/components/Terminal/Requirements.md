@@ -1,9 +1,0 @@
-需求：
-项目整体是一个WebTermina堡垒机。我现在已经使用Paramiko完成了SSH协议功能。
-要求：
-1、请帮我完成Windows RDP协议的代码。需要你帮我完善我项目中的WebrdpTerminal.vue文件和rdp_consumers.py代码文件以及routing.py代码文件。
-2、使用props从WebSshterminal.vue组件中获取hostId值，然后将hostId传递到后端后端需要根据前端发送的hostId查找主机帐户和密码，然后与guacd进行通信。需要注意的是，当后端处理hostId时，需要删除Id中的符号。
-3、我想要的是当用户点击tab连接session时，能直接显示windows页面，而不是从Guacamole创建session连接。Guacamole页面不应该出现，因为我要在我的vue3+Django+guacamole在项目中集成，所以不能出现guacamole页面。
-4、我的IP是172.17.102.69。guacd端口是4822、django端口是8100、vue端口是8080。
-所有代码要求真实，而不要乱教我。这是一个庞大的功能，我需要你把后端guacd这一部分代码涉及到的全部发送给我，一点不要保留
-再次需要重申一下，不要删除和更改我文件中之前的功能。

@@ -153,7 +153,7 @@ const router = createRouter({
             {
               path: ':id',
               name: 'commandAlertDetail',
-              component: () => import('@/components/AlertManagement/CommandAlertDetail.vue'),
+              component: () => import('@/components/AlertManagement/module/CommandAlertDetail.vue'),
               meta: {
                 requiresAuth: true,
                 breadcrumbName: '命令告警详情'
