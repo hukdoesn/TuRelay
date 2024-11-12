@@ -46,13 +46,20 @@ class LockRecordView(APIView):
             user_id = user_lock.user_id     # 获取用户的ID
             user = User.objects.get(id=user_id)     # 根据用户ID获取用户对象
             
+            # 处理 last_attempt_time 为 None 的情况
+            last_attempt_time = (
+                user_lock.last_attempt_time.strftime('%Y-%m-%d %H:%M:%S')
+                if user_lock.last_attempt_time
+                else None
+            )
+            
             data.append({
                 'id': user_lock.id,
                 'username': user.username,
                 'lock_count': user_lock.lock_count,
                 'login_count': user_lock.login_count,
                 'status': user.status,
-                'last_attempt_time': user_lock.last_attempt_time.strftime('%Y-%m-%d %H:%M:%S'),
+                'last_attempt_time': last_attempt_time,  # 使用处理后的时间
             })
             
             # 构建分页信息
