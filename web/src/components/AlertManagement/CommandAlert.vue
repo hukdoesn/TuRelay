@@ -166,7 +166,7 @@ const columns = [
         dataIndex: 'name',
         width: 150,
         customRender: ({ text, record }) => h('a', {
-            class: 'hover-link',
+            class: 'table-link',
             onClick: () => viewDetail(record.id)
         }, text)
     },
@@ -229,7 +229,7 @@ const columns = [
         }
     },
     {
-        title: '创建时间',
+        title: '创建时',
         dataIndex: 'create_time',
         width: 140,
         customRender: ({ text }) => dayjs(text).format('YYYY-MM-DD HH:mm:ss')
@@ -239,15 +239,15 @@ const columns = [
         dataIndex: 'operation',
         width: 150,
         customRender: ({ record }) => h('div', { style: 'display: flex; align-items: center; justify-content: left; gap: 12px;' }, [
-        h('span', { style: 'color: rgb(22,119,255); cursor: pointer;', onClick: () => showEditModal(record) }, '查看'),
-        h('span', { style: 'color: rgb(22,119,255); cursor: pointer;', onClick: () => showEditModal(record) }, '编辑'),
+        h('span', { class: 'table-link', onClick: () => showEditModal(record) }, '查看'),
+        h('span', { class: 'table-link', onClick: () => showEditModal(record) }, '编辑'),
         h(Popconfirm, {
             okText: 'Yes',
             cancelText: 'No',
             onConfirm: () => handleDelete(record.id)
         }, {
-            title: () => `是否要删除命令告警规则 ${record.name} ？`, // Correctly using slot function
-            default: () => h('span', { style: 'color: red; cursor: pointer;' }, '删除')
+            title: () => `是否要删除命令告警规则 ${record.name} ？`,
+            default: () => h('span', { style: 'color: #ff4d4f; cursor: pointer;' }, '删除')
         })
         ])
     },
@@ -571,14 +571,15 @@ onMounted(() => {
     font-size: 12px !important;
 }
 
-.hover-link {
-    color: rgb(22,119,255);
+.table-link {
+    color: rgba(0, 0, 0, 0.88); 
     cursor: pointer;
-    transition: color 0.3s ease; /* 添加颜色过渡效果 */
+    transition: opacity 0.3s ease; /* 添加透明度过渡效果 */
 }
 
-.hover-link:hover {
-    color: rgb(64, 169, 255); /* 鼠标悬浮时的颜色 */
+.table-link:hover {
+    /* opacity: 0.8;  */
+    color: rgba(0, 0, 0, 0.45);
 }
 </style>
 

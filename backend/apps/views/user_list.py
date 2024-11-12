@@ -165,6 +165,8 @@ class UserDetailView(APIView):
                 'mobile': user.mobile,
                 'status': user.status,
                 'create_time': user.create_time,
+                'mfa_level': user.mfa_level,
+                'last_login': user.login_time,  # 添加最后登录时间
             }
             return Response(user_data, status=status.HTTP_200_OK)
         except User.DoesNotExist:

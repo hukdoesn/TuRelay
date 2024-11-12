@@ -1,5 +1,5 @@
 <template>
-  <a-descriptions v-if="alertDetail" title="命令告警详情" :column="1" :labelStyle="{ fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.45)' }">
+  <a-descriptions v-if="alertDetail" title="命令告警详情" :column="1" :labelStyle="{ color: 'rgba(0, 0, 0, 0.45)' }">
     <a-descriptions-item label="规则名称">{{ alertDetail.name }}</a-descriptions-item>
     <a-descriptions-item label="命令规则">{{ alertDetail.command_rule ? alertDetail.command_rule.join(', ') : '' }}</a-descriptions-item>
     <a-descriptions-item label="关联主机">{{ alertDetail.host_names ? alertDetail.host_names.join(', ') : '' }}</a-descriptions-item>

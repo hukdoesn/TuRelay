@@ -68,7 +68,18 @@ const router = createRouter({
           meta: { 
             requiresAuth: true, 
             breadcrumbName: '用户列表' 
-          } 
+          },
+          children: [
+            {
+              path: ':username',
+              name: 'userDetail',
+              component: () => import('@/components/UserManagement/module/UserListDetail.vue'),
+              meta: {
+                requiresAuth: true,
+                breadcrumbName: '用户详情'
+              }
+            }
+          ]
         },
         { 
           path: '/user-management/user-groups', 

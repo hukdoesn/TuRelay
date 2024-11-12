@@ -1,113 +1,116 @@
 <template>
-    <div class="content_tools">
-        <div class="input_tools">
-            <a-input class="input_item" addonBefore="用户名" v-model:value="searchUsername" placeholder="请输入用户名" />
-            <a-input class="input_item" addonBefore="邮箱" v-model:value.lazy="searchEmail" placeholder="请输入邮箱" />
+    <div v-if="!$route.params.username">
+        <div class="content_tools">
+            <div class="input_tools">
+                <a-input class="input_item" addonBefore="用户名" v-model:value="searchUsername" placeholder="请输入用户名" />
+                <a-input class="input_item" addonBefore="邮箱" v-model:value.lazy="searchEmail" placeholder="请输入邮箱" />
+            </div>
+            <div class="button_tools">
+                <a-button class="button_font" @click="resetFilters">重置</a-button>
+                <a-button class="button_font" type="primary" @click="fetchUsers">查询</a-button>
+            </div>
         </div>
-        <div class="button_tools">
-            <a-button class="button_font" @click="resetFilters">重置</a-button>
-            <a-button class="button_font" type="primary" @click="fetchUsers">查询</a-button>
+        <div class="button_create">
+            <span>用户列表</span>
+            <a-button class="button_item button_font" type="primary" @click="showCreateUserModal">新建用户</a-button>
         </div>
-    </div>
-    <div class="button_create">
-        <span>用户列表</span>
-        <a-button class="button_item button_font" type="primary" @click="showCreateUserModal">新建用户</a-button>
-    </div>
-    <div class="table_user">
-        <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
-            :scroll="tableScroll" size="middle" @change="handleTableChange" />
-    </div>
-    <!-- 重置密码模态框 -->
-    <a-modal v-model:open="resetPasswordModalVisible" title="重置密码" @ok="handleResetPasswordOk"
-        @cancel="handleResetPasswordCancel">
-        <a-form :model="resetPasswordForm">
-            <a-form-item label="新密码" name="password" :rules="formRules.password">
-                <a-input-password v-model:value="resetPasswordForm.newPassword" placeholder="请输入新密码" />
-            </a-form-item>
-        </a-form>
-    </a-modal>
-    <a-modal v-model:open="editModalVisible" title="编辑用户" @ok="handleEditOk" @cancel="handleEditCancel">
-        <!-- 编辑用户表单 -->
-        <a-form :model="editForm" labelAlign="right" :labelCol="{ span: 3 }"  layout="vertical">
-            <a-form-item label="用户" name="username" :rules="formRules.username">
-                <a-input :disabled="true" v-model:value="editForm.username" />
-            </a-form-item>
-            <a-form-item label="名称" name="name" :rules="formRules.name">
-                <a-input v-model:value="editForm.name" />
-            </a-form-item>
-            <a-form-item label="手机" name="mobile" :rules="formRules.mobile">
-                <a-input v-model:value="editForm.mobile" />
-            </a-form-item>
-            <a-form-item label="邮箱" name="email" :rules="formRules.email">
-                <a-input v-model:value="editForm.email" />
-            </a-form-item>
-            <!-- 角色单选框 -->
-            <a-form-item label="角色">
-                <a-radio-group v-model:value="editForm.role" @change="handleRoleChange('edit')">
-                    <a-radio v-for="role in roles" :key="role.id" :value="role.id">{{ role.role_name }}</a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <!-- 权限单选框 -->
-            <a-form-item label="权限">
-                <a-radio-group v-model:value="editForm.permissions" :disabled="editForm.role === 1">
-                    <a-radio v-for="permission in permissions" :key="permission.id" :value="permission.id">
-                        {{ permission.name }}
-                    </a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <!-- 根据需要添加其他字段 -->
-            <a-form-item label="MFA认证">
-                <a-radio-group v-model:value="editForm.mfa_level">
-                    <a-radio :value="0">关闭</a-radio>
-                    <a-radio :value="1">开启</a-radio>
-                </a-radio-group>
-            </a-form-item>
-        </a-form>
-    </a-modal>
-    <!-- 新建用户模态框 -->
-    <a-modal v-model:open="createUserModalVisible" title="新建用户" @ok="handleCreateUserOk"
-        @cancel="handleCreateUserCancel" @open="resetCreateUserForm">
-        <a-form :model="createUserForm" :rules="formRules" ref="createFormRef" labelAlign="right"   layout="vertical"
-            :labelCol="{ span: 3 }">
-            <a-form-item label="用户" name="username" :rules="formRules.username">
-                <a-input v-model:value="createUserForm.username" placeholder="请输入用户名" />
-            </a-form-item>
-            <a-form-item label="名称" name="name" :rules="formRules.name">
-                <a-input v-model:value="createUserForm.name" placeholder="请输入名称" />
-            </a-form-item>
-            <a-form-item label="手机" name="mobile" :rules="formRules.mobile">
-                <a-input v-model:value="createUserForm.mobile" placeholder="请输入手机号" />
-            </a-form-item>
-            <a-form-item label="邮箱" name="email" :rules="formRules.email">
-                <a-input v-model:value="createUserForm.email" placeholder="请输入邮箱" />
-            </a-form-item>
-            <a-form-item label="密码" name="password" :rules="formRules.password">
-                <a-input-password v-model:value="createUserForm.password" placeholder="请输入密码" />
-            </a-form-item>
-            <a-form-item label="角色">
-                <a-radio-group v-model:value="createUserForm.role" @change="handleRoleChange('create')">
-                    <a-radio v-for="role in roles" :key="role.id" :value="role.id">{{ role.role_name }}</a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <a-form-item v-if="showPermissions" label="权限">
-                <a-radio-group v-model:value="createUserForm.permissions">
-                    <a-radio v-for="permission in permissions" :key="permission.id" :value="permission.id">{{
+        <div class="table_user">
+            <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
+                :scroll="tableScroll" size="middle" @change="handleTableChange" />
+        </div>
+        <!-- 重置密码模态框 -->
+        <a-modal v-model:open="resetPasswordModalVisible" title="重置密码" @ok="handleResetPasswordOk"
+            @cancel="handleResetPasswordCancel">
+            <a-form :model="resetPasswordForm">
+                <a-form-item label="新密码" name="password" :rules="formRules.password">
+                    <a-input-password v-model:value="resetPasswordForm.newPassword" placeholder="请输入新密码" />
+                </a-form-item>
+            </a-form>
+        </a-modal>
+        <a-modal v-model:open="editModalVisible" title="编辑用户" @ok="handleEditOk" @cancel="handleEditCancel">
+            <!-- 编辑用户表单 -->
+            <a-form :model="editForm" labelAlign="right" :labelCol="{ span: 3 }"  layout="vertical">
+                <a-form-item label="用户" name="username" :rules="formRules.username">
+                    <a-input :disabled="true" v-model:value="editForm.username" />
+                </a-form-item>
+                <a-form-item label="名称" name="name" :rules="formRules.name">
+                    <a-input v-model:value="editForm.name" />
+                </a-form-item>
+                <a-form-item label="手机" name="mobile" :rules="formRules.mobile">
+                    <a-input v-model:value="editForm.mobile" />
+                </a-form-item>
+                <a-form-item label="邮箱" name="email" :rules="formRules.email">
+                    <a-input v-model:value="editForm.email" />
+                </a-form-item>
+                <!-- 角色单选框 -->
+                <a-form-item label="角色">
+                    <a-radio-group v-model:value="editForm.role" @change="handleRoleChange('edit')">
+                        <a-radio v-for="role in roles" :key="role.id" :value="role.id">{{ role.role_name }}</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <!-- 权限单选框 -->
+                <a-form-item label="权限">
+                    <a-radio-group v-model:value="editForm.permissions" :disabled="editForm.role === 1">
+                        <a-radio v-for="permission in permissions" :key="permission.id" :value="permission.id">
+                            {{ permission.name }}
+                        </a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <!-- 根据需要添加其他字段 -->
+                <a-form-item label="MFA认证">
+                    <a-radio-group v-model:value="editForm.mfa_level">
+                        <a-radio :value="0">关闭</a-radio>
+                        <a-radio :value="1">开启</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+            </a-form>
+        </a-modal>
+        <!-- 新建用户模态框 -->
+        <a-modal v-model:open="createUserModalVisible" title="新建用户" @ok="handleCreateUserOk"
+            @cancel="handleCreateUserCancel" @open="resetCreateUserForm">
+            <a-form :model="createUserForm" :rules="formRules" ref="createFormRef" labelAlign="right"   layout="vertical"
+                :labelCol="{ span: 3 }">
+                <a-form-item label="用户" name="username" :rules="formRules.username">
+                    <a-input v-model:value="createUserForm.username" placeholder="请输入用户名" />
+                </a-form-item>
+                <a-form-item label="名称" name="name" :rules="formRules.name">
+                    <a-input v-model:value="createUserForm.name" placeholder="请输入名称" />
+                </a-form-item>
+                <a-form-item label="手机" name="mobile" :rules="formRules.mobile">
+                    <a-input v-model:value="createUserForm.mobile" placeholder="请输入手机号" />
+                </a-form-item>
+                <a-form-item label="邮箱" name="email" :rules="formRules.email">
+                    <a-input v-model:value="createUserForm.email" placeholder="请输入邮箱" />
+                </a-form-item>
+                <a-form-item label="密码" name="password" :rules="formRules.password">
+                    <a-input-password v-model:value="createUserForm.password" placeholder="请输入密码" />
+                </a-form-item>
+                <a-form-item label="角色">
+                    <a-radio-group v-model:value="createUserForm.role" @change="handleRoleChange('create')">
+                        <a-radio v-for="role in roles" :key="role.id" :value="role.id">{{ role.role_name }}</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <a-form-item v-if="showPermissions" label="权限">
+                    <a-radio-group v-model:value="createUserForm.permissions">
+                        <a-radio v-for="permission in permissions" :key="permission.id" :value="permission.id">{{
                 permission.name }}</a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <a-form-item label="状态">
-                <a-switch v-model:checked="createUserForm.status" checked-children="启用" un-checked-children="禁用" />
-            </a-form-item>
-            <a-form-item label="MFA认证">
-                <a-radio-group v-model:value="createUserForm.mfa_level">
-                    <a-radio :value="0">关闭</a-radio>
-                    <a-radio :value="1">开启</a-radio>
-                </a-radio-group>
-            </a-form-item>
-        </a-form>
-    </a-modal>
-    <!-- 权限提示模态框 -->
-    <!-- <showPermissionWarning ref="showPermissionWarning" /> -->
+                    </a-radio-group>
+                </a-form-item>
+                <a-form-item label="状态">
+                    <a-switch v-model:checked="createUserForm.status" checked-children="启用" un-checked-children="禁用" />
+                </a-form-item>
+                <a-form-item label="MFA认证">
+                    <a-radio-group v-model:value="createUserForm.mfa_level">
+                        <a-radio :value="0">关闭</a-radio>
+                        <a-radio :value="1">开启</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+            </a-form>
+        </a-modal>
+        <!-- 权限提示模态框 -->
+        <!-- <showPermissionWarning ref="showPermissionWarning" /> -->
+    </div>
+    <router-view v-else></router-view>
 </template>
 
 <script setup>
@@ -243,6 +246,10 @@ const columns = [
         title: '用户名',
         dataIndex: 'username',
         width: 170,
+        customRender: ({ text, record }) => h('a', {
+            class: 'table-link',
+            onClick: () => viewDetail(record.username)
+        }, text)
     },
     {
         title: '名称',
@@ -490,8 +497,8 @@ const handleDeleteUser = async (username) => {
 
 // 查看详情
 const viewDetails = (record) => {
-    console.log('查看详情', record)
-}
+    viewDetail(record.username);
+};
 
 // 显示重置密码对话框
 const showResetPasswordModal = (record) => {
@@ -633,6 +640,11 @@ onMounted(() => {
     fetchUsers()
     fetchRolesAndPermissions()
 })
+
+// 添加查看详情方法
+const viewDetail = (username) => {
+    router.push(`/user-management/user-list/${username}`);
+};
 </script>
 
 <style>
@@ -672,5 +684,16 @@ onMounted(() => {
 .ant-input::placeholder,
 .ant-table-thead {
     font-size: 12px !important;
+}
+
+.table-link {
+    color: rgba(0, 0, 0, 0.88); 
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* 添加透明度过渡效果 */
+}
+
+.table-link:hover {
+    /* opacity: 0.8;  */
+    color: rgba(0, 0, 0, 0.45);
 }
 </style>
