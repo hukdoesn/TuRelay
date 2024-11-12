@@ -111,7 +111,18 @@ const router = createRouter({
           meta: { 
             requiresAuth: true, 
             breadcrumbName: '主机列表' 
-          } 
+          },
+          children: [
+            {
+              path: ':id',
+              name: 'hostDetail',
+              component: () => import('@/components/AssetManagement/module/HostDetail.vue'),
+              meta: {
+                requiresAuth: true,
+                breadcrumbName: '主机详情'
+              }
+            }
+          ]
         },
         { 
           path: '/asset-management/databases', 
@@ -127,7 +138,18 @@ const router = createRouter({
            meta: { 
             requiresAuth: true, 
             breadcrumbName: '站点监控'
-           } 
+           },
+           children: [
+             {
+               path: ':id',
+               name: 'websiteDetail',
+               component: () => import('@/components/AssetManagement/module/WebsitesDetail.vue'),
+               meta: {
+                 requiresAuth: true,
+                 breadcrumbName: '站点监控详情'
+               }
+             }
+           ]
         },
         { 
           path: '/ci-cd-system',

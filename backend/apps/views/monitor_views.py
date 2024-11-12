@@ -20,67 +20,91 @@ class DomainMonitorView(APIView):
     authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request, pk=None):
         """
-        处理GET请求，返回域名监控列表，支持筛选并提供分页功能。
+        处理GET请求，如果提供了pk则返回单个站点监控详情，否则返回站点监控列表
         """
-        # 获取筛选参数
-        name = request.GET.get('name', '')
-        domain = request.GET.get('domain', '')
+        if pk:
+            try:
+                monitor = get_object_or_404(DomainMonitor, pk=pk)
+                data = {
+                    'id': monitor.id,
+                    'name': monitor.name,
+                    'domain': monitor.domain,
+                    'connectivity': monitor.connectivity,
+                    'status_code': monitor.status_code,
+                    'redirection': monitor.redirection,
+                    'time_consumption': monitor.time_consumption,
+                    'tls_version': monitor.tls_version,
+                    'http_version': monitor.http_version,
+                    'certificate_days': monitor.certificate_days,
+                    'enable': monitor.enable,
+                    'alert': monitor.alert,
+                    'monitor_frequency': monitor.monitor_frequency,
+                    'create_time': monitor.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+                }
+                return Response(data, status=status.HTTP_200_OK)
+            except Exception as e:
+                print(f"Error fetching monitor detail: {str(e)}")
+                return Response({'error': f'Monitor not found: {str(e)}'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            # 获取筛选参数
+            name = request.GET.get('name', '')
+            domain = request.GET.get('domain', '')
 
-        # 获取所有域名监控并按创建时间升序排序
-        monitors = DomainMonitor.objects.all().order_by('create_time')
+            # 获取所有域名监控并按创建时间升序排序
+            monitors = DomainMonitor.objects.all().order_by('create_time')
 
-        # 根据筛选参数过滤
-        if name:
-            monitors = monitors.filter(name__icontains=name)
-        if domain:
-            monitors = monitors.filter(domain__icontains=domain)
+            # 根据筛选参数过滤
+            if name:
+                monitors = monitors.filter(name__icontains=name)
+            if domain:
+                monitors = monitors.filter(domain__icontains=domain)
 
-        # 获取分页参数
-        page = request.GET.get('page', 1)
-        page_size = request.GET.get('page_size', 10)
+            # 获取分页参数
+            page = request.GET.get('page', 1)
+            page_size = request.GET.get('page_size', 10)
 
-        # 实例化分页器
-        paginator = Paginator(monitors, page_size)
-        
-        # 获取当前页的数据
-        current_page_data = paginator.get_page(page)
+            # 实例化分页器
+            paginator = Paginator(monitors, page_size)
+            
+            # 获取当前页的数据
+            current_page_data = paginator.get_page(page)
 
-        # 构建响应数据
-        data = []
-        for monitor in current_page_data:
-            data.append({
-                'id': monitor.id,
-                'name': monitor.name,
-                'domain': monitor.domain,
-                'connectivity': monitor.connectivity,
-                'status_code': monitor.status_code,
-                'redirection': monitor.redirection,
-                'time_consumption': monitor.time_consumption,
-                # 'dns': monitor.dns,
-                'tls_version': monitor.tls_version,
-                'http_version': monitor.http_version,
-                'certificate_days': monitor.certificate_days,
-                'enable': monitor.enable,
-                'alert': monitor.alert,
-                'monitor_frequency': monitor.monitor_frequency,
-                'create_time': monitor.create_time.strftime('%Y-%m-%d %H:%M:%S'),
-            })
+            # 构建响应数据
+            data = []
+            for monitor in current_page_data:
+                data.append({
+                    'id': monitor.id,
+                    'name': monitor.name,
+                    'domain': monitor.domain,
+                    'connectivity': monitor.connectivity,
+                    'status_code': monitor.status_code,
+                    'redirection': monitor.redirection,
+                    'time_consumption': monitor.time_consumption,
+                    # 'dns': monitor.dns,
+                    'tls_version': monitor.tls_version,
+                    'http_version': monitor.http_version,
+                    'certificate_days': monitor.certificate_days,
+                    'enable': monitor.enable,
+                    'alert': monitor.alert,
+                    'monitor_frequency': monitor.monitor_frequency,
+                    'create_time': monitor.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+                })
 
-        # 构建分页信息
-        pagination = {
-            'current_page': current_page_data.number,
-            'total_pages': paginator.num_pages,
-            'total_items': paginator.count,
-            'page_size': page_size,
-        }
+            # 构建分页信息
+            pagination = {
+                'current_page': current_page_data.number,
+                'total_pages': paginator.num_pages,
+                'total_items': paginator.count,
+                'page_size': page_size,
+            }
 
-        # 返回分页后的响应数据
-        return Response({
-            'result': data,
-            'pagination': pagination
-        }, status=status.HTTP_200_OK)
+            # 返回分页后的响应数据
+            return Response({
+                'result': data,
+                'pagination': pagination
+            }, status=status.HTTP_200_OK)
 
     def post(self, request):
         """

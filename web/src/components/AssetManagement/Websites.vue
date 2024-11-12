@@ -1,113 +1,119 @@
 <template>
-    <div class="content_table">
-        <!-- 筛选条件输入框 -->
-        <div class="input_tools">
-            <a-input v-model:value="searchName" class="input_item" addonBefore="监控名称" placeholder="请输入监控名称" />
-            <a-input v-model:value="searchDomain" class="input_item" addonBefore="域名" placeholder="请输入域名" />
+    <div v-if="!$route.params.id">
+        <div class="content_table">
+            <!-- 筛选条件输入框 -->
+            <div class="input_tools">
+                <a-input v-model:value="searchName" class="input_item" addonBefore="监控名称" placeholder="请输入监控名称" />
+                <a-input v-model:value="searchDomain" class="input_item" addonBefore="域名" placeholder="请输入域名" />
+            </div>
+            <!-- 重置和查询按钮 -->
+            <div class="button_tools">
+                <a-button @click="resetFilters" class="button_font">重置</a-button>
+                <a-button @click="fetchMonitors" class="button_font" type="primary">查询</a-button>
+            </div>
         </div>
-        <!-- 重置和查询按钮 -->
-        <div class="button_tools">
-            <a-button @click="resetFilters" class="button_font">重置</a-button>
-            <a-button @click="fetchMonitors" class="button_font" type="primary">查询</a-button>
+
+        <!-- 定时刷新下拉菜单和新建监控按钮 -->
+        <div class="button_create">
+            <span>域名监控</span>
+            <div class="actions">
+                <a-dropdown-button @click="handleButtonClick" class="dropdown_item">
+                    刷新
+                    <template #icon>
+                        <DownOutlined v-if="!selectedRefreshInterval" />
+                        <span v-else>{{ selectedRefreshInterval }}</span>
+                    </template>
+                    <template #overlay>
+                        <a-menu @click="handleMenuClick">
+                            <a-menu-item key="10">10s</a-menu-item>
+                            <a-menu-item key="30">30s</a-menu-item>
+                            <a-menu-item key="60">1m</a-menu-item>
+                            <a-menu-item key="300">5m</a-menu-item>
+                            <a-menu-item key="600">10m</a-menu-item>
+                            <a-menu-item key="1800">30m</a-menu-item>
+                            <a-menu-item key="3600">1h</a-menu-item>
+                        </a-menu>
+                    </template>
+                </a-dropdown-button>
+                <a-button @click="showCreateModal" class="button_item button_font" type="primary">新建监控</a-button>
+            </div>
         </div>
-    </div>
-    <!-- 定时刷新下拉菜单和新建监控按钮 -->
-    <div class="button_create">
-        <span>域名监控</span>
-        <div class="actions">
-            <a-dropdown-button @click="handleButtonClick" class="dropdown_item">
-                刷新
-                <template #icon>
-                    <!-- 有条件地显示DownOutlined图标或所选值 -->
-                    <DownOutlined v-if="!selectedRefreshInterval" />
-                    <span v-else>{{ selectedRefreshInterval }}</span>
-                </template>
-                <template #overlay>
-                    <a-menu @click="handleMenuClick">
-                        <a-menu-item key="10">10s</a-menu-item>
-                        <a-menu-item key="30">30s</a-menu-item>
-                        <a-menu-item key="60">1m</a-menu-item>
-                        <a-menu-item key="300">5m</a-menu-item>
-                        <a-menu-item key="600">10m</a-menu-item>
-                        <a-menu-item key="1800">30m</a-menu-item>
-                        <a-menu-item key="3600">1h</a-menu-item>
-                    </a-menu>
-                </template>
-            </a-dropdown-button>
-            <a-button @click="showCreateModal" class="button_item button_font" type="primary">新建监控</a-button>
+
+        <!-- 显示监控的表格 -->
+        <div class="table_main">
+            <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
+                :scroll="tableScroll" size="middle" @change="handleTableChange" />
         </div>
+
+        <!-- 创建监控的模态框 -->
+        <a-modal v-model:open="isCreateModalVisible" title="新建监控" @ok="handleCreateOk" @cancel="handleCreateCancel"
+            @open="resetCreateForm">
+            <a-form :model="createForm" :rules="createRules" ref="createFormRef" layout="vertical">
+                <a-form-item label="监控名称" name="name" :rules="[{ required: true, message: '请输入监控名称' }]">
+                    <a-input v-model:value="createForm.name" placeholder="请输入监控名称" />
+                </a-form-item>
+                <a-form-item label="域名" name="domain" :rules="[{ required: true, message: '请输入域名' }]">
+                    <a-input v-model:value="createForm.domain" placeholder="请输入域名" />
+                </a-form-item>
+                <a-form-item label="启用监控" name="enable">
+                    <a-switch v-model:checked="createForm.enable" @change="onEnableChange" />
+                </a-form-item>
+                <a-form-item label="监控频率" name="monitor_frequency" :rules="[{ required: true, message: '请选择监控频率' }]">
+                    <a-radio-group v-model:value="createForm.monitor_frequency" :disabled="!createForm.enable">
+                        <a-radio value="15">15秒</a-radio>
+                        <a-radio value="30">30秒</a-radio>
+                        <a-radio value="60">1分钟</a-radio>
+                        <a-radio value="300">5分钟</a-radio>
+                        <a-radio value="600">10分钟</a-radio>
+                        <a-radio value="1800">30分钟</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <a-form-item label="是否告警" name="alert">
+                    <a-switch v-model:checked="createForm.alert" />
+                </a-form-item>
+            </a-form>
+        </a-modal>
+
+        <!-- 编辑监控的模态框 -->
+        <a-modal v-model:open="isEditModalVisible" title="编辑监控" @ok="handleEditOk" @cancel="handleEditCancel">
+            <a-form :model="editForm" :rules="editRules" ref="editFormRef" layout="vertical">
+                <a-form-item label="监控名称" name="name" :rules="[{ required: true, message: '请输入监控名称' }]">
+                    <a-input v-model:value="editForm.name" placeholder="请输入监控名称" />
+                </a-form-item>
+                <a-form-item label="域名" name="domain" :rules="[{ required: true, message: '请输入域名' }]">
+                    <a-input v-model:value="editForm.domain" placeholder="请输入域名" />
+                </a-form-item>
+                <a-form-item label="启用监控" name="enable">
+                    <a-switch v-model:checked="editForm.enable" @change="onEnableChange" />
+                </a-form-item>
+                <a-form-item label="监控频率" name="monitor_frequency" :rules="[{ required: true, message: '请选择监控频率' }]">
+                    <a-radio-group v-model:value="editForm.monitor_frequency" :disabled="!editForm.enable">
+                        <a-radio value="15">15秒</a-radio>
+                        <a-radio value="30">30秒</a-radio>
+                        <a-radio value="60">1分钟</a-radio>
+                        <a-radio value="300">5分钟</a-radio>
+                        <a-radio value="600">10分钟</a-radio>
+                        <a-radio value="1800">30分钟</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <a-form-item label="是否告警" name="alert">
+                    <a-switch v-model:checked="editForm.alert" />
+                </a-form-item>
+            </a-form>
+        </a-modal>
     </div>
-
-    <!-- 显示监控的表格 -->
-    <div class="table_main">
-        <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
-            :scroll="tableScroll" size="middle" @change="handleTableChange" />
-    </div>
-
-    <!-- 创建监控的模态框 -->
-    <a-modal v-model:open="isCreateModalVisible" title="新建监控" @ok="handleCreateOk" @cancel="handleCreateCancel"
-        @open="resetCreateForm">
-        <a-form :model="createForm" :rules="createRules" ref="createFormRef" layout="vertical">
-            <a-form-item label="监控名称" name="name" :rules="[{ required: true, message: '请输入监控名称' }]">
-                <a-input v-model:value="createForm.name" placeholder="请输入监控名称" />
-            </a-form-item>
-            <a-form-item label="域名" name="domain" :rules="[{ required: true, message: '请输入域名' }]">
-                <a-input v-model:value="createForm.domain" placeholder="请输入域名" />
-            </a-form-item>
-            <a-form-item label="启用监控" name="enable">
-                <a-switch v-model:checked="createForm.enable" @change="onEnableChange" />
-            </a-form-item>
-            <a-form-item label="监控频率" name="monitor_frequency" :rules="[{ required: true, message: '请选择监控频率' }]">
-                <a-radio-group v-model:value="createForm.monitor_frequency" :disabled="!createForm.enable">
-                    <a-radio value="15">15秒</a-radio>
-                    <a-radio value="30">30秒</a-radio>
-                    <a-radio value="60">1分钟</a-radio>
-                    <a-radio value="300">5分钟</a-radio>
-                    <a-radio value="600">10分钟</a-radio>
-                    <a-radio value="1800">30分钟</a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <a-form-item label="是否告警" name="alert">
-                <a-switch v-model:checked="createForm.alert" />
-            </a-form-item>
-        </a-form>
-    </a-modal>
-
-    <!-- 编辑监控的模态框 -->
-    <a-modal v-model:open="isEditModalVisible" title="编辑监控" @ok="handleEditOk" @cancel="handleEditCancel">
-        <a-form :model="editForm" :rules="editRules" ref="editFormRef" layout="vertical">
-            <a-form-item label="监控名称" name="name" :rules="[{ required: true, message: '请输入监控名称' }]">
-                <a-input v-model:value="editForm.name" placeholder="请输入监控名称" />
-            </a-form-item>
-            <a-form-item label="域名" name="domain" :rules="[{ required: true, message: '请输入域名' }]">
-                <a-input v-model:value="editForm.domain" placeholder="请输入域名" />
-            </a-form-item>
-            <a-form-item label="启用监控" name="enable">
-                <a-switch v-model:checked="editForm.enable" @change="onEnableChange" />
-            </a-form-item>
-            <a-form-item label="监控频率" name="monitor_frequency" :rules="[{ required: true, message: '请选择监控频率' }]">
-                <a-radio-group v-model:value="editForm.monitor_frequency" :disabled="!editForm.enable">
-                    <a-radio value="15">15秒</a-radio>
-                    <a-radio value="30">30秒</a-radio>
-                    <a-radio value="60">1分钟</a-radio>
-                    <a-radio value="300">5分钟</a-radio>
-                    <a-radio value="600">10分钟</a-radio>
-                    <a-radio value="1800">30分钟</a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <a-form-item label="是否告警" name="alert">
-                <a-switch v-model:checked="editForm.alert" />
-            </a-form-item>
-        </a-form>
-    </a-modal>
+    <router-view v-else></router-view>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, h } from 'vue';
 import { message, Tag, Modal, Popconfirm } from 'ant-design-vue';
 import { DownOutlined } from '@ant-design/icons-vue';
+import { useRouter } from 'vue-router';  // 添加路由导入
 import axios from 'axios';
 import { showPermissionWarning } from '@/components/Global/PermissonWarning.vue';
+
+const router = useRouter();  // 初始化路由
 
 // 筛选条件
 const searchName = ref('');
@@ -337,6 +343,10 @@ const columns = [
         title: '监控名称',
         dataIndex: 'name',
         width: 120,
+        customRender: ({ text, record }) => h('a', {
+            class: 'table-link',
+            onClick: () => viewDetail(record.id)
+        }, text)
     },
     {
         title: '域名',
@@ -485,6 +495,11 @@ const resetFilters = () => {
 onMounted(() => {
     fetchMonitors()
 })
+
+// 添加查看详情的方法
+const viewDetail = (id) => {
+  router.push(`/asset-management/websites/${id}`);
+};
 </script>
 
 
@@ -541,5 +556,16 @@ onMounted(() => {
 .ant-input::placeholder,
 .ant-table-thead {
     font-size: 12px !important;
+}
+
+.table-link {
+    color: rgba(0, 0, 0, 0.88); 
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* 添加透明度过渡效果 */
+}
+
+.table-link:hover {
+    /* opacity: 0.8;  */
+    color: rgba(0, 0, 0, 0.45);
 }
 </style>

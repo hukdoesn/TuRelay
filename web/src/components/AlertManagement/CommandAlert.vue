@@ -157,8 +157,9 @@ const columns = [
         width: 80,
         showSorterTooltip: false,
         sorter: (a, b) => a.displayId - b.displayId,
-        customRender: ({ text }) => h('div', {
-            style: 'background-color: #314659; color: white; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;'
+        customRender: ({ text, record }) => h('div', {
+            class: 'id-link',
+            onClick: () => viewDetail(record.id),
         }, text)
     },
     {
@@ -569,6 +570,23 @@ onMounted(() => {
 .ant-input::placeholder,
 .ant-table-thead {
     font-size: 12px !important;
+}
+
+.id-link {
+    background-color: #314659;
+    color: white;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.id-link:hover {
+    background-color: rgba(0, 0, 0, 0.45); /* 鼠标悬浮时变浅色 */
 }
 
 .table-link {

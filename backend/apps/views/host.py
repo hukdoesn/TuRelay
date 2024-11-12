@@ -28,70 +28,98 @@ class HostView(APIView):
     authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request, pk=None):
         """
-        处理GET请求，返回主机列表，支持按主机名称、操作系统和协议进行筛选，并提供分页功能。
+        处理GET请求，如果提供了pk则返回单个主机详情，否则返回主机列表
         """
-        
-        # 获取筛选参数
-        name = request.GET.get('name', '')  # 获取主机名称的筛选参数，默认为空字符串
-        operating_system = request.GET.get('operating_system', '')  # 获取操作系统的筛选参数，默认为空字符串
-        protocol = request.GET.get('protocol', '')  # 获取协议的筛选参数，默认为空字符串
-
-        # 获取所有主机并按创建时间升序排序
-        hosts = Host.objects.all().order_by('create_time')
-
-        # 根据筛选参数过滤主机
-        if name:
-            hosts = hosts.filter(name__icontains=name)
-        if operating_system:
-            hosts = hosts.filter(operating_system__icontains=operating_system)
-        if protocol:
-            hosts = hosts.filter(protocol__icontains=protocol)
-
-        # 获取分页参数
-        page = request.GET.get('page', 1)  # 获取当前页码，默认为第1页
-        page_size = request.GET.get('page_size', 10)  # 获取每页显示的记录数，默认为10
-
-        # 实例化分页器
-        paginator = Paginator(hosts, page_size)
-
-        # 获取当前页的数据
-        current_page_data = paginator.get_page(page)
-
-        # 构建响应数据
-        data = []
-        for host in current_page_data:
-            # 查询关联的节点
-            node_name = host.node.name if host.node else None  # 如果没有关联节点，返回None
+        if pk:
+            try:
+                # 确保正确处理 UUID
+                host = get_object_or_404(Host, pk=pk)
+                # 查询关联的节点
+                node_name = host.node.name if host.node else None
+                
+                data = {
+                    'id': str(host.id),
+                    'name': host.name,
+                    'status': host.status,
+                    'node': node_name,
+                    'operating_system': host.operating_system,
+                    'network': host.network,
+                    'protocol': host.protocol,
+                    'port': host.port,
+                    'account_type': host.account_type.name if host.account_type else None,
+                    'remarks': host.remarks,
+                    'create_time': host.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+                }
+                return Response(data, status=status.HTTP_200_OK)
+            except Exception as e:
+                print(f"Error fetching host detail: {str(e)}")  # 添加调试日志
+                return Response({'error': f'Host not found: {str(e)}'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            """
+            处理GET请求，返回主机列表，支持按主机名称、操作系统和协议进行筛选，并提供分页功能。
+            """
             
-            data.append({
-                'id': str(host.id),  # 将UUID转换为字符串
-                'name': host.name,
-                'status': host.status,
-                'node': node_name,  # 返回节点名称
-                'operating_system': host.operating_system,
-                'network': host.network,
-                'protocol': host.protocol,
-                'port': host.port,
-                'account_type': host.account_type.name if host.account_type else None,  # 关联凭据的名称
-                'remarks': host.remarks,
-                'create_time': host.create_time.strftime('%Y-%m-%d %H:%M:%S'),
-            })
+            # 获取筛选参数
+            name = request.GET.get('name', '')  # 获取主机名称的筛选参数，默认为空字符串
+            operating_system = request.GET.get('operating_system', '')  # 获取操作系统的筛选参数，默认为空字符串
+            protocol = request.GET.get('protocol', '')  # 获取协议的筛选参数，默认为空字符串
 
-        # 构建分页信息
-        pagination = {
-            'current_page': current_page_data.number,  # 当前页码
-            'total_pages': paginator.num_pages,  # 总页数
-            'total_items': paginator.count,  # 总记录数
-            'page_size': page_size,  # 每页显示的记录数
-        }
+            # 获取所有主机并按创建时间升序排序
+            hosts = Host.objects.all().order_by('create_time')
 
-        # 返回分页后的响应数据
-        return Response({
-            'result': data,
-            'pagination': pagination
-        }, status=status.HTTP_200_OK)
+            # 根据筛选参数过滤主机
+            if name:
+                hosts = hosts.filter(name__icontains=name)
+            if operating_system:
+                hosts = hosts.filter(operating_system__icontains=operating_system)
+            if protocol:
+                hosts = hosts.filter(protocol__icontains=protocol)
+
+            # 获取分页参数
+            page = request.GET.get('page', 1)  # 获取当前页码，默认为第1页
+            page_size = request.GET.get('page_size', 10)  # 获取每页显示的记录数，默认为10
+
+            # 实例化分页器
+            paginator = Paginator(hosts, page_size)
+
+            # 获取当前页的数据
+            current_page_data = paginator.get_page(page)
+
+            # 构建响应数据
+            data = []
+            for host in current_page_data:
+                # 查询关联的节点
+                node_name = host.node.name if host.node else None  # 如果没有关联节点，返回None
+                
+                data.append({
+                    'id': str(host.id),  # 将UUID转换为字符串
+                    'name': host.name,
+                    'status': host.status,
+                    'node': node_name,  # 返回节点名称
+                    'operating_system': host.operating_system,
+                    'network': host.network,
+                    'protocol': host.protocol,
+                    'port': host.port,
+                    'account_type': host.account_type.name if host.account_type else None,  # 关联凭据的名称
+                    'remarks': host.remarks,
+                    'create_time': host.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+                })
+
+            # 构建分页信息
+            pagination = {
+                'current_page': current_page_data.number,  # 当前页码
+                'total_pages': paginator.num_pages,  # 总页数
+                'total_items': paginator.count,  # 总记录数
+                'page_size': page_size,  # 每页显示的记录数
+            }
+
+            # 返回分页后的响应数据
+            return Response({
+                'result': data,
+                'pagination': pagination
+            }, status=status.HTTP_200_OK)
 
     def post(self, request):
         """

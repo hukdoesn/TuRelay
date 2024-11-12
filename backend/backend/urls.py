@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/monitor_domains/create/', DomainMonitorView.as_view(), name='domain-monitor-create'),
     path('api/monitor_domains/<int:pk>/update/', DomainMonitorView.as_view(), name='domain-monitor-update'),
     path('api/monitor_domains/<int:pk>/delete/', DomainMonitorView.as_view(), name='domain-monitor-delete'),
+    path('api/monitor_domains/<int:pk>/', DomainMonitorView.as_view(), name='monitor-domain-detail'),
     path('api/nodes/', NodeSelectionView.as_view(), name='node-selection'),
     path('api/hosts/', HostView.as_view(), name='hosts-list'),
     path('api/hosts/create/', HostView.as_view(), name='hosts-create'),
@@ -49,4 +50,5 @@ urlpatterns = [
     path('api/command_alerts/alert_contacts/', AlertContactList.as_view(), name='alert-contact-list'),
     path('api/asset_nodes/', AssetNodesView.as_view(), name='asset-nodes'),
     path('api/asset_nodes/<str:pk>/', AssetNodesView.as_view(), name='asset-node-detail'),
+    path('api/hosts/<str:pk>/', HostView.as_view(), name='host-detail'),
 ]

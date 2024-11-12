@@ -1,167 +1,171 @@
 <template>
-    <div class="content_table">
-        <!-- 筛选条件输入框 -->
-        <div class="input_tools">
-            <a-input v-model:value="searchName" class="input_item" addonBefore="名称" placeholder="请输入主机名称" />
-            <a-input v-model:value="searchNode" class="input_item" addonBefore="节点" placeholder="请输入节点" />
-        </div>
-        <!-- 重置和查询按钮 -->
-        <div class="button_tools">
-            <a-button @click="resetFilters" class="button_font">重置</a-button>
-            <a-button @click="fetchHosts" class="button_font" type="primary">查询</a-button>
-        </div>
-    </div>
-    <!-- 新建主机按钮 -->
-    <div class="button_create">
-        <span>主机管理</span>
-        <div class="button_group">
-            <a-button @click="showNodeTreeModal" class="button_item button_font" >节点管理</a-button>
-            <a-button @click="showCreateModal" class="button_item button_font" type="primary">新建主机</a-button>
-        </div>
-    </div>
-    <!-- 显示主机的表格 -->
-    <div class="table_main">
-        <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
-            :scroll="tableScroll" size="middle" @change="handleTableChange" />
-    </div>
-
-    <!-- 创建主机的模态框 -->
-    <a-modal v-model:open="isCreateModalVisible" title="新建主机" @ok="handleCreateOk" @cancel="handleCreateCancel"
-        @open="resetCreateForm">
-        <a-form :model="createForm" :rules="createRules" ref="createFormRef" layout="vertical">
-            <a-form-item label="名称" name="name" :rules="createRules.name">
-                <a-input v-model:value="createForm.name" placeholder="请输入主机名称" id="Create_Hosts" />
-            </a-form-item>
-            <a-form-item label="协议" name="protocol" :rules="createRules.protocol">
-                <a-radio-group v-model:value="createForm.protocol" @change="handleProtocolChange">
-                    <a-radio value="SSH">SSH</a-radio>
-                    <a-radio value="RDP">RDP</a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <a-form-item label="IP 地址和端口" name="network">
-                <a-input-group compact>
-                    <!-- IP和端口的组合输入 -->
-                    <a-form-item-rest>
-                        <a-input v-model:value="createForm.network" placeholder="请输入IP地址" style="width: 70%" />
-                    </a-form-item-rest>
-                    <a-form-item-rest>
-                        <a-input-number v-model:value="createForm.port" :min="1" :max="65535" placeholder="请输入端口号"
-                            style="width: 30%" />
-                    </a-form-item-rest>
-                </a-input-group>
-            </a-form-item>
-            <a-form-item label="凭据选项" name="credential_option">
-                <a-radio-group v-model:value="credentialOption" @change="handleCredentialOptionChange">
-                    <a-radio value="existing">使用现有凭据</a-radio>
-                    <a-radio value="new">创建新凭据</a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <a-form-item label="账户类型" name="account_type" :rules="createRules.account_type">
-                <a-select v-model:value="createForm.account_type" placeholder="请选择账户类型"
-                    :disabled="isAccountTypeDisabled">
-                    <a-select-option v-for="credential in filteredCredentials" :key="credential.id"
-                        :value="credential.id" :disabled="isCredentialTypeDisabled(credential.type)">
-                        {{ credential.name }}
-                    </a-select-option>
-                </a-select>
-            </a-form-item>
-            <a-form-item label="节点" name="node" :rules="createRules.node">
-                <a-select v-model:value="createForm.node" placeholder="请选择节点">
-                    <a-select-option v-for="node in availableNodes" :key="node.id" :value="node.id">
-                        {{ node.name }}
-                    </a-select-option>
-                </a-select>
-            </a-form-item>
-            <a-form-item label="备注" name="remarks">
-                <a-textarea v-model:value="createForm.remarks" placeholder="请输入备注" />
-            </a-form-item>
-        </a-form>
-        <template #footer>
-            <!-- 底部按钮 -->
-            <div style="display: flex; justify-content: space-between; width: 100%;">
-                <a-button key="test" @click="handleTestConnection">测试连接</a-button>
-                <div>
-                    <!-- 取消和确认 -->
-                    <a-button key="cancel" @click="handleCreateCancel">取消</a-button>
-                    <a-button key="submit" type="primary" @click="handleCreateOk">确认</a-button>
-                </div>
+    <div v-if="!$route.params.id">
+        <!-- 原有的主机列表内容 -->
+        <div class="content_table">
+            <!-- 筛选条件输入框 -->
+            <div class="input_tools">
+                <a-input v-model:value="searchName" class="input_item" addonBefore="名称" placeholder="请输入主机名称" />
+                <a-input v-model:value="searchNode" class="input_item" addonBefore="节点" placeholder="请输入节点" />
             </div>
-        </template>
-    </a-modal>
-
-    <!-- 编辑主机的模态框 -->
-    <a-modal v-model:open="isEditModalVisible" title="编辑主机" @ok="handleEditOk" @cancel="handleEditCancel"
-        @open="prepareEditForm">
-        <a-form :model="editForm" :rules="editRules" ref="editFormRef" layout="vertical">
-            <a-form-item label="名称" name="name" :rules="editRules.name">
-                <a-input v-model:value="editForm.name" placeholder="请输入主机名称" id="Edit_Hosts" />
-            </a-form-item>
-            <a-form-item label="协议" name="protocol" :rules="editRules.protocol">
-                <a-radio-group v-model:value="editForm.protocol" @change="handleProtocolChange" :disabled="true">
-                    <a-radio value="SSH">SSH</a-radio>
-                    <a-radio value="RDP">RDP</a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <a-form-item label="IP 地址和端口" name="network">
-                <a-input-group compact>
-                    <!-- IP和端口的组合输入 -->
-                    <a-form-item-rest>
-                        <a-input v-model:value="editForm.network" placeholder="请输入IP地址" style="width: 70%" />
-                    </a-form-item-rest>
-                    <a-form-item-rest>
-                        <a-input-number v-model:value="editForm.port" :min="1" :max="65535" placeholder="请输入端口号"
-                            style="width: 30%" />
-                    </a-form-item-rest>
-                </a-input-group>
-            </a-form-item>
-            <a-form-item label="凭据选项" name="credential_option">
-                <a-radio-group v-model:value="credentialOption" @change="handleCredentialOptionChange">
-                    <a-radio value="existing">使用现有凭据</a-radio>
-                    <a-radio value="new">创建新凭据</a-radio>
-                </a-radio-group>
-            </a-form-item>
-            <a-form-item label="账户类型" name="account_type" :rules="editRules.account_type">
-                <a-select v-model:value="editForm.account_type" placeholder="请选择账户类型" :disabled="isAccountTypeDisabled">
-                    <a-select-option v-for="credential in filteredCredentials" :key="credential.id"
-                        :value="credential.id" :disabled="isCredentialTypeDisabled(credential.type)">
-                        {{ credential.name }}
-                    </a-select-option>
-                </a-select>
-            </a-form-item>
-            <a-form-item label="节点" name="node" :rules="editRules.node">
-                <a-select v-model:value="editForm.node" placeholder="请选择节点">
-                    <a-select-option v-for="node in availableNodes" :key="node.id" :value="node.id">
-                        {{ node.name }}
-                    </a-select-option>
-                </a-select>
-            </a-form-item>
-            <a-form-item label="备注" name="remarks">
-                <a-textarea v-model:value="editForm.remarks" placeholder="请输入备注" />
-            </a-form-item>
-        </a-form>
-        <template #footer>
-            <!-- 底部按钮 -->
-            <div style="display: flex; justify-content: space-between; width: 100%;">
-                <a-button key="test" @click="handleTestConnection">测试连接</a-button>
-                <div>
-                    <!-- 取消和确认 -->
-                    <a-button key="cancel" @click="handleEditCancel">取消</a-button>
-                    <a-button key="submit" type="primary" @click="handleEditOk">确认</a-button>
-                </div>
+            <!-- 重置和查询按钮 -->
+            <div class="button_tools">
+                <a-button @click="resetFilters" class="button_font">重置</a-button>
+                <a-button @click="fetchHosts" class="button_font" type="primary">查询</a-button>
             </div>
-        </template>
-    </a-modal>
-    <!-- 打开新建凭据模态框并且结束调用handleProtocolChange方法请求最新凭据列表 -->
-    <CreateCredentialModal ref="createCredentialModalRef" @refresh="handleProtocolChange" />
+        </div>
+        <!-- 新建主机按钮 -->
+        <div class="button_create">
+            <span>主机管理</span>
+            <div class="button_group">
+                <a-button @click="showNodeTreeModal" class="button_item button_font" >节点管理</a-button>
+                <a-button @click="showCreateModal" class="button_item button_font" type="primary">新建主机</a-button>
+            </div>
+        </div>
+        <!-- 显示主机的表格 -->
+        <div class="table_main">
+            <a-table style="font-size: 14px;" :columns="columns" :data-source="data" :pagination="paginationOptions"
+                :scroll="tableScroll" size="middle" @change="handleTableChange" />
+        </div>
 
-    <!-- 添加节点树模态框 -->
-    <a-modal
-        v-model:open="nodeTreeModalVisible"
-        title="节点管理"
-        :footer="null"
-    >
-        <NodeTree ref="nodeTreeRef" />
-    </a-modal>
+        <!-- 创建主机的模态框 -->
+        <a-modal v-model:open="isCreateModalVisible" title="新建主机" @ok="handleCreateOk" @cancel="handleCreateCancel"
+            @open="resetCreateForm">
+            <a-form :model="createForm" :rules="createRules" ref="createFormRef" layout="vertical">
+                <a-form-item label="名称" name="name" :rules="createRules.name">
+                    <a-input v-model:value="createForm.name" placeholder="请输入主机名称" id="Create_Hosts" />
+                </a-form-item>
+                <a-form-item label="协议" name="protocol" :rules="createRules.protocol">
+                    <a-radio-group v-model:value="createForm.protocol" @change="handleProtocolChange">
+                        <a-radio value="SSH">SSH</a-radio>
+                        <a-radio value="RDP">RDP</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <a-form-item label="IP 地址和端口" name="network">
+                    <a-input-group compact>
+                        <!-- IP和端口的组合输入 -->
+                        <a-form-item-rest>
+                            <a-input v-model:value="createForm.network" placeholder="请输入IP地址" style="width: 70%" />
+                        </a-form-item-rest>
+                        <a-form-item-rest>
+                            <a-input-number v-model:value="createForm.port" :min="1" :max="65535" placeholder="请输入端口号"
+                                style="width: 30%" />
+                        </a-form-item-rest>
+                    </a-input-group>
+                </a-form-item>
+                <a-form-item label="凭据选项" name="credential_option">
+                    <a-radio-group v-model:value="credentialOption" @change="handleCredentialOptionChange">
+                        <a-radio value="existing">使用现有凭据</a-radio>
+                        <a-radio value="new">创建新凭据</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <a-form-item label="账户类型" name="account_type" :rules="createRules.account_type">
+                    <a-select v-model:value="createForm.account_type" placeholder="请选择账户类型"
+                        :disabled="isAccountTypeDisabled">
+                        <a-select-option v-for="credential in filteredCredentials" :key="credential.id"
+                            :value="credential.id" :disabled="isCredentialTypeDisabled(credential.type)">
+                            {{ credential.name }}
+                        </a-select-option>
+                    </a-select>
+                </a-form-item>
+                <a-form-item label="节点" name="node" :rules="createRules.node">
+                    <a-select v-model:value="createForm.node" placeholder="请选择节点">
+                        <a-select-option v-for="node in availableNodes" :key="node.id" :value="node.id">
+                            {{ node.name }}
+                        </a-select-option>
+                    </a-select>
+                </a-form-item>
+                <a-form-item label="备注" name="remarks">
+                    <a-textarea v-model:value="createForm.remarks" placeholder="请输入备注" />
+                </a-form-item>
+            </a-form>
+            <template #footer>
+                <!-- 底部按钮 -->
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <a-button key="test" @click="handleTestConnection">测试连接</a-button>
+                    <div>
+                        <!-- 取消和确认 -->
+                        <a-button key="cancel" @click="handleCreateCancel">取消</a-button>
+                        <a-button key="submit" type="primary" @click="handleCreateOk">确认</a-button>
+                    </div>
+                </div>
+            </template>
+        </a-modal>
+
+        <!-- 编辑主机的模态框 -->
+        <a-modal v-model:open="isEditModalVisible" title="编辑主机" @ok="handleEditOk" @cancel="handleEditCancel"
+            @open="prepareEditForm">
+            <a-form :model="editForm" :rules="editRules" ref="editFormRef" layout="vertical">
+                <a-form-item label="名称" name="name" :rules="editRules.name">
+                    <a-input v-model:value="editForm.name" placeholder="请输入主机名称" id="Edit_Hosts" />
+                </a-form-item>
+                <a-form-item label="协议" name="protocol" :rules="editRules.protocol">
+                    <a-radio-group v-model:value="editForm.protocol" @change="handleProtocolChange" :disabled="true">
+                        <a-radio value="SSH">SSH</a-radio>
+                        <a-radio value="RDP">RDP</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <a-form-item label="IP 地址和端口" name="network">
+                    <a-input-group compact>
+                        <!-- IP和端口的组合输入 -->
+                        <a-form-item-rest>
+                            <a-input v-model:value="editForm.network" placeholder="请输入IP地址" style="width: 70%" />
+                        </a-form-item-rest>
+                        <a-form-item-rest>
+                            <a-input-number v-model:value="editForm.port" :min="1" :max="65535" placeholder="请输入端口号"
+                                style="width: 30%" />
+                        </a-form-item-rest>
+                    </a-input-group>
+                </a-form-item>
+                <a-form-item label="凭据选项" name="credential_option">
+                    <a-radio-group v-model:value="credentialOption" @change="handleCredentialOptionChange">
+                        <a-radio value="existing">使用现有凭据</a-radio>
+                        <a-radio value="new">创建新凭据</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <a-form-item label="账户类型" name="account_type" :rules="editRules.account_type">
+                    <a-select v-model:value="editForm.account_type" placeholder="请选择账户类型" :disabled="isAccountTypeDisabled">
+                        <a-select-option v-for="credential in filteredCredentials" :key="credential.id"
+                            :value="credential.id" :disabled="isCredentialTypeDisabled(credential.type)">
+                            {{ credential.name }}
+                        </a-select-option>
+                    </a-select>
+                </a-form-item>
+                <a-form-item label="节点" name="node" :rules="editRules.node">
+                    <a-select v-model:value="editForm.node" placeholder="请选择节点">
+                        <a-select-option v-for="node in availableNodes" :key="node.id" :value="node.id">
+                            {{ node.name }}
+                        </a-select-option>
+                    </a-select>
+                </a-form-item>
+                <a-form-item label="备注" name="remarks">
+                    <a-textarea v-model:value="editForm.remarks" placeholder="请输入备注" />
+                </a-form-item>
+            </a-form>
+            <template #footer>
+                <!-- 底部按钮 -->
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <a-button key="test" @click="handleTestConnection">测试连接</a-button>
+                    <div>
+                        <!-- 取消和确认 -->
+                        <a-button key="cancel" @click="handleEditCancel">取消</a-button>
+                        <a-button key="submit" type="primary" @click="handleEditOk">确认</a-button>
+                    </div>
+                </div>
+            </template>
+        </a-modal>
+        <!-- 打开新建凭据模态框并且结束调用handleProtocolChange方法请求最新凭据列表 -->
+        <CreateCredentialModal ref="createCredentialModalRef" @refresh="handleProtocolChange" />
+
+        <!-- 添加节点树模态框 -->
+        <a-modal
+            v-model:open="nodeTreeModalVisible"
+            title="节点管理"
+            :footer="null"
+        >
+            <NodeTree ref="nodeTreeRef" />
+        </a-modal>
+    </div>
+    <router-view v-else></router-view>
 </template>
 
 <script setup>
@@ -260,7 +264,7 @@ const isEditModalVisible = ref(false);    // 编辑模态框的显示状态
 // 凭据选项控制
 const credentialOption = ref('existing');
 
-// ���制账户类型选择框的禁用状态
+// 制账户类型选择框的禁用状态
 const isAccountTypeDisabled = ref(true);
 
 // 过滤后的凭据列表（根据协议类型筛选）
@@ -474,6 +478,10 @@ const columns = [
         title: '名称',
         dataIndex: 'name',
         width: 150,
+        customRender: ({ text, record }) => h('a', {
+            class: 'table-link',
+            onClick: () => viewDetail(record.id)
+        }, text)
     },
     {
         title: '状态',
@@ -702,6 +710,11 @@ const nodeTreeRef = ref(null);
 const showNodeTreeModal = () => {
     nodeTreeModalVisible.value = true;
 };
+
+// 添加查看详情的方法
+const viewDetail = (id) => {
+  router.push(`/asset-management/hosts/${id}`);
+};
 </script>
 
 <style>
@@ -722,7 +735,7 @@ const showNodeTreeModal = () => {
 .input_item {
     flex: 1;
     max-width: 300px;
-    /* 设置最大宽度 */
+    /* 置最大宽度 */
     min-width: 200px;
     /* 设置最小宽度 */
 }
@@ -748,4 +761,16 @@ const showNodeTreeModal = () => {
     display: flex;
     gap: 8px;
 }
+
+.table-link {
+    color: rgba(0, 0, 0, 0.88); 
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* 添加透明度过渡效果 */
+}
+
+.table-link:hover {
+    /* opacity: 0.8;  */
+    color: rgba(0, 0, 0, 0.45);
+}
+
 </style>
