@@ -117,6 +117,18 @@ const updates = ref([
     type: 'feature',
     title: '新增功能',
     details: [
+      '安全设置页面',
+      'MFA多因素全局控制功能',
+      'IP登陆限制：IP白名单、IP黑名单',
+      '开启水印功能',
+    ]
+  },
+{
+    version: 'v1.0.0',
+    date: '2024-11-12',
+    type: 'feature',
+    title: '新增功能',
+    details: [
       '主机管理详情页面',
       '用户列表详情页面',
       '站点管理详情页面',

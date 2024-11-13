@@ -113,7 +113,9 @@
           <span>系统设置</span>
         </template>
         <a-menu-item key="/settings/auth-settings">
-          <router-link to="/settings/auth-settings">认证设置</router-link>
+          <router-link to="/settings/auth-settings">
+            <span class="developing-feature">认证设置</span>
+          </router-link>
         </a-menu-item>
         <a-menu-item key="/settings/safe-settings">
           <router-link to="/settings/safe-settings">安全设置</router-link>

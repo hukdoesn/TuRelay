@@ -15,3 +15,4 @@ from .alert_contacts import AlertContactView
 from .command_alert import AlertContactList,HostListView, CommandAlertView
 from .asset_nodes import AssetNodesView
 from .mfa_auth import MFAUtil
+from .dashboard import dashboard_statistics, login_statistics

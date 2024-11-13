@@ -17,6 +17,7 @@
     "dayjs": "^1.11.11",
     "dayjs-plugin-utc": "^0.1.2",
     "dayjs-timezone-iana-plugin": "^0.1.0",
+    "echarts": "^5.5.1",
     "emit": "^0.0.2",
     "guacamole-common-js": "^1.4.0",
     "mitt": "^3.0.1",
