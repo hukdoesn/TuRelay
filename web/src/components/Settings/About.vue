@@ -1,26 +1,53 @@
 <template>
   <div class="about-container">
-    <!-- 项目介绍 -->
+    <!-- 项目介绍部分重新设计 -->
     <div class="project-intro">
-      <div class="intro-header">
-        <h1>TuRelay</h1>
-        <div class="version-info">
-          <a-tag color="blue">Version 1.0.0</a-tag>
-          <a-tag color="green">最后更新: {{ formatDate(latestUpdate) }}</a-tag>
+      <!-- Logo和版本信息区域 -->
+      <div class="brand-section">
+        <div class="brand-info">
+          <h1 class="brand-title">Tu Relay</h1>
+          <div class="brand-subtitle">翻斗花园有棵树，我叫图图你记住。</div>
+        </div>
+        <div class="version-badges">
+          <div class="version-badge">
+            <span class="badge-label">当前版本</span>
+            <span class="badge-value">1.0.0</span>
+          </div>
+          <div class="version-badge">
+            <span class="badge-label">更新时间</span>
+            <span class="badge-value">{{ formatDate(latestUpdate) }}</span>
+          </div>
         </div>
       </div>
-      <p class="description">
-        TuRelay 是一个现代化的运维管理平台，致力于提供简单高效的运维解决方案。
-      </p>
+
+      <!-- 项目描述 -->
+      <div class="project-description">
+        <p class="description-text">
+          TuRelay 是一款专注于简化运维工作流程的现代化运维堡垒机平台。通过直观的界面设计和强大的功能集成，
+          为俺图图提供高效、安全、可靠的一站式解决方案。
+          <!-- 翻斗花园有棵树，我叫图图你记住。 -->
+        </p>
+        <div class="feature-tags">
+          <a-tag color="cyan">简单高效</a-tag>
+          <a-tag color="blue">安全可靠</a-tag>
+          <a-tag color="geekblue">功能丰富</a-tag>
+          <a-tag color="purple">持续更新</a-tag>
+        </div>
+      </div>
+
+      <!-- 社交链接部分保持不变 -->
       <div class="social-links">
-        <a href="https://your-blog-url.com" target="_blank" class="badge-link">
-          <img alt="Blog" src="https://img.shields.io/badge/Blog-FF4081?style=for-the-badge&logo=blogger&logoColor=white&labelColor=FF4081" />
+        <a href="https://ext4.cn" target="_blank" class="badge-link">
+          <img alt="Blog" src="https://img.shields.io/badge/博客-1890ff?style=flat-square&logo=Blogger&logoColor=white" />
         </a>
-        <a href="https://github.com/your-github" target="_blank" class="badge-link">
-          <img alt="GitHub" src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white&labelColor=181717" />
+        <a href="https://github.com/hukdoesn" target="_blank" class="badge-link">
+          <img alt="GitHub" src="https://img.shields.io/badge/GitHub-2a3947?style=flat-square&logo=GitHub&logoColor=white" />
         </a>
-        <a href="https://your-docs-url.com" target="_blank" class="badge-link">
-          <img alt="Documentation" src="https://img.shields.io/badge/TuRelay-21BAB5?style=for-the-badge&logo=readthedocs&logoColor=white&labelColor=21BAB5" />
+        <a href="https://www.ext4.cn" target="_blank" class="badge-link">
+          <img alt="Documentation" src="https://img.shields.io/badge/官网-36cfc9?style=flat-square&logo=ReadtheDocs&logoColor=white" />
+        </a>
+        <a href="https://gitee.com/your-gitee" target="_blank" class="badge-link">
+          <img alt="Gitee" src="https://img.shields.io/badge/Gitee-28404e?style=flat-square&logo=Gitee&logoColor=white" />
         </a>
       </div>
     </div>
@@ -79,14 +106,35 @@ import {
   SafetyCertificateOutlined,
 } from '@ant-design/icons-vue';
 
-const latestUpdate = ref('2024-03-19');
+const latestUpdate = ref('2024-11-12');
 const timelineMode = ref('all');
 
 // 更新记录
 const updates = ref([
+{
+    version: 'v1.0.0',
+    date: '2024-11-12',
+    type: 'feature',
+    title: '新增功能',
+    details: [
+      '主机管理详情页面',
+      '用户列表详情页面',
+      '站点管理详情页面',
+      '更新日志时间轴页面',
+    ]
+  },
   {
-    version: 'v1.0.3',
-    date: '2024-03-19',
+    version: 'v1.0.0',
+    date: '2024-11-12',
+    type: 'bugfix',
+    title: 'Bug修复更新',
+    details: [
+      '修复锁定记录last_attemp_time字段空值显示错误',
+    ]
+  },
+  {
+    version: 'v1.0.0',
+    date: '2024-11-12',
     type: 'optimization',
     title: '性能优化',
     details: [
@@ -194,45 +242,116 @@ const formatDate = (date) => {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
 }
 
-.intro-header {
-  margin-bottom: 24px;
+.brand-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-.intro-header h1 {
-  font-size: 2.8em;
+.brand-info {
+  flex: 1;
+}
+
+.brand-title {
+  font-size: 3.2em;
+  font-weight: 600;
+  margin: 0;
   background: linear-gradient(45deg, #1890ff, #36cfc9);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 16px;
+  letter-spacing: -1px;
 }
 
-.description {
+.brand-subtitle {
   font-size: 1.2em;
-  line-height: 1.8;
-  color: #4a5568;
+  color: #8c8c8c;
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+.version-badges {
+  display: flex;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.version-badge {
+  background: rgba(24, 144, 255, 0.1);
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 120px;
+}
+
+.badge-label {
+  font-size: 0.85em;
+  color: #8c8c8c;
+  margin-bottom: 4px;
+}
+
+.badge-value {
+  font-size: 1.1em;
+  color: #1890ff;
+  font-weight: 500;
+}
+
+.project-description {
   margin-bottom: 32px;
-  max-width: 800px;
+}
+
+.description-text {
+  font-size: 1.1em;
+  line-height: 1.8;
+  color: #595959;
+  margin-bottom: 20px;
+  max-width: 900px;
+}
+
+.feature-tags {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.feature-tags :deep(.ant-tag) {
+  padding: 4px 12px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 4px;
 }
 
 .social-links {
   display: flex;
   gap: 12px;
   margin-top: 24px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .badge-link {
   transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
 }
 
 .badge-link:hover {
   transform: translateY(-2px);
-  filter: brightness(1.1);
 }
 
 .badge-link img {
-  height: 28px;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.badge-link:hover img {
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
 }
 
 .update-section {
@@ -354,7 +473,22 @@ const formatDate = (date) => {
   display: none;
 }
 
+/* 响应式设计 */
 @media (max-width: 768px) {
+  .brand-section {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .version-badges {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .brand-title {
+    font-size: 2.5em;
+  }
+
   .section-header {
     flex-direction: column;
     gap: 16px;
