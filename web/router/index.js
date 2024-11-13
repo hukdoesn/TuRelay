@@ -227,11 +227,11 @@ const router = createRouter({
           } 
         },
         { 
-          path: '/settings/system-tools', 
-          component: () => import('@/components/Settings/SystemTools.vue'), 
+          path: '/settings/safe-settings', 
+          component: () => import('@/components/Settings/SafeSettings.vue'), 
           meta: { 
             requiresAuth: true, 
-            breadcrumbName: '系统工具' 
+            breadcrumbName: '安全设置' 
           } 
         },
         { 

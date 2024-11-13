@@ -168,7 +168,7 @@ class DomainMonitor(models.Model):
     """
     name = models.CharField(max_length=150, verbose_name="监控名称")  # 监控名称
     domain = models.CharField(max_length=255, verbose_name="域名")  # 域名
-    # type = models.CharField(max_length=50, verbose_name="监控类型")  # 监控类型
+    # type = models.CharField(max_length=50, verbose_name="监控类型")  # 监控型
     connectivity = models.BooleanField(default=False, verbose_name="连通性")  # 连通性
     status_code = models.IntegerField(null=True, blank=True, verbose_name="状态码")  # 状态码
     redirection = models.CharField(max_length=255, null=True, blank=True, verbose_name="重定向地址")  # 重定向地址
@@ -180,7 +180,7 @@ class DomainMonitor(models.Model):
     enable = models.BooleanField(default=True, verbose_name="启用")  # 是否启用监控
     alert = models.BooleanField(default=False, verbose_name="告警")  # 是否开启告警
     monitor_frequency = models.IntegerField(default=60, verbose_name="监控频率（秒）")  # 监控频率（秒）
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建���间
 
     class Meta:
         db_table = 't_domain_monitor'  # 指定数据库表名为 t_domain_monitor
@@ -232,7 +232,7 @@ class CommandLog(models.Model):
     命令日志模型，记录用户执行的命令信息
     """
     username = models.CharField(max_length=150, verbose_name="用户名")  # 执行命令的用户名
-    command = models.TextField(verbose_name="执行的命令")  # 记录执行过的命令
+    command = models.TextField(verbose_name="执行的命令")  # 记录执��过的命令
     hosts = models.CharField(max_length=255, verbose_name="执行主机")  # 记录执行的主机名
     network = models.CharField(null=True, blank=True, max_length=255, verbose_name="执行主机IP")  # 记录执行的主机IP
     credential = models.CharField(max_length=150, verbose_name="使用的凭据")  # 记录执行命令当前使用账号凭据名称
@@ -279,5 +279,17 @@ class CommandAlert(models.Model):
 
     def __str__(self):
         return self.name
+
+class SystemSettings(models.Model):
+    """
+    系统设置模型，存储全局配置
+    """
+    watermark_enabled = models.BooleanField(default=True, verbose_name="水印启用状态")
+    ip_whitelist = models.TextField(null=True, blank=True, verbose_name="IP白名单")
+    ip_blacklist = models.TextField(null=True, blank=True, verbose_name="IP黑名单")
+    update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")
+
+    class Meta:
+        db_table = 't_system_settings'
 
 

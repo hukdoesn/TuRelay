@@ -133,6 +133,7 @@ export default {
       localStorage.setItem('tokenExpiry', this.$dayjs().add(2, 'hour').format());
       localStorage.setItem('isReadOnly', data.is_read_only);
       localStorage.setItem('sessionTimeout', this.$dayjs().add(2, 'hour').format());
+      localStorage.setItem('watermarkEnabled', data.watermark_enabled);   // 添加水印设置
 
       this.$router.push('/home');
     },
@@ -142,7 +143,9 @@ export default {
         const errorMessages = {
           400: '无效的凭据',
           401: error.response.data.status === 'mfa_invalid' ? 'MFA验证码错误' : '密码错误',
-          403: '账号被锁定，请联系管理员',
+          403: error.response.data.status === 'ip_not_allowed' ? 'IP不在白名单中' :
+               error.response.data.status === 'ip_blocked' ? 'IP在黑名单中' :
+               '账号被锁定，请联系管理员',
           404: '找不到用户',
           423: '账号被锁定'
         };

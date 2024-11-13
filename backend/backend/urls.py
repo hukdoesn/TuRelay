@@ -1,5 +1,6 @@
 from django.urls import path
 from apps.views import LoginView, MFABindView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView
+from apps.views.settings import SystemSettingsView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
@@ -51,4 +52,5 @@ urlpatterns = [
     path('api/asset_nodes/', AssetNodesView.as_view(), name='asset-nodes'),
     path('api/asset_nodes/<str:pk>/', AssetNodesView.as_view(), name='asset-node-detail'),
     path('api/hosts/<str:pk>/', HostView.as_view(), name='host-detail'),
+    path('api/settings/system/', SystemSettingsView.as_view(), name='system-settings'),
 ]

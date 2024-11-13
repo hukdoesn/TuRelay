@@ -115,8 +115,8 @@
         <a-menu-item key="/settings/auth-settings">
           <router-link to="/settings/auth-settings">认证设置</router-link>
         </a-menu-item>
-        <a-menu-item key="/settings/system-tools">
-          <router-link to="/settings/system-tools">系统工具</router-link>
+        <a-menu-item key="/settings/safe-settings">
+          <router-link to="/settings/safe-settings">安全设置</router-link>
         </a-menu-item>
         <a-menu-item key="/settings/about">
           <router-link to="/settings/about">关于</router-link>

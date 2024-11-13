@@ -1,11 +1,12 @@
 from apps.utils import (
     APIView, JsonResponse, jwt, datetime,
     get_object_or_404, timezone, RefreshToken,
-    settings, User, UserLock, LoginLog, Token, user_has_view_permission
+    settings, User, UserLock, LoginLog, Token, user_has_view_permission, is_ip_in_list
 )
 from django.contrib.auth.hashers import check_password
 from user_agents import parse
 from .mfa_auth import MFAUtil
+from apps.models import SystemSettings
 
 class LoginView(APIView):
     """
@@ -23,6 +24,46 @@ class LoginView(APIView):
         
         browser_info = f"{user_agent.browser.family} {user_agent.browser.version_string}"  # 获取浏览器信息
         os_info = user_agent.os.family  # 获取操作系统信息
+
+        # 获取系统设置
+        system_settings = SystemSettings.objects.first()
+        if not system_settings:
+            system_settings = SystemSettings.objects.create()
+
+        # 先检查白名单
+        if system_settings.ip_whitelist:
+            # 如果在白名单中，直接允许访问
+            if is_ip_in_list(client_ip, system_settings.ip_whitelist):
+                pass  # 允许继续登录流程
+            else:
+                # 不在白名单中，直接拒绝
+                LoginLog.objects.create(
+                    username=username,
+                    client_ip=client_ip,
+                    login_status=False,
+                    reason="IP不在白名单中",
+                    browser_info=browser_info,
+                    os_info=os_info
+                )
+                return JsonResponse({
+                    'status': 'ip_not_allowed',
+                    'message': 'IP不在白名单中'
+                }, status=403)
+        # 如果没有设置白名单，则检查黑名单
+        elif system_settings.ip_blacklist:
+            if is_ip_in_list(client_ip, system_settings.ip_blacklist):
+                LoginLog.objects.create(
+                    username=username,
+                    client_ip=client_ip,
+                    login_status=False,
+                    reason="IP在黑名单中",
+                    browser_info=browser_info,
+                    os_info=os_info
+                )
+                return JsonResponse({
+                    'status': 'ip_blocked',
+                    'message': 'IP在黑名单中'
+                }, status=403)
 
         # 尝试获取用户对象，如果不存在返回用户不存在状态码
         try:
@@ -160,13 +201,19 @@ class LoginView(APIView):
             os_info=os_info
         )
 
+        # 获取系统设置
+        system_settings = SystemSettings.objects.first()
+        if not system_settings:
+            system_settings = SystemSettings.objects.create()
+
         # 返回登录成功响应
         return JsonResponse({
             'status': 'login_successful',
             'access_token': str(access_token),
             'refresh_token': str(refresh),
             'name': user.name,
-            'is_read_only': is_read_only,  # 返回权限信息
+            'is_read_only': is_read_only,
+            'watermark_enabled': system_settings.watermark_enabled,     # 添加水印设置
             'message': '登录成功'
         }, status=200)
 

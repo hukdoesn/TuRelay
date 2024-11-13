@@ -20,6 +20,7 @@ from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 # json
 import json
+import ipaddress
 
 # 自定义Token认证类
 class CustomTokenAuthentication(BaseAuthentication):
@@ -80,3 +81,28 @@ class TokenAuthMiddleware(BaseMiddleware):
             scope['user'] = AnonymousUser()
 
         return await super().__call__(scope, receive, send)
+
+def is_ip_in_list(ip, ip_list_str):
+    """
+    检查 IP 是否在 IP 列表中
+    支持 IP 地址和 CIDR 格式
+    """
+    if not ip_list_str:
+        return False
+    
+    ip_addr = ipaddress.ip_address(ip)
+    ip_list = [x.strip() for x in ip_list_str.split(',')]
+    
+    for item in ip_list:
+        if item == '*':  # 允许所有 IP
+            return True
+        try:
+            if '/' in item:  # CIDR 格式
+                if ip_addr in ipaddress.ip_network(item, strict=False):
+                    return True
+            else:  # 单个 IP 地址
+                if ip_addr == ipaddress.ip_address(item):
+                    return True
+        except ValueError:
+            continue
+    return False
