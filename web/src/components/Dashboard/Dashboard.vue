@@ -2,111 +2,85 @@
   <div class="dashboard-container">
     <!-- 数据概览卡片 -->
     <a-row :gutter="[16, 16]">
-      <a-col :span="6">
-        <a-card class="stat-card" :body-style="{ padding: '20px' }">
-          <div class="stat-card-content">
-            <div class="stat-icon">
-              <img width="40" height="40" src="https://img.icons8.com/plasticine/100/monitor.png" alt="monitor"/>
-            </div>
-            <div class="stat-info">
-              <div class="stat-title">主机数量</div>
-              <div class="stat-value">{{ statistics.hostCount }}</div>
-            </div>
+      <a-col :span="6" v-for="(card, index) in statCards" :key="index">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <img :width="28" :height="28" :src="card.icon" :alt="card.title"/>
           </div>
-        </a-card>
+          <div class="stat-info">
+            <div class="stat-title">{{ card.title }}</div>
+            <div class="stat-value">{{ statistics[card.key] }}</div>
+          </div>
+        </div>
       </a-col>
-      <a-col :span="6">
-        <a-card class="stat-card" :body-style="{ padding: '20px' }">
-          <div class="stat-card-content">
-            <div class="stat-icon">
-              <img width="40" height="40" src="https://img.icons8.com/plasticine/100/name.png" alt="name"/>
-            </div>
-            <div class="stat-info">
-              <div class="stat-title">用户数量</div>
-              <div class="stat-value">{{ statistics.userCount }}</div>
-            </div>
+    </a-row>
+
+    <!-- 系统概览 -->
+    <a-row :gutter="[16, 16]" class="section-margin">
+      <a-col :span="6" v-for="(item, key) in systemOverview" :key="key">
+        <div class="overview-item">
+          <div class="overview-icon">
+            <img :width="28" :height="28" :src="item.icon" :alt="item.label"/>
           </div>
-        </a-card>
-      </a-col>
-      <a-col :span="6">
-        <a-card class="stat-card" :body-style="{ padding: '20px' }">
-          <div class="stat-card-content">
-            <div class="stat-icon">
-              <img width="40" height="40" src="https://img.icons8.com/plasticine/100/system-report.png" alt="system-report"/>
-            </div>
-            <div class="stat-info">
-              <div class="stat-title">告警数量</div>
-              <div class="stat-value">{{ statistics.alertCount }}</div>
-            </div>
+          <div class="overview-content">
+            <div class="overview-value">{{ statistics[item.key] }}</div>
+            <div class="overview-label">{{ item.label }}</div>
           </div>
-        </a-card>
-      </a-col>
-      <a-col :span="6">
-        <a-card class="stat-card" :body-style="{ padding: '20px' }">
-          <div class="stat-card-content">
-            <div class="stat-icon">
-              <img width="40" height="40" src="https://img.icons8.com/plasticine/100/lock.png" alt="lock"/>
-            </div>
-            <div class="stat-info">
-              <div class="stat-title">锁定用户</div>
-              <div class="stat-value">{{ statistics.lockedUserCount }}</div>
-            </div>
-          </div>
-        </a-card>
+        </div>
       </a-col>
     </a-row>
 
     <!-- 图表区域 -->
-    <a-row :gutter="[16, 16]" style="margin-top: 16px">
-      <!-- 主机类型分布饼图 -->
-      <a-col :span="12">
-        <a-card title="主机类型分布">
-          <div ref="hostChartRef" style="height: 300px"></div>
+    <a-row :gutter="[16, 16]" class="section-margin">
+      <!-- 主机类型分布 -->
+      <a-col :span="6">
+        <a-card class="chart-card" :bordered="true" title="主机类型分布">
+          <div ref="hostChartRef" style="height: 280px"></div>
         </a-card>
       </a-col>
       
-      <!-- 登录统计折线图 -->
+      <!-- 网站连通性占比 -->
+      <a-col :span="6">
+        <a-card class="chart-card" :bordered="true" title="网站连通性占比">
+          <div ref="websiteChartRef" style="height: 280px"></div>
+        </a-card>
+      </a-col>
+      
+      <!-- 用户登录统计 -->
       <a-col :span="12">
-        <a-card title="用户登录统计">
+        <a-card class="chart-card" :bordered="true" title="用户登录统计">
           <template #extra>
-            <a-radio-group v-model:value="dateRange" @change="handleDateRangeChange">
+            <a-radio-group v-model:value="dateRange" @change="handleDateRangeChange" size="small">
               <a-radio-button value="7">近7天</a-radio-button>
               <a-radio-button value="14">近14天</a-radio-button>
               <a-radio-button value="30">近30天</a-radio-button>
             </a-radio-group>
           </template>
-          <div ref="loginChartRef" style="height: 300px"></div>
+          <div ref="loginChartRef" style="height: 280px"></div>
         </a-card>
       </a-col>
     </a-row>
 
-    <!-- 详细统计信息 -->
-    <a-row :gutter="[16, 16]" style="margin-top: 16px">
-      <a-col :span="12">
-        <a-card title="系统概况">
-          <a-descriptions :column="1">
-            <a-descriptions-item label="在线会话">
-              {{ statistics.onlineSessionCount }}
-            </a-descriptions-item>
-            <a-descriptions-item label="失败登录">
-              {{ statistics.failedLoginCount }}
-            </a-descriptions-item>
-            <a-descriptions-item label="资产数量">
-              {{ statistics.assetCount }}
-            </a-descriptions-item>
-            <a-descriptions-item label="网站监控">
-              {{ statistics.websiteCount }}
-            </a-descriptions-item>
-          </a-descriptions>
-        </a-card>
-      </a-col>
-      
+    <!-- 最近记录区域 -->
+    <a-row :gutter="[16, 16]" class="section-margin">
       <!-- 最近登录记录 -->
       <a-col :span="12">
-        <a-card title="最近登录记录">
+        <a-card class="info-card" :bordered="true" title="最近登录失败记录">
           <a-table
             :columns="loginColumns"
             :data-source="recentLogins"
+            :pagination="false"
+            size="small"
+          />
+        </a-card>
+      </a-col>
+      
+      <!-- 最近告警记录 -->
+      <a-col :span="12">
+        <a-card class="info-card" :bordered="true" title="最近告警记录">
+          <a-table
+            :columns="alertColumns"
+            :data-source="recentAlerts"
             :pagination="false"
             size="small"
           />
@@ -136,6 +110,7 @@ const statistics = ref({
 // 图表DOM引用
 const hostChartRef = ref(null)
 const loginChartRef = ref(null)
+const websiteChartRef = ref(null)
 
 // 最近登录记录表格列定义
 const loginColumns = [
@@ -143,17 +118,27 @@ const loginColumns = [
     title: '用户名',
     dataIndex: 'username',
     key: 'username',
-  },
-  {
-    title: '登录时间',
-    dataIndex: 'login_time',
-    key: 'login_time',
+    width: '15%'
   },
   {
     title: 'IP地址',
     dataIndex: 'client_ip',
     key: 'client_ip',
+    width: '25%'
   },
+  {
+    title: '失败原因',
+    dataIndex: 'reason',
+    key: 'reason',
+    width: '25%',
+    ellipsis: true  // 文字过长时显示省略号
+  },
+  {
+    title: '时间',
+    dataIndex: 'login_time',
+    key: 'login_time',
+    width: '25%'
+  }
 ]
 
 // 最近登录数据
@@ -161,6 +146,55 @@ const recentLogins = ref([])
 
 // 添加日期范围选择的响应式变量
 const dateRange = ref('7')
+
+// 统计卡片数据
+const statCards = [
+  {
+    title: '主机数量',
+    key: 'hostCount',
+    icon: 'https://img.icons8.com/parakeet-line/48/workstation.png'
+  },
+  {
+    title: '用户数量',
+    key: 'userCount',
+    icon: 'https://img.icons8.com/parakeet-line/48/user-group-man-man.png'
+  },
+  {
+    title: '告警数量',
+    key: 'alertCount',
+    icon: 'https://img.icons8.com/parakeet-line/48/warning-shield.png'
+  },
+  {
+    title: '锁定用户',
+    key: 'lockedUserCount',
+    icon: 'https://img.icons8.com/parakeet-line/48/keyhole-shield.png'
+  }
+]
+
+// 系统概况数据
+const systemOverview = [
+  { 
+    label: '在线会话', 
+    key: 'onlineSessionCount',
+    icon: 'https://img.icons8.com/parakeet-line/48/speech-bubble.png'
+  },
+  { 
+    label: '失败登录', 
+    key: 'failedLoginCount',
+    // icon: 'https://img.icons8.com/wired/64/cancel.png'
+    icon: 'https://img.icons8.com/parakeet-line/48/cancel.png'
+  },
+  { 
+    label: '网站监控', 
+    key: 'websiteCount',
+    icon: 'https://img.icons8.com/parakeet-line/48/web-shield.png'
+  },
+  { 
+    label: '资产数量', 
+    key: 'assetCount',
+    icon: 'https://img.icons8.com/wired/64/database.png'
+  },
+]
 
 // 初始化主机类型分布图表
 const initHostChart = (data) => {
@@ -172,8 +206,8 @@ const initHostChart = (data) => {
     },
     legend: {
       orient: 'vertical',
-      right: 10,
-      top: 'center'
+      right: '5%',
+      bottom: '5%'
     },
     series: [
       {
@@ -190,17 +224,73 @@ const initHostChart = (data) => {
         label: {
           show: true,
           position: 'outside',
-          formatter: '{b}: {c}台 ({d}%)'
+          formatter: '{c} 台',
+          padding: [0, 8]
         },
         labelLine: {
           show: true,
-          length: 15,
-          length2: 20,
+          length: 10,
+          length2: 15,
           smooth: true
         },
         data: [
           { value: data.linux || 0, name: 'Linux' },
           { value: data.windows || 0, name: 'Windows' }
+        ]
+      }
+    ]
+  }
+  chart.setOption(option)
+}
+
+// 初始化网站连通性图表
+const initWebsiteChart = (data) => {
+  const chart = echarts.init(websiteChartRef.value)
+  const option = {
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b}: {c} ({d}%)'
+    },
+    legend: {
+      orient: 'vertical',
+      right: '5%',
+      bottom: '5%'
+    },
+    series: [
+      {
+        name: '连通性',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        center: ['40%', '50%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: '#fff',
+          borderWidth: 2
+        },
+        label: {
+          show: true,
+          position: 'outside',
+          formatter: '{b}: {c}个',
+          padding: [0, 8]
+        },
+        labelLine: {
+          show: true,
+          length: 10,
+          length2: 15,
+          smooth: true
+        },
+        data: [
+          { 
+            value: data.connected || 0, 
+            name: '正常',
+            itemStyle: { color: '#52c41a' }
+          },
+          { 
+            value: data.disconnected || 0, 
+            name: '异常',
+            itemStyle: { color: '#ff4d4f' }
+          }
         ]
       }
     ]
@@ -225,7 +315,7 @@ const initLoginChart = (data) => {
         // 遍历每个系列的数据
         params.forEach(param => {
           // 使用圆点标记 + 用户名 + 具体数值 + 单位
-          result += `${param.marker} ${param.seriesName}: ${param.value}次<br/>`;
+          result += `${param.marker} ${param.seriesName}: ${param.value} 次<br/>`;
         });
         return result;
       }
@@ -325,6 +415,7 @@ const fetchDashboardData = async () => {
     
     statistics.value = statsResponse.data.statistics
     initHostChart(statsResponse.data.hostTypes)
+    initWebsiteChart(statsResponse.data.websiteStatus)  // 初始化网站连通性图表
     initLoginChart(loginStatsResponse.data)
     recentLogins.value = statsResponse.data.recentLogins
   } catch (error) {
@@ -361,8 +452,10 @@ onMounted(() => {
   // 监听窗口大小变化，重绘图表
   window.addEventListener('resize', () => {
     const hostChart = echarts.getInstanceByDom(hostChartRef.value)
+    const websiteChart = echarts.getInstanceByDom(websiteChartRef.value)
     const loginChart = echarts.getInstanceByDom(loginChartRef.value)
     hostChart?.resize()
+    websiteChart?.resize()
     loginChart?.resize()
   })
 })
@@ -370,48 +463,39 @@ onMounted(() => {
 
 <style scoped>
 .dashboard-container {
-  padding: 24px;
-  background: #f0f2f5;
   min-height: 100%;
-}
-
-.stat-card {
-  border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.3s ease;
   background: white;
-  border: 1px solid #f0f0f0;
 }
 
-.stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+.section-margin {
+  margin-top: 16px;
 }
 
-.stat-card-content {
+/* 数据概览样式 */
+.stat-item {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border-radius: 4px;
+  transition: all 0.3s;
+  border: 1px solid #f0f0f0;
+  height: 80px;
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .stat-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.stat-icon img {
-  width: 40px;
-  height: 40px;
-  transition: all 0.3s ease;
-}
-
-.stat-card:hover .stat-icon img {
-  transform: scale(1.1);
+  padding: 8px;
+  background: white;
+  border-radius: 6px;
 }
 
 .stat-info {
@@ -419,40 +503,141 @@ onMounted(() => {
 }
 
 .stat-title {
-  font-size: 14px;
+  font-size: 13px;
   color: rgba(0, 0, 0, 0.45);
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 
 .stat-value {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   color: rgba(0, 0, 0, 0.85);
-  line-height: 1.2;
 }
 
-/* 添加响应式样式 */
+/* 图表卡片样式 */
+.chart-card {
+  background: white;
+  border-radius: 4px;
+  height: 100%;
+  transition: all 0.3s;
+}
+
+.chart-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.chart-card :deep(.ant-card-head) {
+  min-height: 48px;
+  padding: 0 16px;
+}
+
+.chart-card :deep(.ant-card-body) {
+  padding: 16px;
+}
+
+.chart-card :deep(.ant-card-head-title) {
+  padding: 14px 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* 系统概览样式 */
+.overview-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border-radius: 4px;
+  transition: all 0.3s;
+  border: 1px solid #f0f0f0;
+  height: 80px;
+}
+
+.overview-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.overview-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  background: white;
+  border-radius: 6px;
+}
+
+.overview-content {
+  flex: 1;
+}
+
+.overview-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.overview-label {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* 表格样式 */
+:deep(.ant-table-small) {
+  font-size: 13px;
+}
+
+:deep(.ant-table-thead > tr > th) {
+  background: white;
+  padding: 12px 16px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+:deep(.ant-table-tbody > tr > td) {
+  padding: 12px 16px;
+}
+
+:deep(.ant-table-tbody > tr:hover > td) {
+  background: #fafafa;
+}
+
+/* 卡片通用样式 */
+:deep(.ant-card) {
+  box-shadow: none;
+}
+
+:deep(.ant-card-bordered) {
+  border: none;
+}
+
+/* 响应式调整 */
 @media screen and (max-width: 1400px) {
-  .stat-icon {
-    width: 48px;
-    height: 48px;
+  .stat-value {
+    font-size: 16px;
   }
   
   .stat-icon img {
     width: 32px;
     height: 32px;
   }
+  
+  .overview-value {
+    font-size: 18px;
+  }
 }
 
 @media screen and (max-width: 1200px) {
-  .stat-icon {
-    width: 40px;
-    height: 40px;
-  }
-  
   .stat-icon img {
     width: 28px;
     height: 28px;
+  }
+  
+  .overview-value {
+    font-size: 16px;
   }
 }
 </style>

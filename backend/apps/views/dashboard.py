@@ -71,20 +71,35 @@ def dashboard_statistics(request):
             'counts': counts
         }
         
-        # 获取最近登录记录
+        # 获取最近登录失败记录
         recent_logins = LoginLog.objects.filter(
-            login_status=True
+            login_status=False  # 只获取失败记录
         ).order_by('-login_time')[:5].values(
             'username', 
             'login_time', 
-            'client_ip'
+            'client_ip',
+            'reason'  # 添加失败原因字段
         )
+        
+        # 格式化时间
+        for record in recent_logins:
+            if record['login_time']:
+                record['login_time'] = record['login_time'].strftime('%Y-%m-%d %H:%M:%S')
+            if not record['reason']:
+                record['reason'] = '未知原因'  # 如果reason为空，显示默认值
+        
+        # 添加网站连通性统计
+        website_status = {
+            'connected': DomainMonitor.objects.filter(connectivity=True).count(),
+            'disconnected': DomainMonitor.objects.filter(connectivity=False).count()
+        }
         
         return Response({
             'statistics': statistics,
             'hostTypes': host_types,
             'loginStats': login_stats,
-            'recentLogins': list(recent_logins)
+            'recentLogins': list(recent_logins),
+            'websiteStatus': website_status  # 添加网站连通性数据
         })
         
     except Exception as e:
