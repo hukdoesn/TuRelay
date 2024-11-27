@@ -88,9 +88,10 @@ class Token(models.Model):
     """
     令牌模型，存储用户的认证令牌
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用")  # 关联到 User 模型
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")  # 关联到 User 模型
     token = models.CharField(max_length=500, verbose_name="令牌")  # 令牌字符串
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
+    last_activity = models.DateTimeField(auto_now=True, verbose_name="最后活动时间")  # 添加最后活动时间字段
 
     class Meta:
         db_table = 't_token'  # 指定数据库表名为 t_token
@@ -180,7 +181,7 @@ class DomainMonitor(models.Model):
     enable = models.BooleanField(default=True, verbose_name="启用")  # 是否启用监控
     alert = models.BooleanField(default=False, verbose_name="告警")  # 是否开启告警
     monitor_frequency = models.IntegerField(default=60, verbose_name="监控频率（秒）")  # 监控频率（秒）
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建���间
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
 
     class Meta:
         db_table = 't_domain_monitor'  # 指定数据库表名为 t_domain_monitor
@@ -232,7 +233,7 @@ class CommandLog(models.Model):
     命令日志模型，记录用户执行的命令信息
     """
     username = models.CharField(max_length=150, verbose_name="用户名")  # 执行命令的用户名
-    command = models.TextField(verbose_name="执行的命令")  # 记录执��过的命令
+    command = models.TextField(verbose_name="执行的命令")  # 记录执行过的命令
     hosts = models.CharField(max_length=255, verbose_name="执行主机")  # 记录执行的主机名
     network = models.CharField(null=True, blank=True, max_length=255, verbose_name="执行主机IP")  # 记录执行的主机IP
     credential = models.CharField(max_length=150, verbose_name="使用的凭据")  # 记录执行命令当前使用账号凭据名称
@@ -288,6 +289,7 @@ class SystemSettings(models.Model):
     ip_whitelist = models.TextField(null=True, blank=True, verbose_name="IP白名单")
     ip_blacklist = models.TextField(null=True, blank=True, verbose_name="IP黑名单")
     update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")
+    multi_login_account = models.CharField(max_length=150, null=True, blank=True, verbose_name="多人登录账号")
 
     class Meta:
         db_table = 't_system_settings'

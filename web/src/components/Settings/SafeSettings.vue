@@ -88,6 +88,18 @@
           </div>
         </a-form-item>
 
+        <!-- 多人登录账号设置 -->
+        <a-divider />
+        <a-form-item label="多人登录账号">
+          <a-input
+            v-model:value="formState.multiLoginAccounts"
+            placeholder="请输入允许多人登录的账号用户名，多个账号用逗号分隔"
+          />
+          <div class="form-item-desc">
+            指定的账号将允许多人同时登录，其他账号保持单一登录状态
+          </div>
+        </a-form-item>
+
         <!-- 提交按钮 -->
         <a-form-item>
           <a-button type="primary" @click="handleSubmit">
@@ -109,6 +121,7 @@ const formState = reactive({
   ipWhitelist: '',
   ipBlacklist: '',
   watermarkEnabled: false,
+  multiLoginAccounts: '',
 });
 
 const disabledMfaUsers = ref([]);
@@ -122,6 +135,7 @@ const getSystemSettings = async () => {
     formState.ipWhitelist = response.data.ip_whitelist || '';
     formState.ipBlacklist = response.data.ip_blacklist || '';
     formState.mfaEnabled = response.data.mfa_enabled;
+    formState.multiLoginAccounts = response.data.multi_login_accounts.join(', ') || '';
     
     // 更新未启用MFA的用户列表
     disabledMfaUsers.value = response.data.disabled_mfa_users || [];
@@ -181,6 +195,7 @@ const handleSubmit = async () => {
       ip_whitelist: formState.ipWhitelist,
       ip_blacklist: formState.ipBlacklist,
       mfa_enabled: formState.mfaEnabled,
+      multi_login_accounts: formState.multiLoginAccounts.split(',').map(account => account.trim()),
     });
     
     localStorage.setItem('watermarkEnabled', formState.watermarkEnabled);

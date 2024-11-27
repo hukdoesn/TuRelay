@@ -33,7 +33,8 @@ class SystemSettingsView(APIView):
             'ip_whitelist': settings.ip_whitelist,
             'ip_blacklist': settings.ip_blacklist,
             'mfa_enabled': mfa_status,
-            'disabled_mfa_users': disabled_mfa_users
+            'disabled_mfa_users': disabled_mfa_users,
+            'multi_login_accounts': settings.multi_login_account.split(',') if settings.multi_login_account else [],
         })
     
     def post(self, request):
@@ -51,6 +52,7 @@ class SystemSettingsView(APIView):
         settings.watermark_enabled = request.data.get('watermark_enabled', settings.watermark_enabled)
         settings.ip_whitelist = request.data.get('ip_whitelist', settings.ip_whitelist)
         settings.ip_blacklist = request.data.get('ip_blacklist', settings.ip_blacklist)
+        settings.multi_login_account = ','.join(request.data.get('multi_login_accounts', []))
         settings.save()
         
         return Response({'message': '设置已更新'}, status=status.HTTP_200_OK) 

@@ -177,15 +177,24 @@ class LoginView(APIView):
         # 检查用户是否具有只读权限
         is_read_only = user_has_view_permission(user)
 
-        # 生成新的JWT令牌并将只读权限信息包含在负载中
+        # 检查是否是允许多人登录的账号
+        multi_login_accounts = system_settings.multi_login_account.split(',') if system_settings and system_settings.multi_login_account else []
+
+        if user.username not in multi_login_accounts:
+            # 如果不是多人登录账号，删除旧的 Token
+            Token.objects.filter(user=user).delete()
+
+        # 生成新的JWT令牌
         refresh = RefreshToken.for_user(user)
         access_token = refresh.access_token
-        access_token['is_read_only'] = is_read_only  # 将权限信息加入到JWT负载中
+        access_token['is_read_only'] = is_read_only
 
-        # 更新或创建用户 Token
-        Token.objects.update_or_create(
+        # 创建新的 Token
+        Token.objects.create(
             user=user,
-            defaults={'token': str(access_token), 'create_time': timezone.now()}
+            token=str(access_token),
+            create_time=timezone.now(),
+            last_activity=timezone.now()
         )
 
         # 更新用户登录时间
