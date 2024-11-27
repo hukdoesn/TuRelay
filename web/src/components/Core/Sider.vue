@@ -16,13 +16,13 @@
     >
       <a-menu-item key="/dashboard">
         <router-link to="/dashboard">
-          <pie-chart-outlined />
+          <IconFont type="icon-shouye1" :style="{ fontSize: '16px' }" />
           <span>数据概览</span>
         </router-link>
       </a-menu-item>
       <a-sub-menu key="/user-management">
         <template #title>
-          <user-outlined />
+          <IconFont type="icon-yonghuguanli" :style="{ fontSize: '16px' }" />
           <span>用户管理</span>
         </template>
         <a-menu-item key="/user-management/user-list">
@@ -42,7 +42,7 @@
       </a-sub-menu>
       <a-sub-menu key="/asset-management">
         <template #title>
-          <desktop-outlined />
+          <IconFont type="icon-shebeizichanguanli" :style="{ fontSize: '16px' }" />
           <span>资产管理</span>
         </template>
         <a-menu-item key="/asset-management/hosts">
@@ -59,19 +59,19 @@
       </a-sub-menu>
       <a-menu-item key="/web-terminal">
         <router-link to="/web-terminal">
-          <file-outlined />
+          <IconFont type="icon-terminal-fill" :style="{ fontSize: '16px' }" />
           <span>web终端</span>
         </router-link>
       </a-menu-item>
       <a-menu-item key="/ci-cd-system">
         <router-link to="/ci-cd-system">
-          <file-outlined />
+          <IconFont type="icon-icon_CICD" :style="{ fontSize: '16px' }" />
           <span class="developing-feature">CI/CD系统</span>
         </router-link>
       </a-menu-item>
       <a-sub-menu key="/alert-management">
         <template #title>
-          <desktop-outlined />
+          <IconFont type="icon-jinggao" :style="{ fontSize: '16px' }" />
           <span>报警管理</span>
         </template>
         <a-menu-item key="/alert-management/alert-contacts">
@@ -88,7 +88,7 @@
       </a-sub-menu>
       <a-sub-menu key="/audit-management">
         <template #title>
-          <desktop-outlined />
+          <IconFont type="icon-shenjizuoyeguanli" :style="{ fontSize: '16px' }" />
           <span>审计管理</span>
         </template>
         <a-menu-item key="/audit-management/command-records">
@@ -97,7 +97,7 @@
       </a-sub-menu>
       <a-sub-menu key="/logs-management">
         <template #title>
-          <desktop-outlined />
+          <IconFont type="icon-rizhiguanli1" :style="{ fontSize: '16px' }" />
           <span>日志管理</span>
         </template>
         <a-menu-item key="/logs-management/login-logs">
@@ -109,7 +109,7 @@
       </a-sub-menu>
       <a-sub-menu key="/settings">
         <template #title>
-          <desktop-outlined />
+          <IconFont type="icon-xitongshezhi2" :style="{ fontSize: '16px' }" />
           <span>系统设置</span>
         </template>
         <a-menu-item key="/settings/auth-settings">
@@ -132,7 +132,6 @@
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {
-  PieChartOutlined,
   UserOutlined,
   DesktopOutlined,
   FileOutlined,
@@ -224,5 +223,15 @@ onMounted(() => {
 
 .info-icon:hover {
   color: #1890ff;
+}
+
+/* 添加自定义图标样式 */
+:deep(.custom-icon) {
+  font-size: 16px; /* 设置你想要的大小 */
+}
+
+/* 如果要统一设置所有 IconFont 的大小 */
+:deep(.anticon) {
+  font-size: 16px;
 }
 </style>
