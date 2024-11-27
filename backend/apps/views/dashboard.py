@@ -13,7 +13,8 @@ from ..models import (
     CommandAlert, 
     UserLock,
     LoginLog,
-    DomainMonitor
+    DomainMonitor,
+    Token
 )
 
 @api_view(['GET'])
@@ -22,13 +23,22 @@ def dashboard_statistics(request):
     获取仪表盘统计数据的视图函数
     """
     try:
+        # 清理过期的会话
+        expired_time = timezone.now() - timedelta(hours=2)  # 2小时过期
+        Token.objects.filter(
+            last_activity__lt=expired_time
+        ).update(is_active=False)
+
+        # 获取在线会话数量
+        online_sessions = Token.objects.filter(is_active=True).count()
+
         # 获取基础统计数据
         statistics = {
             'hostCount': Host.objects.count(),
             'userCount': User.objects.count(),
             'alertCount': CommandAlert.objects.count(),
             'lockedUserCount': UserLock.objects.filter(lock_count__gt=0).count(),
-            'onlineSessionCount': 0,  # 需要实现会话管理功能后再统计
+            'onlineSessionCount': online_sessions,
             'failedLoginCount': LoginLog.objects.filter(login_status=False).count(),
             'assetCount': Host.objects.count(),  # 可以加上其他资产类型
             'websiteCount': DomainMonitor.objects.count(),

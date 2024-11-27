@@ -91,7 +91,8 @@ class Token(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")  # 关联到 User 模型
     token = models.CharField(max_length=500, verbose_name="令牌")  # 令牌字符串
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
-    last_activity = models.DateTimeField(auto_now=True, verbose_name="最后活动时间")  # 添加最后活动时间字段
+    last_activity = models.DateTimeField(auto_now=True, verbose_name="最后活动时间")  # 最后活动时间
+    is_active = models.BooleanField(default=True, verbose_name="是否有效")  # 添加状态字段
 
     class Meta:
         db_table = 't_token'  # 指定数据库表名为 t_token

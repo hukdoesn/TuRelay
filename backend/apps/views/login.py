@@ -181,8 +181,8 @@ class LoginView(APIView):
         multi_login_accounts = system_settings.multi_login_account.split(',') if system_settings and system_settings.multi_login_account else []
 
         if user.username not in multi_login_accounts:
-            # 如果不是多人登录账号，删除旧的 Token
-            Token.objects.filter(user=user).delete()
+            # 如果不是多人登录账号，将旧的 Token 标记为无效
+            Token.objects.filter(user=user).update(is_active=False)
 
         # 生成新的JWT令牌
         refresh = RefreshToken.for_user(user)
@@ -194,7 +194,8 @@ class LoginView(APIView):
             user=user,
             token=str(access_token),
             create_time=timezone.now(),
-            last_activity=timezone.now()
+            last_activity=timezone.now(),
+            is_active=True  # 新建的 Token 设置为有效
         )
 
         # 更新用户登录时间
@@ -255,3 +256,14 @@ class MFABindView(APIView):
             
         except User.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': '用户不存在'}, status=404)
+
+class LogoutView(APIView):
+    """
+    用户登出视图
+    """
+    def post(self, request):
+        token = request.headers.get('Authorization')
+        if token:
+            # 将对应的 Token 标记为无效
+            Token.objects.filter(token=token).update(is_active=False)
+        return JsonResponse({'status': 'success', 'message': '登出成功'})

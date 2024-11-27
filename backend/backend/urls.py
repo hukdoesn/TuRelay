@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, MFABindView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView, dashboard_statistics, login_statistics
+from apps.views import LoginView, MFABindView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView, dashboard_statistics, login_statistics, LogoutView
 from apps.views.system_settings import SystemSettingsView
 
 urlpatterns = [
@@ -55,4 +55,5 @@ urlpatterns = [
     path('api/settings/system/', SystemSettingsView.as_view(), name='system-settings'),
     path('api/dashboard/statistics/', dashboard_statistics, name='dashboard-statistics'),
     path('api/dashboard/login_statistics/<str:days>/', login_statistics, name='login-statistics'),
+    path('api/logout/', LogoutView.as_view(), name='logout'),
 ]

@@ -1,4 +1,4 @@
-from .login import LoginView, MFABindView
+from .login import LoginView, MFABindView, LogoutView
 from .user_list import UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, UserDetailView
 from .login_log import LoginLogView
 from .operation_log import OperationLogView

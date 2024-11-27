@@ -29,15 +29,25 @@ import Icon from '@ant-design/icons-vue/lib/components/Icon';
 import { onMounted, ref } from 'vue';
 import IconFont from '@/icons';
 import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
 
 const router = useRouter();
 const route = useRoute();
 
-const logout = () => {
-    // 清除本地存储中的登录信息
-    localStorage.clear();  // 更彻底地清除所有存储
-    // 导航到登录页面
-    router.push('/login');
+const logout = async () => {
+    try {
+        // 调用登出接口
+        await axios.post('/api/logout/');
+        // 清除本地存储中的登录信息
+        localStorage.clear();
+        // 导航到登录页面
+        router.push('/login');
+    } catch (error) {
+        console.error('登出失败:', error);
+        // 即使接口调用失败，也清除本地存储并跳转
+        localStorage.clear();
+        router.push('/login');
+    }
 };
 const Name = ref(localStorage.getItem('name') || 'Tu Relay');
 
