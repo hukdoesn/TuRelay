@@ -144,12 +144,6 @@ APPEND_SLASH=False
 # 默认的自动字段类型，Django 3.2后默认为BigAutoField
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# JWT令牌的配置，设置了访问令牌和刷新令牌的有效期
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # 访问令牌60分钟后过期
-    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=120),  # 刷新令牌有效期为3小时
-}
-
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
     'http://172.17.102.132:8080',

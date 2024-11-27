@@ -130,10 +130,10 @@ export default {
       localStorage.setItem('accessToken', data.access_token);
       localStorage.setItem('refreshToken', data.refresh_token);
       localStorage.setItem('name', data.name);
-      localStorage.setItem('tokenExpiry', this.$dayjs().add(2, 'hour').format());
+      localStorage.setItem('tokenExpiry', data.login_expiry);
       localStorage.setItem('isReadOnly', data.is_read_only);
-      localStorage.setItem('sessionTimeout', this.$dayjs().add(2, 'hour').format());
-      localStorage.setItem('watermarkEnabled', data.watermark_enabled);   // 添加水印设置
+      localStorage.setItem('sessionTimeout', data.session_expiry);
+      localStorage.setItem('watermarkEnabled', data.watermark_enabled);
 
       this.$router.push('/home');
     },

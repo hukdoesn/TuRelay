@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import check_password
 from user_agents import parse
 from .mfa_auth import MFAUtil
 from apps.models import SystemSettings
+from datetime import timedelta
 
 class LoginView(APIView):
     """
@@ -206,6 +207,10 @@ class LoginView(APIView):
         if not system_settings:
             system_settings = SystemSettings.objects.create()
 
+        # 在成功登录后,生成过期时间(在返回响应前)
+        login_expiry = timezone.now() + timedelta(hours=2)  # 设置2小时后过期
+        session_expiry = timezone.now() + timedelta(hours=2)  # 设置会话2小时后过期
+
         # 返回登录成功响应
         return JsonResponse({
             'status': 'login_successful',
@@ -214,6 +219,8 @@ class LoginView(APIView):
             'name': user.name,
             'is_read_only': is_read_only,
             'watermark_enabled': system_settings.watermark_enabled,     # 添加水印设置
+            'login_expiry': login_expiry.isoformat(),  # 添加登录过期时间
+            'session_expiry': session_expiry.isoformat(),  # 添加会话过期时间
             'message': '登录成功'
         }, status=200)
 

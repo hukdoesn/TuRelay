@@ -1,6 +1,6 @@
 from django.urls import path
 from apps.views import LoginView, MFABindView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView, dashboard_statistics, login_statistics
-from apps.views.settings import SystemSettingsView
+from apps.views.system_settings import SystemSettingsView
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
