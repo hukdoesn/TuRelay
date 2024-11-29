@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import dayjs from 'dayjs';
-
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 
@@ -18,16 +17,34 @@ axios.interceptors.request.use(
     }
 );
 
-// 添加响应拦截器，处理 403 错误
+// 修改响应拦截器，处理token过期等情况
 axios.interceptors.response.use(
     response => {
         return response;
     },
     error => {
-        if (error.response && error.response.status === 403) {
-            // message.error('账号被锁定，请联系管理员');
-            localStorage.removeItem('accessToken'); // 清除 token
-            router.push('/login'); // 重定向到登录页面
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    // token 过期或无效
+                    if (error.response.data.code === 'token_expired') {
+                        message.error('登录已过期，请重新登录');
+                    } else if (error.response.data.code === 'token_invalid') {
+                        message.error('登录状态无效，请重新登录');
+                    }
+                    // 清除本地存储
+                    localStorage.clear();
+                    // 跳转到登录页
+                    router.push('/login');
+                    break;
+                case 403:
+                    message.error('账号被锁定，请联系管理员');
+                    localStorage.clear();
+                    router.push('/login');
+                    break;
+                default:
+                    return Promise.reject(error);
+            }
         }
         return Promise.reject(error);
     }
@@ -269,61 +286,47 @@ const router = createRouter({
   ]
 })
 
+// 修改路由守卫
 router.beforeEach((to, from, next) => {
-  const accessToken = localStorage.getItem('accessToken');  // 从本地存储中获取访问令牌
-  const refreshToken = localStorage.getItem('refreshToken');    // 从本地存储中获取刷新令牌
-  const username = localStorage.getItem('username');    // 从本地存储中获取用户名
-  const isAuthenticated = !!accessToken;    // 检查用户是否已认证
-  const tokenExpiry = localStorage.getItem('tokenExpiry') ? dayjs(localStorage.getItem('tokenExpiry')) : null; // 获取令牌过期时间
-  const sessionTimeout = localStorage.getItem('sessionTimeout') ? dayjs(localStorage.getItem('sessionTimeout')) : null; // 获取会话超时时间
-  // const now = new Date().getTime();
-  const now = dayjs(); // 获取系统当前时间
+    const accessToken = localStorage.getItem('accessToken');
+    const tokenExpiry = localStorage.getItem('tokenExpiry') ? dayjs(localStorage.getItem('tokenExpiry')) : null;
+    const sessionTimeout = localStorage.getItem('sessionTimeout') ? dayjs(localStorage.getItem('sessionTimeout')) : null;
+    const now = dayjs();
 
-  if (accessToken && now.isAfter(tokenExpiry)) {
-    // 如果访问令牌已过期，清除本地存储中的相关信息
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('name');
-    localStorage.removeItem('tokenExpiry');
-    localStorage.removeItem('sessionTimeout');
-  }
+    // 检查是否需要认证
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
-  if (now.isAfter(sessionTimeout)) {
-    // 如果会话已超时，清除本地存储中的相关信息，并重定向到登录页面
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('name');
-    localStorage.removeItem('tokenExpiry');
-    localStorage.removeItem('sessionTimeout');
-    if (to.name !== 'login') {
-      return next({ path: '/login' });
-    }
-  } else {
-    if (to.matched.length === 0) {
-      // 如果访问的路径不存在
-      if (isAuthenticated) {
-        // 用户已登录，跳转到 404 页面
-        return next({ name: 'NotFound' });
-      } else {
-        // 如果用户未登录，跳转到登录页面
-        if (to.name !== 'login') {
-          return next({ path: '/login' });
+    if (requiresAuth) {
+        if (!accessToken) {
+            message.warning('请先登录');
+            next('/login');
+            return;
         }
-      }
-    } else {
-      // 检查目标路由是否需要认证
-      if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
-        // 如果目标路由需要认证但用户未登录，跳转到登录页面
-        if (to.name !== 'login') {
-          return next({ path: '/login' });
+
+        // 检查token是否过期
+        if (tokenExpiry && now.isAfter(tokenExpiry)) {
+            message.error('登录已过期，请重新登录');
+            // 调用登出接口，确保后端清理token
+            axios.post('/api/logout/').finally(() => {
+                localStorage.clear();
+                next('/login');
+            });
+            return;
         }
-      } else {
-        // 如果目标路由不需要认证或用户已登录，允许访问
-        return next();
-      }
+
+        // 检查会话是否超时
+        if (sessionTimeout && now.isAfter(sessionTimeout)) {
+            message.error('会话已超时，请重新登录');
+            // 调用登出接口，确保后端清理token
+            axios.post('/api/logout/').finally(() => {
+                localStorage.clear();
+                next('/login');
+            });
+            return;
+        }
     }
-  }
-  next(); // 保证在所有路径都能到达时调用next
+
+    next();
 });
 
 export default router

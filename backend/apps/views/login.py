@@ -217,9 +217,9 @@ class LoginView(APIView):
         if not system_settings:
             system_settings = SystemSettings.objects.create()
 
-        # 在成功登录后,生成过期时间(在返回响应前)
-        login_expiry = timezone.now() + timedelta(hours=2)  # 设置2小时后过期
-        session_expiry = timezone.now() + timedelta(hours=2)  # 设置会话2小时后过期
+        # 生成过期时间时使用settings中的配置
+        login_expiry = timezone.now() + timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
+        session_expiry = timezone.now() + timedelta(minutes=settings.SESSION_TIMEOUT_MINUTES)
 
         # 返回登录成功响应
         return JsonResponse({
@@ -228,9 +228,9 @@ class LoginView(APIView):
             'refresh_token': str(refresh),
             'name': user.name,
             'is_read_only': is_read_only,
-            'watermark_enabled': system_settings.watermark_enabled,     # 添加水印设置
-            'login_expiry': login_expiry.isoformat(),  # 添加登录过期时间
-            'session_expiry': session_expiry.isoformat(),  # 添加会话过期时间
+            'watermark_enabled': system_settings.watermark_enabled,
+            'login_expiry': login_expiry.isoformat(),
+            'session_expiry': session_expiry.isoformat(),
             'message': '登录成功'
         }, status=200)
 
@@ -264,6 +264,5 @@ class LogoutView(APIView):
     def post(self, request):
         token = request.headers.get('Authorization')
         if token:
-            # 将对应的 Token 标记为无效
-            Token.objects.filter(token=token).update(is_active=False)
+            Token.objects.filter(token=token).delete()  # 直接删除而不是更新状态
         return JsonResponse({'status': 'success', 'message': '登出成功'})

@@ -14,10 +14,10 @@ SECRET_KEY = 'django-insecure-aq1$o05s3&m=0)yq-j1z_7xu7nk)0v_dp9^(9b9048n&1!^e+^
 DEBUG = True
 
 # 允许的主机名列表，对于公开的生产环境需要设置具体的域名或IP地址
-ALLOWED_HOSTS = ['172.17.102.132', 'localhost', '192.168.5.29', '192.168.222.86', '127.0.0.1']  # 添加允许的主机名
+ALLOWED_HOSTS = ['172.17.102.236', 'localhost', '192.168.5.29', '192.168.222.86', '127.0.0.1']  # 添加允许的主机名
 
 # Guacamole 服务器配置
-GUACAMOLE_URL = 'http://172.17.102.132:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改
+GUACAMOLE_URL = 'http://172.17.102.236:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改
 GUACAMOLE_USERNAME = 'guacadmin'  # Guacamole 管理员用户名，默认是 'guacadmin'
 GUACAMOLE_PASSWORD = 'guacadmin'  # Guacamole 管理员密码，默认是 'guacadmin'
 
@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware', # 消息中间件，用于cookie和session的消息标签
     'django.middleware.clickjacking.XFrameOptionsMiddleware', # 防止点击劫持
     'apps.middleware_log.OperationLogMiddleware',
+    'apps.middleware.TokenAuthenticationMiddleware',  # 添加 Token 认证中间件
 ]
 
 # 项目的URL配置路径
@@ -99,7 +100,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 指定使用MySQL作为数据库
         'OPTIONS': {
-            'read_default_file': str(BASE_DIR / 'conf' / 'config.txt'),  # 从文件读取数据库配置
+            'read_default_file': str(BASE_DIR / 'conf' / 'config.txt'),  # 从文件取数据库配置
         }
     }
 }
@@ -146,7 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
-    'http://172.17.102.132:8080',
+    'http://172.17.102.236:8080',
     'http://localhost:8080',
     'http://127.0.0.1:8080',
     'http://192.168.5.82:8080',
@@ -156,7 +157,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://192.168.0.104:8080'
 ]
 CSRF_TRUSTED_ORIGINS = [
-    'http://172.17.102.132:8080',
+    'http://172.17.102.236:8080',
     'http://localhost:8080', 
     'http://127.0.0.1:8080',
     'http://172.17.102.34:8080',
@@ -204,7 +205,7 @@ log_path = os.path.join(os.path.dirname(cur_path), 'Log')  # 日志文件存放�
 #             'maxBytes': 1024 * 1024 * 5,  # 文件大小为5MB
 #             'backupCount': 5,  # 备份数量为5
 #             'formatter': 'standard',  # 使用标准格式器
-#             'encoding': 'utf-8',  # 设置文件编码
+#             'encoding': 'utf-8',  # 设文��编码
 #         },
 #         'console': {
 #             'level': 'INFO',  # 控制台输出所有DEBUG级别及以上的日志
@@ -249,14 +250,17 @@ COMMAND_ALERT = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
         },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
     },
     'loggers': {
         'django': {
@@ -264,10 +268,14 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
-        'log': {
+        'apscheduler': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
         },
     },
 }
+
+# Token相关配置 - 重命名使配置更清晰
+TOKEN_EXPIRE_MINUTES = 120  # token有效期2小时 (120分钟)
+SESSION_TIMEOUT_MINUTES = 2  # 会话超时时间30分钟

@@ -6,7 +6,7 @@ from django.conf import settings
 import logging
 import redis
 
-logger = logging.getLogger('log')
+logger = logging.getLogger('apscheduler')
 
 # Initialize Redis connection
 redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -34,6 +34,7 @@ scheduler = BackgroundScheduler(
     job_defaults={
         'coalesce': False,
         'max_instances': 1,
+        'misfire_grace_time': 60
     },
     timezone=settings.TIME_ZONE,
 )
@@ -43,33 +44,33 @@ def start_scheduler():
     启动调度器
     """
     if check_redis_connection():
-        scheduler.start()
+        if not scheduler.running:
+            scheduler.start()
+            logger.info("调度器已启动")
     else:
         raise RuntimeError("启动调度器失败：无法连接到 Redis")
 
 def add_task(task_class, task_method, task_id, task_name, interval, *args):
     """
     添加定时任务
-    :param task_class: 任务类
-    :param task_method: 任务方法
-    :param task_id: 任务ID
-    :param task_name: 任务名称
-    :param interval: 执行间隔（秒）
-    :param args: 任务方法的参数
     """
     if not check_redis_connection():
         raise RuntimeError("添加定时任务失败：无法连接到 Redis")
     
-    scheduler.add_job(
-        task_method,
-        trigger='interval',
-        seconds=interval,
-        id=task_id,
-        name=task_name,
-        args=args,
-        replace_existing=True
-    )
-    logger.info(f"已添加定时任务: {task_name} 每 {interval} 秒执行一次")
+    try:
+        scheduler.add_job(
+            task_method,
+            trigger='interval',
+            seconds=interval,
+            id=task_id,
+            name=task_name,
+            args=args,
+            replace_existing=True,
+            misfire_grace_time=60
+        )
+        logger.info(f"已添加定时任务: {task_name} 每 {interval} 秒执行一次")
+    except Exception as e:
+        logger.error(f"添加定时任务失败: {str(e)}")
 
 def remove_task(task_id):
     """
