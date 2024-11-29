@@ -1,13 +1,14 @@
 from apps.utils import (
     APIView, JsonResponse, jwt, datetime,
     get_object_or_404, timezone, RefreshToken,
-    settings, User, UserLock, LoginLog, Token, user_has_view_permission, is_ip_in_list
+    settings, User, UserLock, LoginLog, Token, user_has_view_permission, is_ip_in_list, session_manager
 )
 from django.contrib.auth.hashers import check_password
 from user_agents import parse
 from .mfa_auth import MFAUtil
 from apps.models import SystemSettings
 from datetime import timedelta
+# from apps.utils.session import session_manager
 
 class LoginView(APIView):
     """
@@ -181,22 +182,22 @@ class LoginView(APIView):
         multi_login_accounts = system_settings.multi_login_account.split(',') if system_settings and system_settings.multi_login_account else []
 
         if user.username not in multi_login_accounts:
-            # 如果不是多人登录账号，将旧的 Token 标记为无效
-            Token.objects.filter(user=user).update(is_active=False)
+            # 如果不是多人登录账号，删除旧的 Token
+            Token.objects.filter(user=user).delete()
 
-        # 生成新的JWT令牌
+        # 创建新的JWT令牌
         refresh = RefreshToken.for_user(user)
         access_token = refresh.access_token
         access_token['is_read_only'] = is_read_only
 
-        # 创建新的 Token
+        # 创建新的 Token，移除 is_active 字段
         Token.objects.create(
             user=user,
             token=str(access_token),
-            create_time=timezone.now(),
-            last_activity=timezone.now(),
-            is_active=True  # 新建的 Token 设置为有效
         )
+
+        # 在 Redis 中设置会话
+        session_manager.set_session(str(access_token), user.id)
 
         # 更新用户登录时间
         user.login_time = timezone.now()
@@ -264,5 +265,8 @@ class LogoutView(APIView):
     def post(self, request):
         token = request.headers.get('Authorization')
         if token:
-            Token.objects.filter(token=token).delete()  # 直接删除而不是更新状态
+            # 从 Redis 中删除会话
+            session_manager.remove_session(token)
+            # 从数据库中删除 Token
+            Token.objects.filter(token=token).delete()
         return JsonResponse({'status': 'success', 'message': '登出成功'})

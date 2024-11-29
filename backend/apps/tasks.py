@@ -2,29 +2,11 @@ import socket
 import ssl
 import requests
 from django.utils import timezone
-from datetime import datetime, timedelta
+from datetime import datetime
 from django.conf import settings
-from django.db import models
 import logging
 
 logger = logging.getLogger('log')
-
-def cleanup_expired_tokens():
-    """
-    定期清理过期的token
-    """
-    from .models import Token
-    
-    now = timezone.now()
-    # 修改清理逻辑，使用新的配置名
-    expired_time = now - timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)  # 使用新的配置名
-    session_timeout = now - timedelta(minutes=settings.SESSION_TIMEOUT_MINUTES)
-    
-    # 使用 Q 对象组合查询条件
-    Token.objects.filter(
-        models.Q(create_time__lt=expired_time) |  # token 过期
-        models.Q(last_activity__lt=session_timeout)  # 会话超时
-    ).delete()
 
 class DomainMonitorTask:
     """

@@ -18,6 +18,8 @@ from ..models import (
     DomainMonitor,
     Token
 )
+# from apps.utils.session import session_manager
+from apps.utils import session_manager
 
 @api_view(['GET'])
 def dashboard_statistics(request):
@@ -25,17 +27,8 @@ def dashboard_statistics(request):
     获取仪表盘统计数据的视图函数
     """
     try:
-        # 清理过期的token和超时的会话
-        now = timezone.now()
-        Token.objects.filter(
-            # 清理过期的token
-            models.Q(create_time__lt=now - timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)) |
-            # 清理超时的会话
-            models.Q(last_activity__lt=now - timedelta(minutes=settings.SESSION_TIMEOUT_MINUTES))
-        ).delete()  # 直接删除而不是更新状态
-
-        # 获取在线会话数量（只统计有效的token）
-        online_sessions = Token.objects.filter(is_active=True).count()
+        # 获取在线会话数量
+        online_sessions = session_manager.get_active_sessions_count()
 
         # 获取基础统计数据
         statistics = {

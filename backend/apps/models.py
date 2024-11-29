@@ -88,14 +88,13 @@ class Token(models.Model):
     """
     令牌模型，存储用户的认证令牌
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")  # 关联到 User 模型
-    token = models.CharField(max_length=500, verbose_name="令牌")  # 令牌字符串
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")  # 创建时间
-    last_activity = models.DateTimeField(auto_now=True, verbose_name="最后活动时间")  # 最后活动时间
-    is_active = models.BooleanField(default=True, verbose_name="是否有效")  # 添加状态字段
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")
+    token = models.CharField(max_length=500, verbose_name="令牌")
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    last_activity = models.DateTimeField(auto_now=True, verbose_name="最后活动时间")
 
     class Meta:
-        db_table = 't_token'  # 指定数据库表名为 t_token
+        db_table = 't_token'
 
     def __str__(self):
         return f"{self.user.username} - {self.token}"

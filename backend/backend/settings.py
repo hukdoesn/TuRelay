@@ -276,6 +276,11 @@ LOGGING = {
     },
 }
 
-# Token相关配置 - 重命名使配置更清晰
+# Redis配置
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
+REDIS_SESSION_DB = 1  # 使用db 1存储会话信息，与channels使用的db 0区分开
+
+# Token相关配置
 TOKEN_EXPIRE_MINUTES = 120  # token有效期2小时 (120分钟)
-SESSION_TIMEOUT_MINUTES = 2  # 会话超时时间30分钟
+SESSION_TIMEOUT_MINUTES = 30  # 会话超时时间30分钟
