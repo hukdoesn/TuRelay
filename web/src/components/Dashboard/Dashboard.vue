@@ -422,26 +422,29 @@ const fetchDashboardData = async () => {
     console.error('获取仪表盘数据失败:', error)
     // 使用模拟数据用于展示
     statistics.value = {
-      hostCount: 25,
-      userCount: 12,
-      alertCount: 5,
-      lockedUserCount: 2,
-      onlineSessionCount: 3,
-      failedLoginCount: 15,
-      assetCount: 30,
-      websiteCount: 8
+      hostCount: 0,
+      userCount: 0,
+      alertCount: 0,
+      lockedUserCount: 0,
+      onlineSessionCount: 0,
+      failedLoginCount: 0,
+      assetCount: 0,
+      websiteCount: 0
     }
     
     initHostChart({
-      linux: 15,
-      windows: 8,
-      macos: 2,
+      linux: 0,
+      windows: 0,
       others: 0
+    })
+
+    initWebsiteChart({
+      other: 0,
     })
     
     initLoginChart({
-      dates: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-      counts: [30, 25, 35, 45, 20, 15, 40]
+      // dates: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+      // counts: [30, 25, 35, 45, 20, 15, 40]
     })
   }
 }
