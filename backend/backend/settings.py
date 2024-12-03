@@ -14,10 +14,10 @@ SECRET_KEY = 'django-insecure-aq1$o05s3&m=0)yq-j1z_7xu7nk)0v_dp9^(9b9048n&1!^e+^
 DEBUG = True
 
 # 允许的主机名列表，对于公开的生产环境需要设置具体的域名或IP地址
-ALLOWED_HOSTS = ['172.17.102.236', 'localhost', '192.168.5.29', '192.168.222.86', '127.0.0.1']  # 添加允许的主机名
+ALLOWED_HOSTS = ['172.17.103.22', 'localhost', '192.168.5.29', '192.168.222.86', '127.0.0.1']  # 添加允许的主机名
 
 # Guacamole 服务器配置
-GUACAMOLE_URL = 'http://172.17.102.236:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改
+GUACAMOLE_URL = 'http://172.17.103.22:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改
 GUACAMOLE_USERNAME = 'guacadmin'  # Guacamole 管理员用户名，默认是 'guacadmin'
 GUACAMOLE_PASSWORD = 'guacadmin'  # Guacamole 管理员密码，默认是 'guacadmin'
 
@@ -147,7 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
-    'http://172.17.102.236:8080',
+    'http://172.17.103.22:8080',
     'http://localhost:8080',
     'http://127.0.0.1:8080',
     'http://192.168.5.82:8080',
@@ -157,7 +157,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://192.168.0.104:8080'
 ]
 CSRF_TRUSTED_ORIGINS = [
-    'http://172.17.102.236:8080',
+    'http://172.17.103.22:8080',
     'http://localhost:8080', 
     'http://127.0.0.1:8080',
     'http://172.17.102.34:8080',

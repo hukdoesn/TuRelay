@@ -43,69 +43,51 @@ class SessionManager:
     
     def set_session(self, token, user_id):
         """
-        设置会话，同时设置两个过期时间：
-        1. 会话超时时间（短期，用于检测用户活动）
-        2. Token 过期时间（长期，用于控制登录有效期）
+        设置会话，只需设置一个会话超时时间
+        Redis 会自动在过期时删除键
         """
-        # 设置会话数据
         session_key = f"session:{token}"
-        token_key = f"token:{token}"
         
-        # 存储用户会话信息，设置会话超时时间
+        # 设置会话超时时间（分钟转换为秒）
+        timeout_seconds = settings.SESSION_TIMEOUT_MINUTES * 60
+        
+        # 存储用户会话信息并设置过期时间
         self.redis_client.setex(
             session_key,
-            timedelta(minutes=settings.SESSION_TIMEOUT_MINUTES),
-            user_id
-        )
-        
-        # 存储 token 信息，设置 token 过期时间
-        self.redis_client.setex(
-            token_key,
-            timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES),
+            timeout_seconds,
             user_id
         )
     
     def update_session(self, token):
         """
         更新会话活动时间
-        只更新会话超时时间，不更新 token 过期时间
+        每次活动都刷新过期时间
         """
         session_key = f"session:{token}"
-        token_key = f"token:{token}"
-        
-        # 检查 token 是否已过期
-        if not self.redis_client.exists(token_key):
-            return False
             
         # 检查并更新会话时间
         if self.redis_client.exists(session_key):
-            self.redis_client.expire(
-                session_key,
-                timedelta(minutes=settings.SESSION_TIMEOUT_MINUTES)
-            )
+            # 更新过期时间
+            timeout_seconds = settings.SESSION_TIMEOUT_MINUTES * 60
+            self.redis_client.expire(session_key, timeout_seconds)
             return True
+            
         return False
     
     def get_session(self, token):
         """
         获取会话信息
-        同时检查 token 和会话是否有效
         """
         session_key = f"session:{token}"
-        token_key = f"token:{token}"
         
-        # 首先检查 token 是否有效
-        if not self.redis_client.exists(token_key):
-            return None
-            
-        # 然后检查会话是否有效
+        # 如果键存在，返回值；如果已过期，Redis会自动删除并返回None
         return self.redis_client.get(session_key)
     
     def remove_session(self, token):
         """
-        删除会话和 token
+        手动删除会话（用于登出）
         """
-        self.redis_client.delete(f"session:{token}", f"token:{token}")
+        self.redis_client.delete(f"session:{token}")
     
     def get_active_sessions_count(self):
         """

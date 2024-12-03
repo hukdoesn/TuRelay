@@ -33,7 +33,11 @@ class TokenAuthenticationMiddleware:
                         }, status=401)
                     
                     # 更新会话过期时间
-                    session_manager.update_session(auth_header)
+                    if not session_manager.update_session(auth_header):
+                        return JsonResponse({
+                            'code': 'token_invalid',
+                            'message': '登录状态无效'
+                        }, status=401)
                     
                 except jwt.ExpiredSignatureError:
                     session_manager.remove_session(auth_header)
@@ -47,6 +51,11 @@ class TokenAuthenticationMiddleware:
                         'code': 'token_invalid',
                         'message': '登录状态无效'
                     }, status=401)
+            else:
+                return JsonResponse({
+                    'code': 'no_token',
+                    'message': '未提供认证令牌'
+                }, status=401)
             
         response = self.get_response(request)
         return response 

@@ -7,8 +7,7 @@ from django.contrib.auth.hashers import check_password
 from user_agents import parse
 from .mfa_auth import MFAUtil
 from apps.models import SystemSettings
-from datetime import timedelta
-# from apps.utils.session import session_manager
+from datetime import timedelta, datetime as dt
 
 class LoginView(APIView):
     """
@@ -188,9 +187,17 @@ class LoginView(APIView):
         # 创建新的JWT令牌
         refresh = RefreshToken.for_user(user)
         access_token = refresh.access_token
+        
+        # 设置token过期时间
+        token_lifetime = timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
+        access_token.set_exp(lifetime=token_lifetime)
         access_token['is_read_only'] = is_read_only
 
-        # 创建新的 Token，移除 is_active 字段
+        # 打印token的过期时间，用于调试
+        token_exp = dt.fromtimestamp(access_token['exp'], tz=timezone.get_current_timezone())
+        print(f"Token will expire at: {token_exp}")
+
+        # 创建新的 Token
         Token.objects.create(
             user=user,
             token=str(access_token),
