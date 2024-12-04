@@ -121,8 +121,8 @@
           </div>
           <a-progress
             :percent="item.progress"
-            :status="item.status === '完成' ? 'success' : (item.status === '失败' ? 'exception' : 'active')"
-            :stroke-color="item.status === '完成' ? '#52c41a' : (item.status === '失败' ? '#ff4d4f' : '#1890ff')"
+            :status="getProgressStatus(item.status)"
+            :stroke-color="getProgressColor(item.status)"
           />
         </div>
         <div v-if="transferTasks.length === 0" class="no-tasks">
@@ -672,9 +672,15 @@ const handleUpload = async ({ file, onSuccess, onError }) => {
     formData.append('file', file);
     formData.append('path', currentPath.value);
 
-    // 发起上传请求
+    // 发起上传请求，设置较长的超时时间
     const response = await axios.post(`/api/terminal/upload/${hostId}/`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 3600000, // 1小时超时
+      onUploadProgress: (progressEvent) => {
+        // 上传进度处理
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        updateTaskProgress(taskIndex, percentCompleted, '进行中');
+      }
     });
 
     // 建立WebSocket连接监听进度
@@ -716,11 +722,18 @@ const downloadSelectedFiles = async () => {
       const uniqueTabKey = activeTabKey.value;
       const hostId = originalHostIds[uniqueTabKey];
       
-      // 发起下载请求
+      // 发起下载请求，设置较长的超时时间
       const response = await axios.get(`/api/terminal/download/${hostId}/`, {
         params: {
           filename,
           path: currentPath.value,
+        },
+        timeout: 3600000, // 1小时超时
+        responseType: 'blob',
+        onDownloadProgress: (progressEvent) => {
+          // 下载进度处理
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          updateTaskProgress(taskIndex, percentCompleted, '进行中');
         }
       });
 
@@ -818,6 +831,34 @@ onBeforeUnmount(() => {
   });
   window.removeEventListener('resize', handleResize);
 });
+
+// 获取进度条状态
+const getProgressStatus = (status) => {
+  switch (status) {
+    case '完成':
+      return 'success';
+    case '失败':
+      return 'exception';
+    case '校验中':
+      return 'active';
+    default:
+      return 'active';
+  }
+};
+
+// 获取进度条颜色
+const getProgressColor = (status) => {
+  switch (status) {
+    case '完成':
+      return '#52c41a';
+    case '失败':
+      return '#ff4d4f';
+    case '校验中':
+      return '#faad14';  // 使用黄色表示校验中
+    default:
+      return '#1890ff';
+  }
+};
 </script>
 
 <style scoped>
@@ -1220,5 +1261,10 @@ onBeforeUnmount(() => {
 
 :deep(.ant-progress-inner) {
   background-color: #303030 !important;
+}
+
+/* 添加校验中状态的样式 */
+:deep(.ant-progress-status-active .ant-progress-bg) {
+  background-color: #faad14 !important;
 }
 </style>

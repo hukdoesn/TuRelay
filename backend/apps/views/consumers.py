@@ -26,6 +26,7 @@ from asgiref.sync import async_to_sync
 from django.conf import settings
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
+import hashlib  # 添加 hashlib 导入
 
 # 获取日志记录器实例
 logger = logging.getLogger('log')
@@ -418,7 +419,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
         ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
         clean_data = ansi_escape.sub('', data)
 
-        # 检是否包含历史命令的完整输出
+        # 检��否包含历史命令的完整输出
         if self.in_history_search:
             # 尝试从输出中提取完整的命令
             # 使用正则表达式匹配 reverse-i-search 后的实际命令
@@ -588,7 +589,7 @@ class FileListView(APIView):
                 # 执行命令
                 stdin, stdout, stderr = ssh_client.exec_command(group_cmd)
                 group_output = stdout.read().decode('utf-8')
-                # 解析命令输出，建立 GID 到组名的映射
+                # 解析命令输出��建立 GID 到组名的映射
                 for line in group_output.strip().split('\n'):
                     if line:
                         parts = line.split(':')
@@ -696,13 +697,20 @@ class FileUploadView(APIView):
             ssh_client = paramiko.SSHClient()
             ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
+            # 设置更长的超时时间
+            transport_timeout = settings.FILE_TRANSFER.get('TIMEOUT', 3600)  # 默认1小时
+            banner_timeout = 60  # banner超时时间
+            auth_timeout = 60    # 认证超时时间
+
             if credential.type == '密码':
                 ssh_client.connect(
                     host.network,
                     port=host.port,
                     username=credential.account,
                     password=credential.password,
-                    timeout=settings.FILE_TRANSFER['TIMEOUT']
+                    timeout=transport_timeout,
+                    banner_timeout=banner_timeout,
+                    auth_timeout=auth_timeout
                 )
             else:
                 key_file = io.StringIO(credential.key)
@@ -715,21 +723,26 @@ class FileUploadView(APIView):
                     port=host.port,
                     username=credential.account,
                     pkey=pkey,
-                    timeout=settings.FILE_TRANSFER['TIMEOUT']
+                    timeout=transport_timeout,
+                    banner_timeout=banner_timeout,
+                    auth_timeout=auth_timeout
                 )
 
+            # 设置SFTP客户端超时
             sftp_client = ssh_client.open_sftp()
+            sftp_client.get_channel().settimeout(transport_timeout)
+
             remote_path = os.path.join(path, filename)
 
-            # 获取文件大小
+            # 计算源文件的MD5
+            md5_hash = hashlib.md5()
             total_size = os.path.getsize(temp_file_path)
-            uploaded_size = [0]  # 使用列表存储已上传大小，以便在回调中修改
+            uploaded_size = [0]
 
             def upload_callback(sent_bytes, _):
                 uploaded_size[0] += sent_bytes
-                progress = min(int((uploaded_size[0] / total_size) * 100), 99)  # 最大显示99%
+                progress = (uploaded_size[0] / total_size) * 100  # 精确计算进度
                 
-                # 发送进度信息
                 async_to_sync(channel_layer.group_send)(
                     f"file_transfer_{transfer_id}",
                     {
@@ -740,13 +753,32 @@ class FileUploadView(APIView):
                     }
                 )
 
+            # 计算本地文件MD5
+            with open(temp_file_path, 'rb') as f:
+                for chunk in iter(lambda: f.read(4096), b''):
+                    md5_hash.update(chunk)
+            local_md5 = md5_hash.hexdigest()
+
             # 上传文件
             with open(temp_file_path, 'rb') as f:
                 sftp_client.putfo(f, remote_path, callback=upload_callback)
 
-            # 验证文件大小
-            stat = sftp_client.stat(remote_path)
-            if stat.st_size == total_size:
+            # 发送校验状态
+            async_to_sync(channel_layer.group_send)(
+                f"file_transfer_{transfer_id}",
+                {
+                    'type': 'transfer_progress',
+                    'filename': filename,
+                    'progress': 100,
+                    'status': '校验中'
+                }
+            )
+
+            # 计算远程文件MD5
+            _, stdout, _ = ssh_client.exec_command(f'md5sum {remote_path}')
+            remote_md5 = stdout.read().decode().split()[0]
+
+            if remote_md5 == local_md5:
                 # 发送完成消息
                 async_to_sync(channel_layer.group_send)(
                     f"file_transfer_{transfer_id}",
@@ -758,7 +790,9 @@ class FileUploadView(APIView):
                     }
                 )
             else:
-                raise Exception('文件传输不完整')
+                # 如果MD5不匹配，删除远程文件并报错
+                sftp_client.remove(remote_path)
+                raise Exception('文件校验失败')
 
         except Exception as e:
             logger.error('文件上传错误: %s', str(e))
@@ -853,13 +887,17 @@ class FileDownloadView(APIView):
             if file_size > settings.FILE_TRANSFER['MAX_UPLOAD_SIZE']:
                 raise Exception('文件大小超过限制')
 
-            downloaded_size = [0]  # 使用列表存储已下载大小
+            # 计算远程文件MD5
+            _, stdout, _ = ssh_client.exec_command(f'md5sum {remote_path}')
+            remote_md5 = stdout.read().decode().split()[0]
+
+            downloaded_size = [0]
+            md5_hash = hashlib.md5()
 
             def download_callback(sent_bytes, _):
                 downloaded_size[0] += sent_bytes
-                progress = min(int((downloaded_size[0] / file_size) * 100), 99)  # 最大显示99%
+                progress = (downloaded_size[0] / file_size) * 100  # 精确计算进度
                 
-                # 发送进度信息
                 async_to_sync(channel_layer.group_send)(
                     f"file_transfer_{transfer_id}",
                     {
@@ -880,9 +918,24 @@ class FileDownloadView(APIView):
                 )
                 temp_file.close()
 
-                # 验证文件大小
-                actual_size = os.path.getsize(temp_file.name)
-                if actual_size == file_size:
+                # 发送校验状态
+                async_to_sync(channel_layer.group_send)(
+                    f"file_transfer_{transfer_id}",
+                    {
+                        'type': 'transfer_progress',
+                        'filename': filename,
+                        'progress': 100,
+                        'status': '校验中'
+                    }
+                )
+
+                # 计算下载文件的MD5
+                with open(temp_file.name, 'rb') as f:
+                    for chunk in iter(lambda: f.read(4096), b''):
+                        md5_hash.update(chunk)
+                local_md5 = md5_hash.hexdigest()
+
+                if local_md5 == remote_md5:
                     # 发送完成消息
                     async_to_sync(channel_layer.group_send)(
                         f"file_transfer_{transfer_id}",
@@ -899,7 +952,7 @@ class FileDownloadView(APIView):
                         response = FileResponse(f, filename=filename)
                         return response
                 else:
-                    raise Exception('文件传输不完整')
+                    raise Exception('文件校验失败')
 
             finally:
                 # 清理临时文件
