@@ -46,7 +46,7 @@
                 <icon-font type="icon-wenjianguanli" class="file-manager-icon" />
                 文件管理
               </a-button>
-              <!-- 重新连���按钮 -->
+              <!-- 重新连按钮 -->
               <a-button type="text" class="reconnect-button" @click="reconnectTerminal">
                 <icon-font type="icon-shuaxin2" class="reconnect-icon" />
                 重新连接
@@ -109,10 +109,14 @@
       :getContainer="false"
     >
       <div class="progress-list">
-        <div v-for="(item, index) in transferTasks" :key="index" class="progress-item">
+        <div v-for="(item, index) in transferTasks" :key="index" 
+             class="progress-item"
+             :data-type="item.type">
           <div class="progress-info">
             <span class="filename" :title="item.filename">{{ item.filename }}</span>
-            <span class="status">{{ item.status }}</span>
+            <span class="type-badge" :class="item.type">
+              {{ item.type === 'upload' ? '上传' : '下载' }}
+            </span>
           </div>
           <div class="transfer-details">
             <span class="transfer-size">{{ item.transferred }} / {{ item.total }}</span>
@@ -815,7 +819,7 @@ const downloadSelectedFiles = async () => {
 // 返回上一级目录
 const goBack = async () => {
   if (currentPath.value !== '/') {
-    // 移除��前路径的最后一个目录
+    // 移除前路径的最后一个目录
     let newPath = currentPath.value.replace(/\/$/, ''); // 移除末尾的斜杠
     newPath = newPath.substring(0, newPath.lastIndexOf('/')); // 去掉最后一个目录
     if (newPath === '') {
@@ -1275,6 +1279,16 @@ const formatSize = (bytes) => {
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
+  position: relative;
+  border-left: 3px solid;  /* 添加左边框作为类型标识 */
+}
+
+.progress-item[data-type="upload"] {
+  border-left-color: #1890ff;  /* 上传任务使用蓝色 */
+}
+
+.progress-item[data-type="download"] {
+  border-left-color: #52c41a;  /* 下载任务使用绿色 */
 }
 
 .progress-info {
@@ -1284,6 +1298,26 @@ const formatSize = (bytes) => {
   margin-bottom: 8px;
 }
 
+.type-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.type-badge.upload {
+  background-color: #1890ff33;
+  color: #1890ff;
+}
+
+.type-badge.download {
+  background-color: #52c41a33;
+  color: #52c41a;
+}
+
 .filename {
   color: #ffffffD9;
   font-size: 14px;
@@ -1291,7 +1325,7 @@ const formatSize = (bytes) => {
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
-  margin-right: 12px;
+  margin-right: 80px;  /* 为右侧的类型标识留出空间 */
 }
 
 .status {
