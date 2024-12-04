@@ -205,7 +205,7 @@ log_path = os.path.join(os.path.dirname(cur_path), 'Log')  # 日志文件存放�
 #             'maxBytes': 1024 * 1024 * 5,  # 文件大小为5MB
 #             'backupCount': 5,  # 备份数量为5
 #             'formatter': 'standard',  # 使用标准格式器
-#             'encoding': 'utf-8',  # 设文��编码
+#             'encoding': 'utf-8',  # 设文编码
 #         },
 #         'console': {
 #             'level': 'INFO',  # 控制台输出所有DEBUG级别及以上的日志
@@ -284,3 +284,10 @@ REDIS_SESSION_DB = 1  # 使用db 1存储会话信息，与channels使用的db 0�
 # Token相关配置
 TOKEN_EXPIRE_MINUTES = 120  # token有效期2小时 (120分钟)
 SESSION_TIMEOUT_MINUTES = 30  # 会话超时时间30分钟
+
+# 文件传输相关配置
+FILE_TRANSFER = {
+    'MAX_UPLOAD_SIZE': 1024 * 1024 * 1024,  # 1GB 最大上传大小
+    'CHUNK_SIZE': 8192,  # 8KB 传输块大小
+    'TIMEOUT': SESSION_TIMEOUT_MINUTES * 60,  # 使用会话超时时间作为传输超时时间(秒)
+}

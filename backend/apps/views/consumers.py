@@ -1,5 +1,6 @@
 import paramiko
 import asyncio
+import threading
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.shortcuts import get_object_or_404
 from apps.models import Host, Credential, Token, User, CommandLog, CommandAlert
@@ -19,9 +20,18 @@ import urllib.parse  # For parsing query parameters
 import re  # For regular expressions
 from apps.alert_utils.command_alert_handler import check_command_alert
 import socket
+import uuid
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from django.conf import settings
+import tempfile
+from concurrent.futures import ThreadPoolExecutor
 
 # 获取日志记录器实例
 logger = logging.getLogger('log')
+
+# 创建线程池
+file_transfer_executor = ThreadPoolExecutor(max_workers=5)  # 限制最大并发数为5
 
 class SSHConsumer(AsyncWebsocketConsumer):
     """
@@ -211,7 +221,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
                     self.actual_command = ''  # 重置实际命令
                 
                 if self.command_buffer.strip():  # 只有当命令不为空时才记录
-                    # 清理命令中的提示符和搜索前缀
+                    # 清命令中的提示符和搜索前缀
                     clean_command = re.sub(r'^\[.*?\]#\s*', '', self.command_buffer.strip())
                     clean_command = re.sub(r'^.*\(reverse-i-search\).*?: ', '', clean_command)
                     if clean_command:  # 确保清理后的命令不为空
@@ -408,7 +418,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
         ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
         clean_data = ansi_escape.sub('', data)
 
-        # 检查是否包含历史命令的完整输出
+        # 检是否包含历史命令的完整输出
         if self.in_history_search:
             # 尝试从输出中提取完整的命令
             # 使用正则表达式匹配 reverse-i-search 后的实际命令
@@ -425,7 +435,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
             lines = clean_data.splitlines()
             for line in lines:
                 if line.strip():
-                    # 清理命令中的提示符
+                    # 清理命令中的示符
                     clean_line = re.sub(r'^\[.*?\]#\s*', '', line.strip())
                     if clean_line:
                         self.actual_command = clean_line
@@ -631,57 +641,141 @@ class FileUploadView(APIView):
     """
 
     def post(self, request, host_id):
-        # 获取上传的文件
         uploaded_file = request.FILES.get('file')
         if not uploaded_file:
             return Response({'error': '未找到文件'}, status=status.HTTP_400_BAD_REQUEST)
-        # 获取路径参数
+            
+        # 检查文件大小
+        if uploaded_file.size > settings.FILE_TRANSFER['MAX_UPLOAD_SIZE']:
+            return Response({'error': '文件大小超过限制'}, status=status.HTTP_400_BAD_REQUEST)
+
         path = request.POST.get('path', '.')
-        # 获取主机和凭据
-        host = get_object_or_404(Host, id=host_id)
-        credential = get_object_or_404(Credential, id=host.account_type.id)
+        transfer_id = str(uuid.uuid4())
+
         try:
-            # 建立 SSH 和 SFTP 连接
+            host = get_object_or_404(Host, id=host_id)
+            credential = get_object_or_404(Credential, id=host.account_type.id)
+            
+            # 创建临时文件
+            temp_file = tempfile.NamedTemporaryFile(delete=False)
+            for chunk in uploaded_file.chunks():
+                temp_file.write(chunk)
+            temp_file.close()
+            
+            # 使用线程池提交任务
+            file_transfer_executor.submit(
+                self.upload_task,
+                host,
+                credential,
+                temp_file.name,
+                path,
+                uploaded_file.name,
+                transfer_id
+            )
+
+            return Response({
+                'message': '开始上传',
+                'transfer_id': transfer_id
+            })
+
+        except Exception as e:
+            logger.error('文件上传错误: %s', str(e))
+            try:
+                os.unlink(temp_file.name)
+            except:
+                pass
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def upload_task(self, host, credential, temp_file_path, path, filename, transfer_id):
+        channel_layer = get_channel_layer()
+        ssh_client = None
+        sftp_client = None
+
+        try:
+            # 建立SSH连接
             ssh_client = paramiko.SSHClient()
             ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
             if credential.type == '密码':
                 ssh_client.connect(
                     host.network,
                     port=host.port,
                     username=credential.account,
                     password=credential.password,
-                    timeout=10
+                    timeout=settings.FILE_TRANSFER['TIMEOUT']
                 )
-            elif credential.type == '密钥':
+            else:
                 key_file = io.StringIO(credential.key)
-                pkey = paramiko.RSAKey.from_private_key(key_file, password=credential.key_password)
+                pkey = paramiko.RSAKey.from_private_key(
+                    key_file,
+                    password=credential.key_password
+                )
                 ssh_client.connect(
                     host.network,
                     port=host.port,
                     username=credential.account,
                     pkey=pkey,
-                    timeout=10
+                    timeout=settings.FILE_TRANSFER['TIMEOUT']
                 )
-            else:
-                return Response({'error': '不支持的凭据类型'}, status=status.HTTP_400_BAD_REQUEST)
 
             sftp_client = ssh_client.open_sftp()
+            remote_path = os.path.join(path, filename)
 
-            # 确定上传路径
-            if path == '~':
-                # 获取用的home目录
-                path = sftp_client.normalize('.')
+            # 获取文件大小
+            total_size = os.path.getsize(temp_file_path)
+            uploaded_size = [0]  # 使用列表存储已上传大小，以便在回调中修改
 
-            # 上传文件到指定目录
-            remote_file_path = os.path.join(path, uploaded_file.name)
-            sftp_client.putfo(uploaded_file.file, remote_file_path)
+            def upload_callback(sent_bytes, _):
+                uploaded_size[0] += sent_bytes
+                progress = min(int((uploaded_size[0] / total_size) * 100), 99)  # 最大显示99%
+                
+                # 发送进度信息
+                async_to_sync(channel_layer.group_send)(
+                    f"file_transfer_{transfer_id}",
+                    {
+                        'type': 'transfer_progress',
+                        'filename': filename,
+                        'progress': progress,
+                        'status': '进行中'
+                    }
+                )
 
-            sftp_client.close()
-            ssh_client.close()
-            return Response({'message': '文件上传成功'})
+            # 上传文件
+            with open(temp_file_path, 'rb') as f:
+                sftp_client.putfo(f, remote_path, callback=upload_callback)
+
+            # 验证文件大小
+            stat = sftp_client.stat(remote_path)
+            if stat.st_size == total_size:
+                # 发送完成消息
+                async_to_sync(channel_layer.group_send)(
+                    f"file_transfer_{transfer_id}",
+                    {
+                        'type': 'transfer_progress',
+                        'filename': filename,
+                        'progress': 100,
+                        'status': '完成'
+                    }
+                )
+            else:
+                raise Exception('文件传输不完整')
+
         except Exception as e:
-            logger.error('文件上传错误: %s (主机ID=%s)', str(e), host_id)
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error('文件上传错误: %s', str(e))
+            async_to_sync(channel_layer.group_send)(
+                f"file_transfer_{transfer_id}",
+                {
+                    'type': 'transfer_progress',
+                    'filename': filename,
+                    'progress': 0,
+                    'status': '失败'
+                }
+            )
+        finally:
+            if sftp_client:
+                sftp_client.close()
+            if ssh_client:
+                ssh_client.close()
 
 class FileDownloadView(APIView):
     """
@@ -692,58 +786,144 @@ class FileDownloadView(APIView):
         filename = request.GET.get('filename')
         if not filename:
             return Response({'error': '未指定文件名'}, status=status.HTTP_400_BAD_REQUEST)
-        # 获取路径参数
+
         path = request.GET.get('path', '.')
-        # 获取主机和凭据
-        host = get_object_or_404(Host, id=host_id)
-        credential = get_object_or_404(Credential, id=host.account_type.id)
+        transfer_id = str(uuid.uuid4())
+
         try:
-            # 建立 SSH 和 SFTP 连接
+            host = get_object_or_404(Host, id=host_id)
+            credential = get_object_or_404(Credential, id=host.account_type.id)
+
+            # 使用线程池提交任务
+            file_transfer_executor.submit(
+                self.download_task,
+                host,
+                credential,
+                filename,
+                path,
+                transfer_id
+            )
+
+            return Response({
+                'message': '开始下载',
+                'transfer_id': transfer_id
+            })
+
+        except Exception as e:
+            logger.error('文件下载错误: %s', str(e))
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def download_task(self, host, credential, filename, path, transfer_id):
+        channel_layer = get_channel_layer()
+        ssh_client = None
+        sftp_client = None
+
+        try:
+            # 建立SSH连接
             ssh_client = paramiko.SSHClient()
             ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
             if credential.type == '密码':
                 ssh_client.connect(
                     host.network,
                     port=host.port,
                     username=credential.account,
                     password=credential.password,
-                    timeout=10
+                    timeout=settings.FILE_TRANSFER['TIMEOUT']
                 )
-            elif credential.type == '密钥':
+            else:
                 key_file = io.StringIO(credential.key)
-                pkey = paramiko.RSAKey.from_private_key(key_file, password=credential.key_password)
+                pkey = paramiko.RSAKey.from_private_key(
+                    key_file,
+                    password=credential.key_password
+                )
                 ssh_client.connect(
                     host.network,
                     port=host.port,
                     username=credential.account,
                     pkey=pkey,
-                    timeout=10
+                    timeout=settings.FILE_TRANSFER['TIMEOUT']
                 )
-            else:
-                return Response({'error': '不支持的凭据类型'}, status=status.HTTP_400_BAD_REQUEST)
 
             sftp_client = ssh_client.open_sftp()
+            remote_path = os.path.join(path, filename)
 
-            # 确定文件路径
-            if path == '~':
-                # 获取用户的home目录
-                path = sftp_client.normalize('.')
+            # 获取文件大小
+            file_size = sftp_client.stat(remote_path).st_size
+            if file_size > settings.FILE_TRANSFER['MAX_UPLOAD_SIZE']:
+                raise Exception('文件大小超过限制')
 
-            remote_file_path = os.path.join(path, filename)
+            downloaded_size = [0]  # 使用列表存储已下载大小
 
-            # 下载文件
-            file_obj = io.BytesIO()
-            sftp_client.getfo(remote_file_path, file_obj)
-            file_obj.seek(0)
+            def download_callback(sent_bytes, _):
+                downloaded_size[0] += sent_bytes
+                progress = min(int((downloaded_size[0] / file_size) * 100), 99)  # 最大显示99%
+                
+                # 发送进度信息
+                async_to_sync(channel_layer.group_send)(
+                    f"file_transfer_{transfer_id}",
+                    {
+                        'type': 'transfer_progress',
+                        'filename': filename,
+                        'progress': progress,
+                        'status': '进行中'
+                    }
+                )
 
-            sftp_client.close()
-            ssh_client.close()
+            # 使用临时文件处理下载
+            temp_file = tempfile.NamedTemporaryFile(delete=False)
+            try:
+                sftp_client.getfo(
+                    remote_path,
+                    temp_file,
+                    callback=download_callback
+                )
+                temp_file.close()
 
-            response = FileResponse(file_obj, filename=filename)
-            return response
+                # 验证文件大小
+                actual_size = os.path.getsize(temp_file.name)
+                if actual_size == file_size:
+                    # 发送完成消息
+                    async_to_sync(channel_layer.group_send)(
+                        f"file_transfer_{transfer_id}",
+                        {
+                            'type': 'transfer_progress',
+                            'filename': filename,
+                            'progress': 100,
+                            'status': '完成'
+                        }
+                    )
+
+                    # 返回文件
+                    with open(temp_file.name, 'rb') as f:
+                        response = FileResponse(f, filename=filename)
+                        return response
+                else:
+                    raise Exception('文件传输不完整')
+
+            finally:
+                # 清理临时文件
+                try:
+                    os.unlink(temp_file.name)
+                except:
+                    pass
+
         except Exception as e:
-            logger.error('文件下载错误: %s (主机ID=%s)', str(e), host_id)
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error('文件下载错误: %s', str(e))
+            async_to_sync(channel_layer.group_send)(
+                f"file_transfer_{transfer_id}",
+                {
+                    'type': 'transfer_progress',
+                    'filename': filename,
+                    'progress': 0,
+                    'status': '失败'
+                }
+            )
+        finally:
+            if sftp_client:
+                sftp_client.close()
+            if ssh_client:
+                ssh_client.close()
 
 class FileDeleteView(APIView):
     """

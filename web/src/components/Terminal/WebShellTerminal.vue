@@ -93,6 +93,10 @@
             class="action-button spacing">
             删除
           </a-button>
+          <!-- 新增进度按钮 -->
+          <a-button @click="showProgressModal" class="action-button spacing">
+            进度
+          </a-button>
         </div>
         <!-- 文件列表 -->
         <a-table :columns="fileColumns" :dataSource="fileList" :rowKey="record => record.filename" :pagination="false"
@@ -100,6 +104,32 @@
         </a-table>
       </div>
     </a-drawer>
+    <!-- 添加进度弹窗 -->
+    <a-modal
+      v-model:visible="isProgressModalVisible"
+      title="文件传输进度"
+      :footer="null"
+      :maskClosable="false"
+      class="progress-modal"
+      :getContainer="false"
+    >
+      <div class="progress-list">
+        <div v-for="(item, index) in transferTasks" :key="index" class="progress-item">
+          <div class="progress-info">
+            <span class="filename">{{ item.filename }}</span>
+            <span class="status">{{ item.status }}</span>
+          </div>
+          <a-progress
+            :percent="item.progress"
+            :status="item.status === '完成' ? 'success' : (item.status === '失败' ? 'exception' : 'active')"
+            :stroke-color="item.status === '完成' ? '#52c41a' : (item.status === '失败' ? '#ff4d4f' : '#1890ff')"
+          />
+        </div>
+        <div v-if="transferTasks.length === 0" class="no-tasks">
+          暂无传输任务
+        </div>
+      </div>
+    </a-modal>
   </a-layout>
 </template>
 
@@ -602,50 +632,133 @@ const handleFileClick = async (record) => {
   }
 };
 
-// 上传文件
+// 添加进度相关的响应式变量
+const isProgressModalVisible = ref(false);
+const transferTasks = ref([]);
+
+// 显示进度弹窗
+const showProgressModal = () => {
+  isProgressModalVisible.value = true;
+};
+
+// 添加或更新传输任务
+const addTransferTask = (filename, type = 'upload') => {
+  const task = {
+    filename,
+    type,
+    progress: 0,
+    status: '进行中'
+  };
+  transferTasks.value.push(task);
+  isProgressModalVisible.value = true;
+  return transferTasks.value.length - 1; // 返回任务索引
+};
+
+// 更新任务进度
+const updateTaskProgress = (index, progress, status = '进行中') => {
+  if (transferTasks.value[index]) {
+    transferTasks.value[index].progress = progress;
+    transferTasks.value[index].status = status;
+  }
+};
+
+// 修改上传文件处理函数
 const handleUpload = async ({ file, onSuccess, onError }) => {
+  const taskIndex = addTransferTask(file.name, 'upload');
   try {
     const uniqueTabKey = activeTabKey.value;
     const hostId = originalHostIds[uniqueTabKey];
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('path', currentPath.value); // 上传到当前路径
-    await axios.post(`/api/terminal/upload/${hostId}/`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    formData.append('path', currentPath.value);
+
+    // 发起上传请求
+    const response = await axios.post(`/api/terminal/upload/${hostId}/`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
     });
-    // 上传成功后刷新文件列表
-    await loadFileList();
-    onSuccess(null, file);
+
+    // 建立WebSocket连接监听进度
+    const token = localStorage.getItem('accessToken');
+    const ws = new WebSocket(`${wsServerAddress}/ws/file_transfer/${response.data.transfer_id}/?token=${token}`);
+    
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'progress') {
+        updateTaskProgress(taskIndex, data.progress, data.status);
+        if (data.status === '完成') {
+          ws.close();
+          loadFileList();
+          onSuccess(null, file);
+        } else if (data.status === '失败') {
+          ws.close();
+          onError(new Error('上传失败'));
+        }
+      }
+    };
+
+    ws.onerror = () => {
+      updateTaskProgress(taskIndex, 0, '失败');
+      onError(new Error('WebSocket连接失败'));
+    };
+
   } catch (error) {
     console.error('上传文件失败:', error);
+    updateTaskProgress(taskIndex, 0, '失败');
     onError(error);
   }
 };
 
-// 下载选中的文件
+// 修改下载文件处理函数
 const downloadSelectedFiles = async () => {
-  try {
-    const uniqueTabKey = activeTabKey.value;
-    const hostId = originalHostIds[uniqueTabKey];
-    for (const filename of selectedFileKeys.value) {
+  for (const filename of selectedFileKeys.value) {
+    const taskIndex = addTransferTask(filename, 'download');
+    try {
+      const uniqueTabKey = activeTabKey.value;
+      const hostId = originalHostIds[uniqueTabKey];
+      
+      // 发起下载请求
       const response = await axios.get(`/api/terminal/download/${hostId}/`, {
         params: {
           filename,
           path: currentPath.value,
-        },
-        responseType: 'blob',
+        }
       });
-      // 创建下载链接
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+
+      // 建立WebSocket连接监听进度
+      const token = localStorage.getItem('accessToken');
+      const ws = new WebSocket(`${wsServerAddress}/ws/file_transfer/${response.data.transfer_id}/?token=${token}`);
+      
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'progress') {
+          updateTaskProgress(taskIndex, data.progress, data.status);
+          if (data.status === '完成') {
+            ws.close();
+            // 处理文件下载
+            const blob = new Blob([response.data]);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } else if (data.status === '失败') {
+            ws.close();
+            console.error('下载失败');
+          }
+        }
+      };
+
+      ws.onerror = () => {
+        updateTaskProgress(taskIndex, 0, '失败');
+        console.error('WebSocket连接失败');
+      };
+
+    } catch (error) {
+      console.error('下载文件失败:', error);
+      updateTaskProgress(taskIndex, 0, '失败');
     }
-  } catch (error) {
-    console.error('下载文件失败:', error);
   }
 };
 
@@ -1042,5 +1155,70 @@ onBeforeUnmount(() => {
 /* 复选框焦点状态 */
 :deep(.ant-checkbox-input:focus+.ant-checkbox-inner) {
   border-color: #1f1f1f !important;
+}
+
+/* 进度弹窗样式 */
+:deep(.progress-modal .ant-modal-content) {
+  background-color: #1f1f1f;
+}
+
+:deep(.progress-modal .ant-modal-header) {
+  background-color: #1f1f1f;
+  border-bottom: 1px solid #303030;
+}
+
+:deep(.progress-modal .ant-modal-title) {
+  color: #ffffffD9;
+}
+
+:deep(.progress-modal .ant-modal-close) {
+  color: #ffffffD9;
+}
+
+:deep(.progress-modal .ant-modal-close:hover) {
+  color: #ffffff;
+}
+
+.progress-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.progress-item {
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #141414;
+  border-radius: 4px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.filename {
+  color: #ffffffD9;
+  font-size: 14px;
+}
+
+.status {
+  color: #ffffffD9;
+  font-size: 12px;
+}
+
+.no-tasks {
+  text-align: center;
+  color: #ffffffD9;
+  padding: 20px;
+}
+
+/* 进度条样式 */
+:deep(.ant-progress-text) {
+  color: #ffffffD9 !important;
+}
+
+:deep(.ant-progress-inner) {
+  background-color: #303030 !important;
 }
 </style>
