@@ -101,7 +101,8 @@
     </a-drawer>
     <!-- 添加进度弹窗 -->
     <a-modal
-      v-model:visible="isProgressModalVisible"
+      v-model:open="isProgressModalVisible"
+      @cancel="isProgressModalVisible = false"
       title="文件传输进度"
       :footer="null"
       :maskClosable="false"
@@ -439,7 +440,7 @@ const reconnectTerminal = () => {
   initializeTerminal(uniqueTabKey);
 };
 
-// 添加带唯一名称的 Tab 标签
+// 添加带唯名称的 Tab 标签
 const addTabWithUniqueName = (title, hostId, connectionType) => {
   let baseTitle = title;
   let index = 0;
@@ -621,7 +622,7 @@ const handleDrawerClose = () => {
   fileList.value = [];
   currentPath.value = '/';
   selectedFileKeys.value = [];
-  // 如果有其他需要重置的状态，也可以在这里添加
+  // 果有其他需要重置的状态，也可以在这里添加
 };
 
 // 加载文件列表
@@ -979,6 +980,69 @@ const formatSize = (bytes) => {
   border-top: 1px solid #303030;
   border-bottom: 1px solid #303030;
   background-color: #1d1f23;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+/* 自定义滚动条样式 */
+.tab-bar::-webkit-scrollbar {
+  height: 2px;  /* 水平滚动条的高度 */
+}
+
+.tab-bar::-webkit-scrollbar-track {
+  background: #1d1f23;  /* 与tab-bar背景色一致 */
+}
+
+.tab-bar::-webkit-scrollbar-thumb {
+  background: #303030;
+  border-radius: 2px;
+}
+
+.tab-bar::-webkit-scrollbar-thumb:hover {
+  background: #404040;
+}
+
+/* 标签样式 */
+:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag) {
+  margin-inline-end: 5px;
+  border-radius: 2px;
+  border: none;
+  line-height: 28px;  /* 稍微减小行高，为滚动条留出空间 */
+  white-space: nowrap;
+  flex-shrink: 0;  /* 防止标签被压缩 */
+}
+
+/* 活跃tab样式 */
+.active-tab {
+  background-color: #1e2023 !important;
+  color: #FFFFFF !important;
+  position: relative;
+}
+
+/* 活跃tab添加底部边框 */
+.active-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  width: 50%;
+  height: 2px;
+  background-color: #428DFF;
+}
+
+/* 非活跃tab样式 */
+.inactive-tab {
+  color: #FFFFFF66 !important;
+  border-color: #2d2e36 !important;
+  position: relative;
+}
+
+/* 背景和文本的tab悬停样式 */
+:deep(.ant-tag:hover) {
+  background-color: #1e2023 !important;
+  color: #FFFFFF !important;
+  cursor: pointer;
 }
 
 .logo-img {
@@ -1018,7 +1082,9 @@ const formatSize = (bytes) => {
   margin-inline-end: 5px;
   border-radius: 2px;
   border: none;
-  line-height: 30px;
+  line-height: 28px;  /* 稍微减小行高，为滚动条留出空间 */
+  white-space: nowrap;
+  flex-shrink: 0;  /* 防止标签被压缩 */
 }
 
 /* tree 样式 */
@@ -1104,7 +1170,7 @@ const formatSize = (bytes) => {
   /* gap: 10px; 在两个按钮之间设置 10px 的间距 */
   position: absolute;
   right: 10px;
-  /* 将按钮容器靠右对齐 */
+  /* 将按钮容器右对齐 */
 }
 
 /* 新连接button */
