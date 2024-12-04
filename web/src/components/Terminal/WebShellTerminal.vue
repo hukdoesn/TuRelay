@@ -195,10 +195,14 @@ const fetchTreeData = async () => {
     });
     treeData.value = response.data.treeData;
 
+    // 获取一级节点的 key 并设置为展开状态
+    const firstLevelKeys = treeData.value.map(node => node.key);
+    expandedKeys.value = firstLevelKeys;
+
     // 获取 hostId 并展开选中节点
     const hostId = route.query.hostId;
     if (hostId) {
-      expandAndSelectNode(hostId); // 展开树并选中节点
+      expandAndSelectNode(hostId);
     }
   } catch (error) {
     console.error('获取树结构数据失败:', error);
