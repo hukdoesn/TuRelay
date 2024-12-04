@@ -53,7 +53,7 @@ MIDDLEWARE = [
     # 'django.middleware.csrf.CsrfViewMiddleware', # 管理跨站请求伪造保护
     'django.contrib.auth.middleware.AuthenticationMiddleware', # 用于用户认证
     'django.contrib.messages.middleware.MessageMiddleware', # 消息中间件，用于cookie和session的消息标签
-    'django.middleware.clickjacking.XFrameOptionsMiddleware', # 防止点击劫持
+    'django.middleware.clickjacking.XFrameOptionsMiddleware', # 防��点击劫持
     'apps.middleware_log.OperationLogMiddleware',
     'apps.middleware.TokenAuthenticationMiddleware',  # 添加 Token 认证中间件
 ]
@@ -285,11 +285,11 @@ REDIS_SESSION_DB = 1  # 使用db 1存储会话信息，与channels使用的db 0�
 TOKEN_EXPIRE_MINUTES = 120  # token有效期2小时 (120分钟)
 SESSION_TIMEOUT_MINUTES = 30  # 会话超时时间30分钟
 
-# 文件传输相关配置
+# 文件传��相关配置
 FILE_TRANSFER = {
-    'MAX_UPLOAD_SIZE': 2 * 1024 * 1024 * 1024,  # 2GB 最大上传大小
-    'CHUNK_SIZE': 32 * 1024 * 1024,  # 改为 32MB 的传输块大小
-    'BUFFER_SIZE': 1024 * 1024,  # 改为 1MB 的缓冲区大小
+    'MAX_UPLOAD_SIZE': 10 * 1024 * 1024 * 1024,  # 10GB 最大上传大小
+    'CHUNK_SIZE': 256 * 1024 * 1024,  # 改为 256MB 的传输块大小
+    'BUFFER_SIZE': 64 * 1024 * 1024,  # 改为 64MB 的缓冲区大小
     'PROGRESS_UPDATE_INTERVAL': 2,  # 每2%更新一次进度
     'TIMEOUT': SESSION_TIMEOUT_MINUTES * 60,  # 使用会话超时时间作为传输超时时间(秒)
 }

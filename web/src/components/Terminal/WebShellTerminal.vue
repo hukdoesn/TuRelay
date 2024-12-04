@@ -116,17 +116,18 @@
       <div class="progress-list">
         <div v-for="(item, index) in transferTasks" :key="index" class="progress-item">
           <div class="progress-info">
-            <span class="filename">{{ item.filename }}</span>
+            <span class="filename" :title="item.filename">{{ item.filename }}</span>
             <span class="status">{{ item.status }}</span>
           </div>
           <div class="transfer-details">
-            <span>{{ item.transferred }} / {{ item.total }}</span>
-            <span>{{ item.speed }}</span>
+            <span class="transfer-size">{{ item.transferred }} / {{ item.total }}</span>
+            <span class="transfer-speed">{{ item.speed }}</span>
           </div>
           <a-progress
             :percent="item.progress"
             :status="getProgressStatus(item.status)"
             :stroke-color="getProgressColor(item.status)"
+            size="small"
           />
         </div>
         <div v-if="transferTasks.length === 0" class="no-tasks">
@@ -375,7 +376,7 @@ const initializeTerminal = async (uniqueTabKey) => {
       title = '连接异常断开';
       messages = [
         '连接意外中断',
-        event.reason ? `原因: ${event.reason}` : '原因: 未知错误',
+        event.reason ? `原因: ${event.reason}` : '原因: 未知错',
         '',
         '点击右上角的重新连接按钮以重试'
       ];
@@ -417,7 +418,7 @@ const switchTab = async (uniqueTabKey) => {
   currentConnectionType.value = connectionTypes[uniqueTabKey];
 };
 
-// 重新连��指定的终端
+// 重新连指定的终端
 const reconnectTerminal = () => {
   const uniqueTabKey = activeTabKey.value;
   if (sockets[uniqueTabKey]) sockets[uniqueTabKey].close();
@@ -1009,7 +1010,7 @@ const formatSize = (bytes) => {
   background-color: #1e2023 !important;
   color: #FFFFFF !important;
   position: relative;
-  /* 底部边界定位 */
+  /* 底边界定位 */
 }
 
 /* 活跃tab添加底部边框*/
@@ -1223,6 +1224,7 @@ const formatSize = (bytes) => {
 /* 进度弹窗样式 */
 :deep(.progress-modal .ant-modal-content) {
   background-color: #1f1f1f;
+  max-width: 100%;
 }
 
 :deep(.progress-modal .ant-modal-header) {
@@ -1244,7 +1246,7 @@ const formatSize = (bytes) => {
 
 .progress-list {
   max-height: 400px;
-  overflow-y: auto;
+  overflow: hidden;  /* 移除滚动条 */
 }
 
 .progress-item {
@@ -1257,45 +1259,59 @@ const formatSize = (bytes) => {
 .progress-info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
 }
 
 .filename {
   color: #ffffffD9;
   font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  margin-right: 12px;
 }
 
 .status {
   color: #ffffffD9;
   font-size: 12px;
+  white-space: nowrap;
 }
 
-.no-tasks {
-  text-align: center;
-  color: #ffffffD9;
-  padding: 20px;
-}
-
-/* 进度条样式 */
-:deep(.ant-progress-text) {
-  color: #ffffffD9 !important;
-}
-
-:deep(.ant-progress-inner) {
-  background-color: #303030 !important;
-}
-
-/* 添加校验中状态的样式 */
-:deep(.ant-progress-status-active .ant-progress-bg) {
-  background-color: #faad14 !important;
-}
-
-/* 添加传输详情样式 */
 .transfer-details {
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
   font-size: 12px;
   color: #ffffffD9;
+}
+
+.transfer-size, .transfer-speed {
+  white-space: nowrap;
+}
+
+/* 进度条样式 */
+:deep(.ant-progress) {
+  display: flex;
+  align-items: center;
+}
+
+:deep(.ant-progress-outer) {
+  flex: 1;
+  margin-right: 8px !important;
+}
+
+:deep(.ant-progress-text) {
+  flex-shrink: 0;
+  color: #ffffffD9 !important;
+  font-size: 12px;
+  min-width: 35px;
+}
+
+.no-tasks {
+  text-align: center;
+  color: #ffffffD9;
+  padding: 20px;
 }
 </style>
