@@ -1,8 +1,21 @@
 <template>
   <a-layout>
-    <!-- 顶部布局，用于显示标题 -->
+    <!-- 顶部布局，用于显示标题和按钮 -->
     <a-layout-header class="terminal-header">
       <img src="@/assets/svg/turelay_logo.svg" alt="Logo" class="logo-img" @click="goToDashboard" />
+      <!-- 按钮容器 -->
+      <div class="header-buttons">
+        <!-- 文件管理按钮 -->
+        <a-button type="text" class="header-button" @click="showFileManagerDrawer">
+          <icon-font type="icon-wenjianguanli" class="button-icon" />
+          文件管理
+        </a-button>
+        <!-- 重新连接按钮 -->
+        <a-button type="text" class="header-button" @click="reconnectTerminal">
+          <icon-font type="icon-shuaxin2" class="button-icon" />
+          重新连接
+        </a-button>
+      </div>
     </a-layout-header>
     <a-layout>
       <!-- 侧边栏布局，包含树形结构 -->
@@ -39,19 +52,6 @@
               :class="{ 'active-tab': tab.key === activeTabKey, 'inactive-tab': tab.key !== activeTabKey }">
               {{ tab.title }}
             </a-tag>
-            <!-- 按钮容器，仅在 SSH 连接时显示 -->
-            <div class="button-container" v-if="currentHostId && currentConnectionType === 'ssh'">
-              <!-- 文件管理按钮 -->
-              <a-button type="text" class="file-manager-button" @click="showFileManagerDrawer">
-                <icon-font type="icon-wenjianguanli" class="file-manager-icon" />
-                文件管理
-              </a-button>
-              <!-- 重新连按钮 -->
-              <a-button type="text" class="reconnect-button" @click="reconnectTerminal">
-                <icon-font type="icon-shuaxin2" class="reconnect-icon" />
-                重新连接
-              </a-button>
-            </div>
           </div>
           <!-- 终端容器 -->
           <div v-for="tab in tabs" :key="tab.key" v-show="tab.key === activeTabKey" class="terminal-container">
@@ -424,6 +424,12 @@ const switchTab = async (uniqueTabKey) => {
 
 // 重新连指定的终端
 const reconnectTerminal = () => {
+  // 检查是否有活动的标签页和SSH连接
+  const activeTab = tabs.value.find(tab => tab.key === activeTabKey.value);
+  if (!activeTab || activeTab.connectionType !== 'ssh') {
+    message.warning('请选择节点，进行连接后再进行操作');
+    return;
+  }
   const uniqueTabKey = activeTabKey.value;
   if (sockets[uniqueTabKey]) sockets[uniqueTabKey].close();
   if (terminals[uniqueTabKey]) terminals[uniqueTabKey].dispose();
@@ -599,8 +605,14 @@ const rowSelection = {
 
 // 显示文件管理抽屉并加载文件列表
 const showFileManagerDrawer = async () => {
+  // 检查是否有活动的标签页和SSH连接
+  const activeTab = tabs.value.find(tab => tab.key === activeTabKey.value);
+  if (!activeTab || activeTab.connectionType !== 'ssh') {
+    message.warning('请选择节点，进行连接后再进行操作');
+    return;
+  }
   isFileManagerVisible.value = true;
-  currentPath.value = '/'; // 默认路径为根目录
+  currentPath.value = '/';
   await loadFileList();
 };
 
@@ -897,7 +909,29 @@ const formatSize = (bytes) => {
   background-color: #191C20;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-button {
+  color: #FFFFFF66 !important;
+  display: flex;
+  align-items: center;
+}
+
+.header-button:hover {
+  color: #FFFFFF !important;
+  background-color: #1e2023 !important;
+}
+
+.button-icon {
+  margin-right: 4px;
 }
 
 .full-terminal {
@@ -1189,7 +1223,7 @@ const formatSize = (bytes) => {
   color: #ffffffD9 !important;
 }
 
-/* 鼠标悬停背景颜色 */
+/* 鼠标停背景颜色 */
 :deep(.ant-table-tbody>tr:hover>td) {
   background-color: #1f1f1f !important;
 }
