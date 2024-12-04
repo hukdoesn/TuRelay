@@ -125,7 +125,7 @@
           <a-progress
             :percent="item.progress"
             :status="getProgressStatus(item.status)"
-            :stroke-color="getProgressColor(item.status)"
+            :stroke-color="getProgressColor(item.status, index)"
             size="small"
           />
         </div>
@@ -866,17 +866,12 @@ const getProgressStatus = (status) => {
 };
 
 // 获取进度条颜色
-const getProgressColor = (status) => {
-  switch (status) {
-    case '完成':
-      return '#52c41a';
-    case '失败':
-      return '#ff4d4f';
-    case '校验中':
-      return '#faad14';  // 使用黄色表示校验中
-    default:
-      return '#1890ff';
+const getProgressColor = (status, index) => {
+  if (status === '失败') {
+    return '#ff4d4f';  // 失败状态使用红色
   }
+  // 使用传入的index直接获取对应的任务
+  return transferTasks.value[index]?.type === 'upload' ? '#1890ff' : '#52c41a';
 };
 
 // 添加格式化文件大小的函数
@@ -1233,6 +1228,7 @@ const formatSize = (bytes) => {
 
 :deep(.progress-modal .ant-modal-header) {
   background-color: #1f1f1f;
+  padding-bottom: 10px;
   border-bottom: 1px solid #303030;
 }
 
@@ -1280,22 +1276,6 @@ const formatSize = (bytes) => {
   width: 100%;
   box-sizing: border-box;
   position: relative;
-  border-left: 3px solid;  /* 添加左边框作为类型标识 */
-}
-
-.progress-item[data-type="upload"] {
-  border-left-color: #1890ff;  /* 上传任务使用蓝色 */
-}
-
-.progress-item[data-type="download"] {
-  border-left-color: #52c41a;  /* 下载任务使用绿色 */
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
 }
 
 .type-badge {
@@ -1303,18 +1283,17 @@ const formatSize = (bytes) => {
   top: 12px;
   right: 12px;
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: 4px;
   font-size: 12px;
-  color: #ffffff;
 }
 
 .type-badge.upload {
-  background-color: #1890ff33;
+  background-color: #1890ff15;
   color: #1890ff;
 }
 
 .type-badge.download {
-  background-color: #52c41a33;
+  background-color: #52c41a15;
   color: #52c41a;
 }
 
@@ -1325,13 +1304,7 @@ const formatSize = (bytes) => {
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
-  margin-right: 80px;  /* 为右侧的类型标识留出空间 */
-}
-
-.status {
-  color: #ffffffD9;
-  font-size: 12px;
-  white-space: nowrap;
+  margin-right: 80px;
 }
 
 .transfer-details {
@@ -1346,7 +1319,6 @@ const formatSize = (bytes) => {
   white-space: nowrap;
 }
 
-/* 进度条样式 */
 :deep(.ant-progress) {
   display: flex;
   align-items: center;
