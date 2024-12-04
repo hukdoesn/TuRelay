@@ -398,7 +398,7 @@ class FileDownloadView(APIView):
             host = get_object_or_404(Host, id=host_id)
             credential = get_object_or_404(Credential, id=host.account_type.id)
 
-            # 使用线程池提交任务
+            # 使用线程池提交下载任务
             file_transfer_executor.submit(
                 self.download_task,
                 host,
@@ -427,6 +427,7 @@ class FileDownloadView(APIView):
             ssh_client = paramiko.SSHClient()
             ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
+            # 设置更长的超时时间
             transport_timeout = settings.FILE_TRANSFER.get('TIMEOUT', 3600)
             banner_timeout = 60
             auth_timeout = 60
@@ -457,6 +458,7 @@ class FileDownloadView(APIView):
                     auth_timeout=auth_timeout
                 )
 
+            # 设置SFTP客户端
             sftp_client = ssh_client.open_sftp()
             sftp_client.get_channel().settimeout(transport_timeout)
             
@@ -464,7 +466,7 @@ class FileDownloadView(APIView):
             sftp_client.get_channel().window_size = 67108864  # 64MB
 
             remote_path = os.path.join(path, filename)
-
+            
             # 获取文件大小
             file_size = sftp_client.stat(remote_path).st_size
             
@@ -502,65 +504,27 @@ class FileDownloadView(APIView):
                 
                 return transferred
 
-            # 使用更大的缓冲区下载文件
-            temp_file = tempfile.NamedTemporaryFile(delete=False, buffering=settings.FILE_TRANSFER['BUFFER_SIZE'])
-            try:
-                sftp_client.get(
-                    remote_path,
-                    temp_file.name,  # 使用文件路径而不是文件对象
-                    callback=download_callback
-                )
-                temp_file.close()
+            # 创建临时文件
+            temp_file_path = f'/tmp/download_{transfer_id}'
+            sftp_client.get(
+                remote_path,
+                temp_file_path,
+                callback=download_callback
+            )
 
-                # 发送校验状态
-                async_to_sync(channel_layer.group_send)(
-                    f"file_transfer_{transfer_id}",
-                    {
-                        'type': 'transfer_progress',
-                        'filename': filename,
-                        'progress': 100,
-                        'status': '校验中'
-                    }
-                )
-
-                # 计算下载文件的MD5
-                with open(temp_file.name, 'rb') as f:
-                    while True:
-                        chunk = f.read(settings.FILE_TRANSFER['CHUNK_SIZE'])
-                        if not chunk:
-                            break
-                        md5_hash.update(chunk)
-                local_md5 = md5_hash.hexdigest()
-
-                # 计算远程文件MD5
-                _, stdout, _ = ssh_client.exec_command(f'md5sum {remote_path}')
-                remote_md5 = stdout.read().decode().split()[0]
-
-                if local_md5 == remote_md5:
-                    # 发送完成消息
-                    async_to_sync(channel_layer.group_send)(
-                        f"file_transfer_{transfer_id}",
-                        {
-                            'type': 'transfer_progress',
-                            'filename': filename,
-                            'progress': 100,
-                            'status': '完成'
-                        }
-                    )
-
-                    # 返回文件
-                    with open(temp_file.name, 'rb') as f:
-                        response = FileResponse(f, filename=filename)
-                        return response
-                else:
-                    raise Exception('文件校验失败')
-
-            finally:
-                # 清理临时文件
-                try:
-                    os.unlink(temp_file.name)
-                except:
-                    pass
+            # 发送完成消息
+            async_to_sync(channel_layer.group_send)(
+                f"file_transfer_{transfer_id}",
+                {
+                    'type': 'transfer_progress',
+                    'filename': filename,
+                    'progress': 100,
+                    'status': '完成',
+                    'transferred': file_size,
+                    'total': file_size,
+                    'speed': 0
+                }
+            )
 
         except Exception as e:
             logger.error('文件下载错误: %s', str(e))
@@ -570,7 +534,10 @@ class FileDownloadView(APIView):
                     'type': 'transfer_progress',
                     'filename': filename,
                     'progress': 0,
-                    'status': '失败'
+                    'status': '失败',
+                    'transferred': 0,
+                    'total': file_size,
+                    'speed': 0
                 }
             )
         finally:
@@ -579,58 +546,34 @@ class FileDownloadView(APIView):
             if ssh_client:
                 ssh_client.close()
 
-class FileDeleteView(APIView):
-    """删除服务器上的文件。"""
-
-    def delete(self, request, host_id):
-        filename = request.GET.get('filename')
-        if not filename:
-            return Response({'error': '未指定文件名'}, status=status.HTTP_400_BAD_REQUEST)
-
-        path = request.GET.get('path', '.')
-        host = get_object_or_404(Host, id=host_id)
-        credential = get_object_or_404(Credential, id=host.account_type.id)
-
+# 添加新的视图函数来处理文件下载
+class FileDownloadContentView(APIView):
+    def get(self, request, transfer_id):
         try:
-            ssh_client = paramiko.SSHClient()
-            ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
-            if credential.type == '密码':
-                ssh_client.connect(
-                    host.network,
-                    port=host.port,
-                    username=credential.account,
-                    password=credential.password,
-                    timeout=10
-                )
-            elif credential.type == '密钥':
-                key_file = io.StringIO(credential.key)
-                pkey = paramiko.RSAKey.from_private_key(key_file, password=credential.key_password)
-                ssh_client.connect(
-                    host.network,
-                    port=host.port,
-                    username=credential.account,
-                    pkey=pkey,
-                    timeout=10
-                )
-            else:
-                return Response({'error': '不支持的凭据类型'}, status=status.HTTP_400_BAD_REQUEST)
-
-            sftp_client = ssh_client.open_sftp()
-
-            remote_path = os.path.join(path, filename)
-
-            # 判断是文件还是目录
-            file_attr = sftp_client.lstat(remote_path)
-            if stat.S_ISDIR(file_attr.st_mode):
-                sftp_client.rmdir(remote_path)
-            else:
-                sftp_client.remove(remote_path)
-
-            sftp_client.close()
-            ssh_client.close()
-            return Response({'message': '文件删除成功'})
-
+            # 获取临时文件路径
+            temp_file_path = f'/tmp/download_{transfer_id}'  # 使用 transfer_id 作为临时文件名
+            
+            if not os.path.exists(temp_file_path):
+                return Response({'error': '文件不存在或已过期'}, status=status.HTTP_404_NOT_FOUND)
+            
+            # 读取文件并返回
+            response = FileResponse(
+                open(temp_file_path, 'rb'),
+                as_attachment=True,
+                filename=os.path.basename(temp_file_path)
+            )
+            
+            # 设置响应头
+            response['Content-Type'] = 'application/octet-stream'
+            
+            return response
+            
         except Exception as e:
-            logger.error('文件删除错误: %s', str(e))
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+            logger.error('文件下载错误: %s', str(e))
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        finally:
+            # 清理临时文件
+            try:
+                os.unlink(temp_file_path)
+            except:
+                pass 

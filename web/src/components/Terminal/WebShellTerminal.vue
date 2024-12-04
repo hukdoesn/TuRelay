@@ -46,7 +46,7 @@
                 <icon-font type="icon-wenjianguanli" class="file-manager-icon" />
                 文件管理
               </a-button>
-              <!-- 重新连接按钮 -->
+              <!-- 重新连���按钮 -->
               <a-button type="text" class="reconnect-button" @click="reconnectTerminal">
                 <icon-font type="icon-shuaxin2" class="reconnect-icon" />
                 重新连接
@@ -87,11 +87,6 @@
           <a-button @click="downloadSelectedFiles" :disabled="selectedFileKeys.length === 0"
             class="action-button spacing">
             下载
-          </a-button>
-          <!-- 删除按钮 -->
-          <a-button @click="deleteSelectedFiles" :disabled="selectedFileKeys.length === 0"
-            class="action-button spacing">
-            删除
           </a-button>
           <!-- 新增进度按钮 -->
           <a-button @click="showProgressModal" class="action-button spacing">
@@ -151,6 +146,7 @@ import WebrdsTerminal from './WebrdpTerminal.vue'; // 引入新的 WebrdsTermina
 import { WebglAddon } from 'xterm-addon-webgl';
 import { SearchAddon } from 'xterm-addon-search';
 import { useRouter } from 'vue-router';  // 引入 useRouter
+import { message } from 'ant-design-vue';
 
 // 声明响应式变量
 const treeData = ref([]);
@@ -434,7 +430,7 @@ const addTabWithUniqueName = (title, hostId, connectionType) => {
   let baseTitle = title;
   let index = 0;
 
-  // 确保标签名称唯一
+  // 确保标签名一
   while (tabs.value.find((tab) => tab.title === title)) {
     index += 1;
     title = `${baseTitle}(${index})`;
@@ -731,24 +727,28 @@ const formatSpeed = (bytesPerSecond) => {
 
 // 修改下载文件处理函数
 const downloadSelectedFiles = async () => {
-  for (const filename of selectedFileKeys.value) {
+  // 过滤出非目录的文件
+  const filesToDownload = selectedFileKeys.value.filter(filename => {
+    const file = fileList.value.find(f => f.filename === filename);
+    return file && !file.is_directory;
+  });
+
+  if (filesToDownload.length === 0) {
+    message.warning('请选择要下载的文件，不能下载目录');
+    return;
+  }
+
+  for (const filename of filesToDownload) {
     const taskIndex = addTransferTask(filename, 'download');
     try {
       const uniqueTabKey = activeTabKey.value;
       const hostId = originalHostIds[uniqueTabKey];
       
-      // 发起下载请求，设置较长的超时时间
+      // 发起下载请求，获取 transfer_id
       const response = await axios.get(`/api/terminal/download/${hostId}/`, {
         params: {
           filename,
           path: currentPath.value,
-        },
-        timeout: 3600000, // 1小时超时
-        responseType: 'blob',
-        onDownloadProgress: (progressEvent) => {
-          // 下载进度处理
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          updateTaskProgress(taskIndex, percentCompleted, '进行中');
         }
       });
 
@@ -756,66 +756,66 @@ const downloadSelectedFiles = async () => {
       const token = localStorage.getItem('accessToken');
       const ws = new WebSocket(`${wsServerAddress}/ws/file_transfer/${response.data.transfer_id}/?token=${token}`);
       
-      ws.onmessage = (event) => {
+      ws.onmessage = async (event) => {
         const data = JSON.parse(event.data);
         if (data.type === 'progress') {
-          updateTaskProgress(taskIndex, data.progress, data.status);
+          // 更新传输任务状态
+          if (transferTasks.value[taskIndex]) {
+            transferTasks.value[taskIndex] = {
+              ...transferTasks.value[taskIndex],
+              progress: data.progress,
+              status: data.status,
+              speed: formatSpeed(data.speed),
+              transferred: formatSize(data.transferred),
+              total: formatSize(data.total)
+            };
+          }
+
           if (data.status === '完成') {
             ws.close();
-            // 处理文件下载
-            const blob = new Blob([response.data]);
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // 下载完成后，获取文件内容并触发下载
+            try {
+              const downloadResponse = await axios.get(`/api/terminal/download_file/${response.data.transfer_id}/`, {
+                responseType: 'blob'
+              });
+              
+              const blob = new Blob([downloadResponse.data]);
+              const url = window.URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.setAttribute('download', filename);
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(url);
+            } catch (error) {
+              console.error('下载文件失败:', error);
+              message.error(`下载文件 ${filename} 失败`);
+            }
           } else if (data.status === '失败') {
             ws.close();
-            console.error('下载失败');
+            message.error(`下载文件 ${filename} 失败`);
           }
         }
       };
 
       ws.onerror = () => {
         updateTaskProgress(taskIndex, 0, '失败');
-        console.error('WebSocket连接失败');
+        message.error(`下载文件 ${filename} 失败`);
       };
 
     } catch (error) {
       console.error('下载文件失败:', error);
       updateTaskProgress(taskIndex, 0, '失败');
+      message.error(`下载文件 ${filename} 失败`);
     }
-  }
-};
-
-// 删除选中的文件
-const deleteSelectedFiles = async () => {
-  try {
-    const uniqueTabKey = activeTabKey.value;
-    const hostId = originalHostIds[uniqueTabKey];
-    for (const filename of selectedFileKeys.value) {
-      await axios.delete(`/api/terminal/delete/${hostId}/`, {
-        params: {
-          filename,
-          path: currentPath.value,
-        },
-      });
-    }
-    // 删除成功后刷新文件列表
-    await loadFileList();
-    // 清空选中的文件
-    selectedFileKeys.value = [];
-  } catch (error) {
-    console.error('删除文件失败:', error);
   }
 };
 
 // 返回上一级目录
 const goBack = async () => {
   if (currentPath.value !== '/') {
-    // 移除当前路径的最后一个目录
+    // 移除��前路径的最后一个目录
     let newPath = currentPath.value.replace(/\/$/, ''); // 移除末尾的斜杠
     newPath = newPath.substring(0, newPath.lastIndexOf('/')); // 去掉最后一个目录
     if (newPath === '') {
@@ -1025,7 +1025,7 @@ const formatSize = (bytes) => {
   width: 50%;
   /* 将下划线宽度设置为50% */
   height: 2px;
-  /* 下划线的厚度 */
+  /* 下线的厚度 */
   background-color: #428DFF;
 }
 
@@ -1246,7 +1246,26 @@ const formatSize = (bytes) => {
 
 .progress-list {
   max-height: 400px;
-  overflow: hidden;  /* 移除滚动条 */
+  overflow-y: auto;     /* 允许垂直滚动 */
+  overflow-x: hidden;   /* 禁用水平滚动 */
+}
+
+/* 自定义滚动条样式 */
+.progress-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.progress-list::-webkit-scrollbar-track {
+  background: #1f1f1f;
+}
+
+.progress-list::-webkit-scrollbar-thumb {
+  background: #303030;
+  border-radius: 2px;
+}
+
+.progress-list::-webkit-scrollbar-thumb:hover {
+  background: #404040;
 }
 
 .progress-item {
@@ -1254,6 +1273,8 @@ const formatSize = (bytes) => {
   padding: 12px;
   background-color: #141414;
   border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .progress-info {

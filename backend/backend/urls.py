@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, MFABindView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, FileDeleteView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView, dashboard_statistics, login_statistics, LogoutView
+from apps.views import LoginView, MFABindView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView, dashboard_statistics, login_statistics, LogoutView, FileDownloadContentView
 from apps.views.system_settings import SystemSettingsView
 
 urlpatterns = [
@@ -36,7 +36,6 @@ urlpatterns = [
     path('api/terminal/files/<str:host_id>/', FileListView.as_view()),
     path('api/terminal/upload/<str:host_id>/', FileUploadView.as_view()),
     path('api/terminal/download/<str:host_id>/', FileDownloadView.as_view()),
-    path('api/terminal/delete/<str:host_id>/', FileDeleteView.as_view()),
     path('api/command_logs/', CommandLogView.as_view(), name='command_logs'),
     path('api/alert_contacts/', AlertContactView.as_view(), name='alert_contacts-list'),
     path('api/alert_contacts/create/', AlertContactView.as_view(), name='alert_contacts-create'),
@@ -56,4 +55,5 @@ urlpatterns = [
     path('api/dashboard/statistics/', dashboard_statistics, name='dashboard-statistics'),
     path('api/dashboard/login_statistics/<str:days>/', login_statistics, name='login-statistics'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('api/terminal/download_file/<str:transfer_id>/', FileDownloadContentView.as_view()),
 ]
