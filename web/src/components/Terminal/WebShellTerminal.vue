@@ -91,7 +91,6 @@
           <!-- 删除按钮 -->
           <a-button @click="deleteSelectedFiles" :disabled="selectedFileKeys.length === 0"
             class="action-button spacing">
-            <DeleteOutlined />
             删除
           </a-button>
         </div>
