@@ -287,7 +287,9 @@ SESSION_TIMEOUT_MINUTES = 30  # 会话超时时间30分钟
 
 # 文件传输相关配置
 FILE_TRANSFER = {
-    'MAX_UPLOAD_SIZE': 1024 * 1024 * 1024,  # 1GB 最大上传大小
-    'CHUNK_SIZE': 8192,  # 8KB 传输块大小
+    'MAX_UPLOAD_SIZE': 2 * 1024 * 1024 * 1024,  # 2GB 最大上传大小
+    'CHUNK_SIZE': 32 * 1024 * 1024,  # 改为 32MB 的传输块大小
+    'BUFFER_SIZE': 1024 * 1024,  # 改为 1MB 的缓冲区大小
+    'PROGRESS_UPDATE_INTERVAL': 2,  # 每2%更新一次进度
     'TIMEOUT': SESSION_TIMEOUT_MINUTES * 60,  # 使用会话超时时间作为传输超时时间(秒)
 }

@@ -119,6 +119,10 @@
             <span class="filename">{{ item.filename }}</span>
             <span class="status">{{ item.status }}</span>
           </div>
+          <div class="transfer-details">
+            <span>{{ item.transferred }} / {{ item.total }}</span>
+            <span>{{ item.speed }}</span>
+          </div>
           <a-progress
             :percent="item.progress"
             :status="getProgressStatus(item.status)"
@@ -413,7 +417,7 @@ const switchTab = async (uniqueTabKey) => {
   currentConnectionType.value = connectionTypes[uniqueTabKey];
 };
 
-// 重新连接指定的终端
+// 重新连��指定的终端
 const reconnectTerminal = () => {
   const uniqueTabKey = activeTabKey.value;
   if (sockets[uniqueTabKey]) sockets[uniqueTabKey].close();
@@ -663,7 +667,7 @@ const updateTaskProgress = (index, progress, status = '进行中') => {
 };
 
 // 修改上传文件处理函数
-const handleUpload = async ({ file, onSuccess, onError }) => {
+const handleUpload = async ({ file }) => {
   const taskIndex = addTransferTask(file.name, 'upload');
   try {
     const uniqueTabKey = activeTabKey.value;
@@ -672,15 +676,10 @@ const handleUpload = async ({ file, onSuccess, onError }) => {
     formData.append('file', file);
     formData.append('path', currentPath.value);
 
-    // 发起上传请求，设置较长的超时时间
+    // 发起上传请求
     const response = await axios.post(`/api/terminal/upload/${hostId}/`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
-      timeout: 3600000, // 1小时超时
-      onUploadProgress: (progressEvent) => {
-        // 上传进度处理
-        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        updateTaskProgress(taskIndex, percentCompleted, '进行中');
-      }
+      timeout: 3600000 // 1小时超时
     });
 
     // 建立WebSocket连接监听进度
@@ -690,28 +689,43 @@ const handleUpload = async ({ file, onSuccess, onError }) => {
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === 'progress') {
-        updateTaskProgress(taskIndex, data.progress, data.status);
+        // 更新传输任务状态
+        if (transferTasks.value[taskIndex]) {
+          transferTasks.value[taskIndex] = {
+            ...transferTasks.value[taskIndex],
+            progress: data.progress,
+            status: data.status,
+            speed: formatSpeed(data.speed),
+            transferred: formatSize(data.transferred),
+            total: formatSize(data.total)
+          };
+        }
+
         if (data.status === '完成') {
           ws.close();
           loadFileList();
-          onSuccess(null, file);
         } else if (data.status === '失败') {
           ws.close();
-          onError(new Error('上传失败'));
         }
       }
     };
 
     ws.onerror = () => {
       updateTaskProgress(taskIndex, 0, '失败');
-      onError(new Error('WebSocket连接失败'));
     };
 
   } catch (error) {
     console.error('上传文件失败:', error);
     updateTaskProgress(taskIndex, 0, '失败');
-    onError(error);
   }
+};
+
+// 添加格式化速度的函数
+const formatSpeed = (bytesPerSecond) => {
+  if (bytesPerSecond === 0) return '0 B/s';
+  const units = ['B/s', 'KB/s', 'MB/s', 'GB/s'];
+  const i = Math.floor(Math.log(bytesPerSecond) / Math.log(1024));
+  return `${(bytesPerSecond / Math.pow(1024, i)).toFixed(2)} ${units[i]}`;
 };
 
 // 修改下载文件处理函数
@@ -858,6 +872,14 @@ const getProgressColor = (status) => {
     default:
       return '#1890ff';
   }
+};
+
+// 添加格式化文件大小的函数
+const formatSize = (bytes) => {
+  if (bytes === 0) return '0 B';
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${units[i]}`;
 };
 </script>
 
@@ -1266,5 +1288,14 @@ const getProgressColor = (status) => {
 /* 添加校验中状态的样式 */
 :deep(.ant-progress-status-active .ant-progress-bg) {
   background-color: #faad14 !important;
+}
+
+/* 添加传输详情样式 */
+.transfer-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #ffffffD9;
 }
 </style>

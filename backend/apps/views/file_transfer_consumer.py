@@ -54,5 +54,8 @@ class FileTransferConsumer(AsyncWebsocketConsumer):
             'type': 'progress',
             'filename': event['filename'],
             'progress': event['progress'],
-            'status': event['status']
+            'status': event['status'],
+            'transferred': event.get('transferred', 0),  # 添加已传输字节数
+            'total': event.get('total', 0),  # 添加总字节数
+            'speed': event.get('speed', 0)  # 添加传输速度
         })) 

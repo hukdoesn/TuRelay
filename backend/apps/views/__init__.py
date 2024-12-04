@@ -8,7 +8,7 @@ from .monitor_views import DomainMonitorView
 from .host import HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView
 from .consumers import SSHConsumer
 from .terminal_tree import get_tree_structure
-from .consumers import FileListView, FileUploadView, FileDownloadView, FileDeleteView
+from .file_management import FileListView, FileUploadView, FileDownloadView, FileDeleteView
 from .rdp_consumers import GuacamoleConsumer
 from .command_log import CommandLogView
 from .alert_contacts import AlertContactView
