@@ -72,7 +72,7 @@ const columns = [
         dataIndex: 'module',
         width: 130,
         customRender: ({ text }) => h(Tag, { 
-            // color: 'processing',
+            color: 'rgba(22, 119, 255, 0.8)',
             style: {  },
             bordered: false
         }, () => h('span', text))

@@ -66,7 +66,7 @@ const columns = [
         dataIndex: 'hosts',
         width: 170,
         customRender: ({ text }) => h(Tag, { 
-            color: 'processing',
+            color: 'rgba(22, 119, 255, 0.8)',
             style: {  },
             bordered: false
         }, () => h('span', text))

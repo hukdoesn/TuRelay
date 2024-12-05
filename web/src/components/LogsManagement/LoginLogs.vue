@@ -80,7 +80,7 @@ const columns = [
         dataIndex: 'login_status',
         width: 120,
         customRender: ({ text }) => h(Tag, {
-            color: text === 1 ? 'processing' : 'error',
+            color: text === 1 ? 'rgba(22, 119, 255, 0.8)' : 'rgba(255,77,79,0.8)',
             bordered: false
         }, () => text === 1 ? '成功' : '失败')
     },

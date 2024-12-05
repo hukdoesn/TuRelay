@@ -17,21 +17,24 @@
         <div class="button_create">
             <span>域名监控</span>
             <div class="actions">
-                <a-dropdown-button @click="handleButtonClick" class="dropdown_item">
-                    刷新
+                <a-dropdown-button 
+                    @click="handleButtonClick" 
+                    class="dropdown_item"
+                >
                     <template #icon>
-                        <DownOutlined v-if="!selectedRefreshInterval" />
-                        <span v-else>{{ selectedRefreshInterval }}</span>
+                        <SyncOutlined :class="{ 'icon-spin': isRefreshing }" />
                     </template>
+                    {{ selectedRefreshInterval || '刷新' }}
                     <template #overlay>
                         <a-menu @click="handleMenuClick">
-                            <a-menu-item key="10">10s</a-menu-item>
-                            <a-menu-item key="30">30s</a-menu-item>
-                            <a-menu-item key="60">1m</a-menu-item>
-                            <a-menu-item key="300">5m</a-menu-item>
-                            <a-menu-item key="600">10m</a-menu-item>
-                            <a-menu-item key="1800">30m</a-menu-item>
-                            <a-menu-item key="3600">1h</a-menu-item>
+                            <a-menu-item key="0">不刷新</a-menu-item>
+                            <a-menu-item key="10">10秒</a-menu-item>
+                            <a-menu-item key="30">30秒</a-menu-item>
+                            <a-menu-item key="60">1分钟</a-menu-item>
+                            <a-menu-item key="300">5分钟</a-menu-item>
+                            <a-menu-item key="600">10分钟</a-menu-item>
+                            <a-menu-item key="1800">30分钟</a-menu-item>
+                            <a-menu-item key="3600">1小时</a-menu-item>
                         </a-menu>
                     </template>
                 </a-dropdown-button>
@@ -106,9 +109,9 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, h } from 'vue';
+import { ref, reactive, onMounted, h, onUnmounted } from 'vue';
 import { message, Tag, Modal, Popconfirm } from 'ant-design-vue';
-import { DownOutlined } from '@ant-design/icons-vue';
+import { DownOutlined, SyncOutlined } from '@ant-design/icons-vue';
 import { useRouter } from 'vue-router';  // 添加路由导入
 import axios from 'axios';
 import { showPermissionWarning } from '@/components/Global/PermissonWarning.vue';
@@ -178,20 +181,48 @@ const refreshInterval = ref('10秒');  // 默认显示10秒
 const selectedRefreshInterval = ref('');  // 用于存储已选择的刷新间隔值
 let refreshTimer = null;  // 定时器，用于定时刷新页面
 
+const isRefreshing = ref(false); // 控制刷新图标旋转
+
 // 处理下拉菜单点击事件，设置刷新间隔并显示选择的值
-const handleMenuClick = ({ domEvent }) => {
-    const selectedValue = domEvent.target.innerText;  // 获取选中的显示值，如 "10s", "1m", "1h" 等
-    selectedRefreshInterval.value = selectedValue;  // 更新显示的刷新间隔值
+const handleMenuClick = ({ key }) => {
+    if (key === '0') {
+        // 选择不刷新
+        selectedRefreshInterval.value = '不刷新';
+        if (refreshTimer) {
+            clearInterval(refreshTimer);
+            refreshTimer = null;
+        }
+        return;
+    }
+
+    // 转换显示文本
+    const intervalMap = {
+        '10': '10秒',
+        '30': '30秒',
+        '60': '1分钟',
+        '300': '5分钟',
+        '600': '10分钟',
+        '1800': '30分钟',
+        '3600': '1小时'
+    };
+    
+    selectedRefreshInterval.value = intervalMap[key];
 
     // 清除之前的定时器
     if (refreshTimer) {
         clearInterval(refreshTimer);
     }
 
-    // 根据选择的间隔值设置定时刷新
-    const intervalInMs = convertToMilliseconds(selectedValue);
+    // 设置新的定时器
+    const intervalInMs = parseInt(key) * 1000;
     refreshTimer = setInterval(() => {
-        fetchMonitors();  // 定时刷新页面
+        isRefreshing.value = true;
+        fetchMonitors().finally(() => {
+            // 延迟1秒后停止旋转
+            setTimeout(() => {
+                isRefreshing.value = false;
+            }, 1000);
+        });
     }, intervalInMs);
 };
 
@@ -213,9 +244,17 @@ const convertToMilliseconds = (interval) => {
 };
 
 // 处理下拉菜单按钮点击事件（如有需要，可以在此函数中添加额外逻辑）
-const handleButtonClick = () => {
-    message.info(`已刷新,当前选择的定时刷新为：${selectedRefreshInterval.value || '未选择'}`);
-    fetchMonitors();
+const handleButtonClick = async () => {
+    isRefreshing.value = true;
+    try {
+        await fetchMonitors();
+        message.success(`已刷新${selectedRefreshInterval.value ? `,当前选择的定时刷新为：${selectedRefreshInterval.value}` : ''}`);
+    } finally {
+        // 延迟1秒后停止旋转，让动画效果更明显
+        setTimeout(() => {
+            isRefreshing.value = false;
+        }, 1000);
+    }
 };
 
 // 权限检查函数
@@ -274,7 +313,7 @@ const resetEditForm = () => {
     editForm.alert = false;
 };
 
-// 新建监控的提交处理函数
+// 新建监控提交处理函数
 const handleCreateOk = () => {
     checkPermission(() => {
         createFormRef.value.validate().then(async () => {
@@ -358,7 +397,11 @@ const columns = [
         dataIndex: 'connectivity',
         width: 100,
         customRender({ text }) {
-            return h(Tag, { color: text ? 'rgba(56,158,13,0.8)' : 'rgba(255,77,79,0.8)' }, { default: () => text ? '可连接' : '不可连接' });
+            return h(Tag, { 
+                color: text ? 'rgba(56,158,13,0.8)' : 'rgba(255,77,79,0.8)' 
+            }, { 
+                default: () => text ? '可连接' : '不可连接' 
+            });
         }
     },
     {
@@ -371,7 +414,11 @@ const columns = [
         dataIndex: 'redirection',
         width: 90,
         customRender({ text }) {
-            return h(Tag, { color: text ? 'blue' : 'default' }, { default: () => text ? '有' : '无' });
+            return h(Tag, { 
+                color: text ? 'rgba(22,119,255,0.8)' : 'rgba(144,147,153,0.8)' 
+            }, { 
+                default: () => text ? '是' : '否' 
+            });
         }
     },
     {
@@ -393,6 +440,36 @@ const columns = [
         title: '证书剩余天数',
         dataIndex: 'certificate_days',
         width: 100,
+        customRender({ text }) {
+            // 如果天数为 null，显示灰色的 N/A
+            if (text === null) {
+                return h(Tag, { 
+                    color: 'rgba(144,147,153,0.8)' 
+                }, { 
+                    default: () => 'N/A' 
+                });
+            }
+
+            // 根据剩余天数返回不同颜色的标签
+            let color;
+            let textDisplay = `${text}天`;
+
+            if (text <= 7) {
+                // 7天内过期显示红色
+                color = 'rgba(255,77,79,0.8)';
+            } else if (text <= 30) {
+                // 30天内过期显示橙色
+                color = 'rgba(250,173,20,0.8)';
+            } else if (text <= 90) {
+                // 90天内过期显示蓝色
+                color = 'rgba(22,119,255,0.8)';
+            } else {
+                // 大于90天显示绿色
+                color = 'rgba(56,158,13,0.8)';
+            }
+
+            return h(Tag, { color }, { default: () => textDisplay });
+        }
     },
     {
         title: '监控频率(秒)',
@@ -400,11 +477,15 @@ const columns = [
         width: 100,
     },
     {
-        title: '是否告警',
+        title: '是否开启告警',
         dataIndex: 'alert',
         width: 90,
         customRender({ text }) {
-            return h(Tag, { color: text ? 'processing' : 'default' }, { default: () => text ? '是' : '否' });
+            return h(Tag, { 
+                color: text ? 'rgba(250,173,20,0.8)' : 'rgba(144,147,153,0.8)' 
+            }, { 
+                default: () => text ? '是' : '否' 
+            });
         }
     },
     {
@@ -477,7 +558,7 @@ const handleDeleteMonitor = async (id) => {
     })
 };
 
-// 处理表格分页和排序变化
+// 处理表格分页和排序变
 const handleTableChange = (pagination) => {
     paginationOptions.current = pagination.current;
     paginationOptions.pageSize = pagination.pageSize;
@@ -500,6 +581,13 @@ onMounted(() => {
 const viewDetail = (id) => {
   router.push(`/asset-management/websites/${id}`);
 };
+
+// 在组件卸载时清理定时器
+onUnmounted(() => {
+    if (refreshTimer) {
+        clearInterval(refreshTimer);
+    }
+});
 </script>
 
 
@@ -543,12 +631,32 @@ const viewDetail = (id) => {
 }
 
 .dropdown_item {
-    margin-right: 0;
-    /* Adjust margin as needed */
+    display: flex;
+    align-items: center;
 }
 
-:where(.css-dev-only-do-not-override-19iuou).ant-btn {
-    font-size: 12px;
+.dropdown_item .anticon {
+    font-size: 14px;
+    margin-left: 4px;
+}
+
+/* 添加旋转动画 */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.icon-spin {
+    animation: spin 1s linear;
+}
+
+/* 移除 Ant Design 按钮的 loading 效果 */
+.ant-btn-loading-icon {
+    display: none !important;
 }
 
 /* 修改 input的addonBefore 和 placeholder 的字体大小 */
