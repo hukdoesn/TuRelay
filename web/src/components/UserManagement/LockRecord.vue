@@ -101,7 +101,7 @@ const columns = [
         title: '最后尝试时间',
         dataIndex: 'last_attempt_time',
         width: 170,
-        customRender: ({ text }) => text || '暂无记录'  // 如果是 null 则显示"暂无记录"
+        customRender: ({ text }) => text || 'N/A'  // 如果是 null 则显示"N/A"
     }
 ]
 

@@ -256,7 +256,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
                 command=command_to_save,
                 hosts=self.host.name,
                 network=self.host.network,
-                credential=self.credential.account,
+                credential=self.credential.name,
                 create_time=datetime.datetime.now()
             )
             logger.info(f'命令已记录: 用户={self.username}, 主机={self.host.name}, 命令={command_to_save}')
