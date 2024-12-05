@@ -6,27 +6,6 @@
     </div>
     <!-- 右边的操作区域 -->
     <div style="padding: 0 16px; display: flex; align-items: center; gap: 16px;">
-      <!-- 关于下拉菜单 -->
-      <a-dropdown>
-        <a href="javascript:;" class="ant-dropdown-link" style="color: inherit;">
-          <img width="18" height="18" src="https://img.icons8.com/parakeet-line/48/info.png" alt="info"/>
-        </a>
-        <template #overlay>
-          <a-menu>
-            <a-menu-item>
-              <a href="javascript:;" @click="openDocs">文档</a>
-            </a-menu-item>
-            <a-menu-item>
-              <a href="javascript:;" @click="openSupport">支持</a>
-            </a-menu-item>
-            <a-menu-divider />
-            <a-menu-item>
-              <a href="javascript:;" @click="goToAbout">关于</a>
-            </a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
-
       <!-- 终端图标按钮 -->
       <a-button type="link" @click="goToTerminal" style="display: flex; align-items: center; padding: 0;">
         <img width="18" height="18" src="https://img.icons8.com/parakeet-line/48/code.png" alt="code"/>
