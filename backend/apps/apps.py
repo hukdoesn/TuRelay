@@ -6,5 +6,18 @@ class AppsConfig(AppConfig):
 
     def ready(self):
         # Import the scheduler and start it within the ready method
-        from .scheduler import start_scheduler
+        from .scheduler import start_scheduler, add_task
+        from apps.views import HostMonitorTask
+        # from .tasks.host_monitor import HostMonitorTask
+        
+        # 启动调度器
         start_scheduler()
+        
+        # 添加主机监控任务（每10秒执行一次）
+        add_task(
+            HostMonitorTask,
+            HostMonitorTask.monitor_hosts,
+            'host_monitor',
+            '主机连接探测',
+            10
+        )
