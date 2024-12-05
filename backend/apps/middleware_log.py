@@ -28,7 +28,8 @@ class OperationLogMiddleware(MiddlewareMixin):
     # 添加白名单路径
     WHITELIST_PATHS = [
         '/api/login/',
-        '/api/mfa/bind/',  # 添加MFA绑定路径到白名单
+        '/api/mfa/bind/', 
+        '/api/logout/'
     ]
 
     def process_view(self, request, view_func, view_args, view_kwargs):

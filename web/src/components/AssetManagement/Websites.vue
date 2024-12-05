@@ -358,7 +358,7 @@ const columns = [
         dataIndex: 'connectivity',
         width: 100,
         customRender({ text }) {
-            return h(Tag, { color: text ? 'green' : 'error' }, { default: () => text ? '可连接' : '不可连接' });
+            return h(Tag, { color: text ? 'rgba(56,158,13,0.8)' : 'rgba(255,77,79,0.8)' }, { default: () => text ? '可连接' : '不可连接' });
         }
     },
     {

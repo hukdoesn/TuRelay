@@ -266,7 +266,7 @@ const columns = [
                 roleName,
                 description ? h('span', [
                     '\u00A0\u00A0',  // 添加两个不间断空格
-                    h(Tag, { bordered: false, color: '' }, () => h('span', { style: { fontSize: '10px' } }, description))  // 设置字体大小为14px
+                    h(Tag, { bordered: false, color: 'rgba(22, 119, 255, 0.8)' }, () => h('span', { style: { fontSize: '10px' } }, description))  // 设置字体大小为14px
                 ]) : null
             ]);
         }

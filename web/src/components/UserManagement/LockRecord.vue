@@ -69,7 +69,7 @@ const columns = [
             // color: 'rgba(22, 119, 255, 0.8)',
             // color: 'processing',
             style: { },
-            bordered: false,
+            // bordered: false,
         }, () => `${text} 次`)  // 将“次”附加到文本值
     },
     {
@@ -80,7 +80,7 @@ const columns = [
             // color: 'rgba(22, 119, 255, 0.8)',
             // color: 'processing',
             style: { },
-            bordered: false,
+            // bordered: false,
         }, () => `${text} 次`)  // 将“次”附加到文本值
     },
 
