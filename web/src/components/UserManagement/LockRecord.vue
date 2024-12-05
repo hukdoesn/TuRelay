@@ -20,7 +20,7 @@
 
 <script setup>
 import { ref, reactive, h , onMounted } from 'vue' 
-import { message, Badge, Tag } from 'ant-design-vue';
+import { message, Badge } from 'ant-design-vue';
 import axios from 'axios';  // 引入axios用于请求后端API
 
 //  表格数据
@@ -65,23 +65,13 @@ const columns = [
         title: '失败登录次数',
         dataIndex: 'login_count',
         width: 120,
-        customRender: ({ text }) => h(Tag, { 
-            // color: 'rgba(22, 119, 255, 0.8)',
-            // color: 'processing',
-            style: { },
-            // bordered: false,
-        }, () => `${text} 次`)  // 将“次”附加到文本值
+        customRender: ({ text }) => `${text} 次`  // 移除 Tag，直接返回文本
     },
     {
         title: '锁定',
         dataIndex: 'lock_count',
         width: 120,
-        customRender: ({ text }) => h(Tag, { 
-            // color: 'rgba(22, 119, 255, 0.8)',
-            // color: 'processing',
-            style: { },
-            // bordered: false,
-        }, () => `${text} 次`)  // 将“次”附加到文本值
+        customRender: ({ text }) => `${text} 次`  // 移除 Tag，直接返回文本
     },
 
     {
@@ -101,7 +91,7 @@ const columns = [
         title: '最后尝试时间',
         dataIndex: 'last_attempt_time',
         width: 170,
-        customRender: ({ text }) => text || 'N/A'  // 如果是 null 则显示"N/A"
+        customRender: ({ text }) => text || '暂无记录'  // 如果是 null 则显示"暂无记录"
     }
 ]
 
