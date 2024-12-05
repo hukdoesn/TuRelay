@@ -71,11 +71,6 @@ const columns = [
         title: '操作模块',
         dataIndex: 'module',
         width: 130,
-        customRender: ({ text }) => h(Tag, { 
-            color: 'rgba(22, 119, 255, 0.8)',
-            style: {  },
-            bordered: false
-        }, () => h('span', text))
     },
     {
         title: '请求接口',
@@ -86,6 +81,37 @@ const columns = [
         title: '请求方法',
         dataIndex: 'request_method',
         width: 120,
+        customRender: ({ text }) => {
+            // 根据不同的请求方法设置不同的颜色
+            let color;
+            switch (text.toUpperCase()) {
+                case 'GET':
+                    color = 'rgba(19,194,194,0.8)';
+                    break;
+                case 'POST':
+                    color = 'rgba(82,196,26,0.8)';
+                    break;
+                case 'PUT':
+                    color = 'rgba(22,119,255,0.8)'
+                    break;
+                case 'DELETE':
+                    color = 'rgba(245,34,45,0.8)';
+                    break;
+                case 'PATCH':
+                    color = 'purple';
+                    break;
+                default:
+                    color = 'default';
+            }
+            return h(Tag, { 
+                color: color,
+                style: { 
+                    fontSize: '12px',
+                    padding: '0 8px',
+                },
+                bordered: false
+            }, () => text)
+        }
     },
     {
         title: 'IP地址',
@@ -132,7 +158,7 @@ const fetchOperationLogs = async () => {
                 page: paginationOptions.current,
                 page_size: paginationOptions.pageSize,
                 username: filters.username,  // 将用户名筛选条件发送到后端
-                request_method: filters.request_method,  // 将请求方法筛选条件发送到后端
+                request_method: filters.request_method,  // 发送用户输入的请求方法
             }
         })
         
@@ -169,22 +195,36 @@ const resetFilters = () => {
 const showDetails = (record) => {
     Modal.info({
         title: '操作详情',
-        width: 800,  // 设置模态框宽度
+        width: '80%',  // 使用百分比宽度
+        class: 'operation-log-modal',  // 添加自定义类名
         content: h(Table, {
             columns: [
-                { title: '变更前', dataIndex: 'before' },
-                { title: '变更后', dataIndex: 'after' }
+                { 
+                    title: '变更前', 
+                    dataIndex: 'before',
+                    width: '50%',  // 设置列宽
+                },
+                { 
+                    title: '变更后', 
+                    dataIndex: 'after',
+                    width: '50%',  // 设置列宽
+                }
             ],
             dataSource: [
                 {
                     key: '1',
-                    before: h('pre', {}, JSON.stringify(JSON.parse(record.before_change || '{}'), null, 2)),
-                    after: h('pre', {}, JSON.stringify(JSON.parse(record.after_change || '{}'), null, 2))
+                    before: h('pre', { class: 'json-content' }, JSON.stringify(JSON.parse(record.before_change || '{}'), null, 2)),
+                    after: h('pre', { class: 'json-content' }, JSON.stringify(JSON.parse(record.after_change || '{}'), null, 2))
                 }
             ],
-            pagination: false,  // 不显示分页
-            bordered: true
+            pagination: false,
+            bordered: true,
+            scroll: { x: true },  // 添加水平滚动
         }),
+        style: {
+            maxWidth: '1200px',  // 设置最大宽度
+            top: '50px',  // 距离顶部的距离
+        },
         onOk() {}
     });
 }
@@ -231,5 +271,47 @@ onMounted(() => {
 .ant-input::placeholder,
 .ant-table-thead {
     font-size: 12px !important;
+}
+
+/* 添加新的样式 */
+.operation-log-modal {
+    /* Modal 样式 */
+    min-width: 800px;  /* 最小宽度 */
+}
+
+.operation-log-modal .ant-modal-body {
+    max-height: calc(100vh - 200px);  /* 最大高度，减去头部和底部的高度 */
+    overflow-y: auto;  /* 垂直滚动 */
+}
+
+.operation-log-modal .json-content {
+    margin: 0;
+    white-space: pre-wrap;  /* 保留空格和换行 */
+    word-wrap: break-word;  /* 长单词换行 */
+    font-family: monospace;  
+    font-size: 14px;
+    line-height: 1.5;
+    max-height: none !important;  /* 取消最大高度限制 */
+    overflow: visible !important;  /* 允许内容溢出 */
+}
+
+/* 调整表格单元格样式 */
+.operation-log-modal .ant-table-cell {
+    white-space: normal !important;  /* 允许文本换行 */
+    word-break: break-word;  /* 在单词内换行 */
+    vertical-align: top;  /* 顶部对齐 */
+    padding: 16px !important;  /* 增加内边距 */
+}
+
+/* 确保表格能够水平滚动 */
+.operation-log-modal .ant-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* 调整表格内容的最大宽度 */
+.operation-log-modal .ant-table {
+    width: 100%;
+    table-layout: fixed;
 }
 </style>

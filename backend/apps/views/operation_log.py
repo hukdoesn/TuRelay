@@ -24,9 +24,10 @@ class OperationLogView(APIView):
 
         # 根据筛选参数过滤操作日志
         if username:
-            operation_logs = operation_logs.filter(user__username__icontains=username)        # 根据操作用户名进行筛选
+            operation_logs = operation_logs.filter(user__username__icontains=username)        # 根据操作用户名进行筛选，不区分大小写
         if request_method:
-            operation_logs = operation_logs.filter(request_method=request_method)        # 根据操作类型进行筛选
+            # 使用 iregex 进行不区分大小写的正则匹配，确保完全匹配
+            operation_logs = operation_logs.filter(request_method__iregex=f'^{request_method}$')     # 使用正则表达式进行不区分大小写的精确匹配
 
         # 实例化分页器
         paginator = Paginator(operation_logs, page_size)
@@ -43,7 +44,7 @@ class OperationLogView(APIView):
 
             data.append({
                 'id': operation_log.id,
-                'username': user.name,  # 根据用户ID获取用户名
+                'username': user.username,  # 根据用户ID获取用户名
                 'module': operation_log.module,
                 'request_interface': operation_log.request_interface,
                 'request_method': operation_log.request_method,
