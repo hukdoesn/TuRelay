@@ -13,11 +13,12 @@ from django.http import FileResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from apps.models import Host, Credential
+from apps.models import Host, Credential, OperationLog
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.conf import settings
 from concurrent.futures import ThreadPoolExecutor
+from apps.utils import CustomTokenAuthentication, IsAuthenticated
 import time
 
 # 获取日志记录器实例
@@ -28,6 +29,8 @@ file_transfer_executor = ThreadPoolExecutor(max_workers=5)  # 限制最大并发
 
 class FileListView(APIView):
     """获取服务器上的文件列表，包括文件的所有者和所属组信息，以及格式化的文件大小。"""
+    authentication_classes = [CustomTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, host_id):
         # 获取主机和凭据
@@ -170,6 +173,8 @@ class FileListView(APIView):
 
 class FileUploadView(APIView):
     """上传文件到服务器。"""
+    authentication_classes = [CustomTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, host_id):
         uploaded_file = request.FILES.get('file')
@@ -204,17 +209,39 @@ class FileUploadView(APIView):
                 transfer_id
             )
 
+            # 记录操作日志
+            OperationLog.objects.create(
+                user=request.user,  # 已通过认证的用户
+                module='文件管理',
+                request_interface=request.path,
+                request_method=request.method,
+                ip_address=request.META.get('REMOTE_ADDR'),
+                before_change='{}',
+                after_change=json.dumps({
+                    'message': '文件上传',
+                    'filename': uploaded_file.name,
+                    'path': path,
+                    'host_ip': host.network,
+                    'host_name': host.name
+                }, ensure_ascii=False)
+            )
+
             return Response({
                 'message': '开始上传',
-                'transfer_id': transfer_id
+                'path': path,
+                'uploaded_file': uploaded_file.name,
+                'transfer_id': transfer_id,
+                'host_name': host.name,
+                'host_ip': host.network
             })
 
         except Exception as e:
             logger.error('文件上传错误: %s', str(e))
             try:
-                os.unlink(temp_file.name)
-            except:
-                pass
+                if 'temp_file' in locals():
+                    os.unlink(temp_file.name)
+            except Exception as e:
+                logger.error('删除临时文件错误: %s', str(e))
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def upload_task(self, host, credential, temp_file_path, path, filename, transfer_id):
@@ -385,6 +412,8 @@ class FileUploadView(APIView):
 
 class FileDownloadView(APIView):
     """从服务器下载文件。"""
+    authentication_classes = [CustomTokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, host_id):
         filename = request.GET.get('filename')
@@ -408,9 +437,30 @@ class FileDownloadView(APIView):
                 transfer_id
             )
 
+            # 记录操作日志
+            OperationLog.objects.create(
+                user=request.user,  # 已通过认证的用户
+                module='文件管理',
+                request_interface=request.path,
+                request_method=request.method,
+                ip_address=request.META.get('REMOTE_ADDR'),
+                before_change='{}',
+                after_change=json.dumps({
+                    'message': '文件下载',
+                    'filename': filename,
+                    'path': path,
+                    'host_ip': host.network,
+                    'host_name': host.name
+                }, ensure_ascii=False)
+            )
+
             return Response({
                 'message': '开始下载',
-                'transfer_id': transfer_id
+                'transfer_id': transfer_id,
+                'host_name': host.name,
+                'host_ip': host.network,
+                'filename': filename,
+                'path': path
             })
 
         except Exception as e:
@@ -548,6 +598,10 @@ class FileDownloadView(APIView):
 
 # 添加新的视图函数来处理文件下载
 class FileDownloadContentView(APIView):
+    """处理文件下载内容的视图"""
+    authentication_classes = [CustomTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, transfer_id):
         try:
             # 获取临时文件路径
