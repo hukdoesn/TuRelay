@@ -55,8 +55,11 @@
                 <a-form-item label="监控名称" name="name" :rules="[{ required: true, message: '请输入监控名称' }]">
                     <a-input v-model:value="createForm.name" placeholder="请输入监控名称" />
                 </a-form-item>
-                <a-form-item label="域名" name="domain" :rules="[{ required: true, message: '请输入域名' }]">
-                    <a-input v-model:value="createForm.domain" placeholder="请输入域名" />
+                <a-form-item label="域名" name="domain" :rules="[
+                    { required: true, message: '请输入域名' },
+                    { validator: validateDomain }
+                ]">
+                    <a-input v-model:value="createForm.domain" placeholder="不支持http协议域名，例如: example.com 或 https://example.com，" />
                 </a-form-item>
                 <a-form-item label="启用监控" name="enable">
                     <a-switch v-model:checked="createForm.enable" @change="onEnableChange" />
@@ -319,16 +322,28 @@ const handleCreateOk = () => {
         createFormRef.value.validate().then(async () => {
             try {
                 const token = localStorage.getItem('accessToken');
-                await axios.post('/api/monitor_domains/create/', createForm, {
+                // 发送请求前处理域名格式
+                const formData = { ...createForm };
+                if (!formData.domain.startsWith('https://')) {
+                    formData.domain = `https://${formData.domain}`;
+                }
+                
+                const response = await axios.post('/api/monitor_domains/create/', formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
+                
                 message.success('监控创建成功');
                 isCreateModalVisible.value = false;
-                fetchMonitors(); // 重新加载监控列表
+                fetchMonitors();
             } catch (error) {
-                message.error('监控创建失败');
+                // 简化错误处理，针对SSL证书错误提供友好提示
+                if (error.response?.data?.error?.domain?.[0]?.includes('SSL证书验证失败')) {
+                    message.error('SSL证书验证失败，请检查证书是否已过期');
+                } else {
+                    message.error('监控创建失败，请检查输入是否正确');
+                }
             }
         }).catch((error) => {
             message.error('请检查表单是否填写正确');
@@ -337,25 +352,28 @@ const handleCreateOk = () => {
     });
 };
 
-// 
-const currentMonitor = ref(null);
 // 编辑监控的提交处理函数
 const handleEditOk = () => {
     checkPermission(() => {
         editFormRef.value.validate().then(async () => {
             try {
                 const token = localStorage.getItem('accessToken');
-                await axios.put(`/api/monitor_domains/${currentMonitor.value.id}/update/`, editForm, {
+                const response = await axios.put(`/api/monitor_domains/${currentMonitor.value.id}/update/`, editForm, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
+                
                 message.success('监控更新成功');
                 isEditModalVisible.value = false;
-                fetchMonitors();  // 重新加载监控列表
+                fetchMonitors();
             } catch (error) {
-                message.error('监控更新失败');
-                console.error('Update failed:', error.response ? error.response.data : error.message);
+                // 简化错误处理，针对SSL证书错误提供友好提示
+                if (error.response?.data?.error?.domain?.[0]?.includes('SSL证书验证失败')) {
+                    message.error('SSL证书验证失败，请检查证书是否已过期');
+                } else {
+                    message.error('监控更新失败，请检查输入是否正确');
+                }
             }
         }).catch((error) => {
             message.error('请检查表单是否填写正确');
@@ -588,6 +606,25 @@ onUnmounted(() => {
         clearInterval(refreshTimer);
     }
 });
+
+// 在 script setup 部分添加域名验证函数
+const validateDomain = async (rule, value) => {
+    if (!value) return;
+    
+    // 移除前后空格
+    value = value.trim();
+    
+    // 如果以 http:// 开头，抛出错误
+    if (value.toLowerCase().startsWith('http://')) {
+        throw new Error('不支持 HTTP 协议，请使用 HTTPS 或直接输入域名');
+    }
+    
+    // 如果不是以 https:// 开头，也不是纯域名格式，抛出错误
+    const domainRegex = /^(https:\/\/)?[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](\.[a-zA-Z]{2,})+$/;
+    if (!domainRegex.test(value)) {
+        throw new Error('请输入有效的域名格式');
+    }
+};
 </script>
 
 

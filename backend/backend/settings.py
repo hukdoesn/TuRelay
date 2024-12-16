@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import logging
 import time
+import datetime
 from datetime import timedelta
 
 # 设置基础目录，通常用于构建项目内的其他路径，如静态文件、数据库文件等
@@ -14,7 +15,7 @@ SECRET_KEY = 'django-insecure-aq1$o05s3&m=0)yq-j1z_7xu7nk)0v_dp9^(9b9048n&1!^e+^
 DEBUG = True
 
 # 允许的主机名列表，对于公开的生产环境需要设置具体的域名或IP地址
-ALLOWED_HOSTS = ['172.17.103.22', 'localhost', '192.168.5.29', '192.168.222.86', '127.0.0.1']  # 添加允许的主机名
+ALLOWED_HOSTS = ['172.17.103.22', 'localhost', '192.168.5.31', '192.168.222.86', '127.0.0.1']  # 添加允许的主机名
 
 # Guacamole 服务器配置
 GUACAMOLE_URL = 'http://172.17.103.22:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改
@@ -142,7 +143,7 @@ USE_TZ = False
 STATIC_URL = 'static/'
 APPEND_SLASH=False
 
-# 默认的自动字段类型，Django 3.2后默认为BigAutoField
+# 默认的自动���段类型，Django 3.2后默认为BigAutoField
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = False
@@ -151,7 +152,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
     'http://127.0.0.1:8080',
     'http://192.168.5.82:8080',
-    'http://192.168.5.29:8080',
+    'http://192.168.5.31:8080',
     'http://192.168.5.13:8081',
     'http://192.168.222.86:8080',
     'http://192.168.0.104:8080'
@@ -162,15 +163,19 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8080',
     'http://172.17.102.34:8080',
     'http://192.168.5.82:8080',
-    'http://192.168.5.29:8080',
+    'http://192.168.5.31:8080',
     'http://192.168.5.13:8081',
     'http://192.168.222.86:8080',
     'http://192.168.0.104:8080'
     ]
 
 # 日志配置，用于应用程序的日志管理
-cur_path = os.path.dirname(os.path.realpath(__file__))  # 当前文件的路径
-log_path = os.path.join(os.path.dirname(cur_path), 'Log')  # 日志文件存放路径
+cur_path = os.path.dirname(os.path.realpath(__file__))
+log_path = os.path.join(os.path.dirname(cur_path), 'logs')  # 修改为logs目录
+
+# 确保日志目录存在
+if not os.path.exists(log_path):
+    os.makedirs(log_path)
 
 # 命令告警配置
 COMMAND_ALERT = {
@@ -186,24 +191,111 @@ LOGGING = {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
+        'simple': {
+            'format': '[{asctime}] {levelname} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
     },
     'handlers': {
         'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+            'formatter': 'simple'
         },
+        'default': {
+            'level': 'INFO',  # 日志级别: DEBUG < INFO < WARNING < ERROR < CRITICAL，只记录大于等于INFO级别的日志
+            'class': 'logging.handlers.TimedRotatingFileHandler',  # 处理器类型：按时间切割的日志文件处理器
+            'filename': os.path.join(log_path, 'all.log'),  # 日志文件路径：指定日志文件的存储位置和名称
+            'formatter': 'verbose',  # 日志格式：使用verbose格式器，包含详细的日志信息
+            'when': 'midnight',  # 切割时机：在午夜0点进行日志切割
+            'interval': 1,  # 切割间隔：每1个时间单位（由when参数决定，这里是1天）进行一次切割
+            'backupCount': 30,  # 备份数量：保留最近30个日志文件，超过将被删除
+            'encoding': 'utf-8',  # 文件编码：使用UTF-8编码保存日志文件
+            'atTime': datetime.time(0, 0),  # 具体切割时间：指定在0点0分进行日志切割
+        },
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(log_path, 'error.log'),
+            'formatter': 'verbose',
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 30,
+            'encoding': 'utf-8',
+            'atTime': datetime.time(0, 0),
+        },
+        'django_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(log_path, 'django.log'),
+            'formatter': 'verbose',
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 30,
+            'encoding': 'utf-8',
+            'atTime': datetime.time(0, 0),
+        },
+        'apps_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(log_path, 'apps.log'),
+            'formatter': 'verbose',
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 30,
+            'encoding': 'utf-8',
+            'atTime': datetime.time(0, 0),
+        },
+        'db_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(log_path, 'db.log'),
+            'formatter': 'verbose',
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 30,
+            'encoding': 'utf-8',
+            'atTime': datetime.time(0, 0),
+        }
     },
     'loggers': {
+        '': {  # 根记录器，捕获所有日志
+            'handlers': ['console', 'default', 'error_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'django_file', 'error_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['error_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['db_file'],
             'level': 'INFO',
             'propagate': False,
         },
         'apscheduler': {
-            'handlers': ['console'],
+            'handlers': ['console', 'default'],
             'level': 'WARNING',
             'propagate': False,
         },
+        'apps': {
+            'handlers': ['console', 'apps_file', 'error_file'],
+            'level': 'INFO',
+            'propagate': False,
+        }
     },
 }
 
