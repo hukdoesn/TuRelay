@@ -341,9 +341,9 @@ class FileUploadView(APIView):
                     md5_hash.update(chunk)
             local_md5 = md5_hash.hexdigest()
 
-            # 使用更大的缓冲区上传文件
+            # 缓冲区上传文件
             sftp_client.put(
-                temp_file_path,  # 使用临时文件路径而不是文件对象
+                temp_file_path,  # 临时文件路径
                 remote_path,
                 callback=upload_callback,
                 confirm=True
@@ -477,7 +477,6 @@ class FileDownloadView(APIView):
             ssh_client = paramiko.SSHClient()
             ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-            # 设置更长的超时时间
             transport_timeout = settings.FILE_TRANSFER.get('TIMEOUT', 3600)
             banner_timeout = 60
             auth_timeout = 60

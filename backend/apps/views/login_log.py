@@ -21,7 +21,6 @@ class LoginLogView(APIView):
         # 获取筛选参数
         username = request.GET.get('username', '')  # 获取用户名筛选参数，默认为空字符串
         client_ip = request.GET.get('client_ip', '')  # 获取客户端IP筛选参数，默认为空字符串
-        # login_status = request.GET.get('login_status', '')  # 获取登录状态筛选参数，默认为空字符串
         
         # 根据筛选参数过滤日志
         if username:
@@ -29,8 +28,6 @@ class LoginLogView(APIView):
             print(login_logs)
         if client_ip:
             login_logs = login_logs.filter(client_ip__icontains=client_ip)  # 根据客户端IP进行模糊匹配筛选
-        # if login_status:
-        #     login_logs = login_logs.filter(login_status=login_status)  # 根据登录状态进行筛选
 
         # 实例化分页器
         paginator = Paginator(login_logs, page_size)

@@ -37,7 +37,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
         self.escape_buffer = ''  # 存储转义序列
         self.last_activity = None  # 记录最后活动时间
         self.timeout_task = None   # 存储超时检查任务
-        self.TIMEOUT_SECONDS = 600  # 设置10分钟超时 (60秒 * 10)
+        self.TIMEOUT_SECONDS = 3600  # 设置60分钟超时 (60秒 * 60)
 
         # 定义一个正则表达式来匹配 shell 提示符
         self.shell_prompt_regex = re.compile(r'[^@]+@[^:]+:[^\$#]*[#$]\s?$')
@@ -130,7 +130,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
                 if text_data:
                     self.last_input_char = text_data[-1]
         except (json.JSONDecodeError, TypeError):
-            # 如果数据不是 JSON 或不能迭代，则视为普通的命令输入
+            # 如果数据不是 JSON 或不能迭代，视为普通的命令输入
             if hasattr(self, 'ssh_channel'):
                 self.ssh_channel.send(text_data)
 
@@ -199,7 +199,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
 
             # 处理回车键
             if char in ('\r', '\n'):
-                if self.actual_command:  # 如果有实际命令（从历史记录或方向键获取），使用它
+                if self.actual_command: 
                     self.command_buffer = self.actual_command
                     self.actual_command = ''  # 重置实际命令
                 
@@ -397,7 +397,6 @@ class SSHConsumer(AsyncWebsocketConsumer):
             self.is_command_executed = False
             return
 
-        # 移除 ANSI 转义序列
         ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
         clean_data = ansi_escape.sub('', data)
 

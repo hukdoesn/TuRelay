@@ -170,7 +170,7 @@ class HostView(APIView):
         elif protocol == 'RDP':
             request.data['operating_system'] = 'Windows'
 
-        # 处理 account_type，确保它是一个有效的凭据 ID
+        # 处理 account_type，凭据 ID
         account_type = request.data.get('account_type')
         if account_type:
             try:
@@ -313,7 +313,7 @@ class TestConnectionView(APIView):
             except Exception as e:
                 return False, f"Unexpected error: {str(e)}"
             
-# 新增节点信息的API
+# 节点信息的API
 class NodeSelectionView(APIView):
     """
     NodeSelectionView 类返回简要的节点信息，

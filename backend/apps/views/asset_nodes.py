@@ -20,7 +20,7 @@ class AssetNodesView(APIView):
             nodes = Node.objects.all()
             node_list = []
             
-            # 创建一个函数来计算节点及其子节点的主机总数
+            # 计算节点及其子节点的主机总数
             def count_total_hosts(node):
                 # 获取当前节点的直接主机数量
                 direct_hosts = node.hosts.count()
@@ -34,11 +34,11 @@ class AssetNodesView(APIView):
                 total_hosts = count_total_hosts(node)
                 
                 node_data = {
-                    'id': str(node.id),  # UUID需要转换为字符串
+                    'id': str(node.id),
                     'name': node.name,
                     'parent': str(node.parent.id) if node.parent else None,
                     'create_time': node.create_time.strftime('%Y-%m-%d %H:%M:%S'),
-                    'host_count': total_hosts  # 添加主机数量字段
+                    'host_count': total_hosts
                 }
                 node_list.append(node_data)
             return Response(node_list)
@@ -142,7 +142,7 @@ class AssetNodesView(APIView):
                                      status=status.HTTP_400_BAD_REQUEST)
                 
                 # 如果没有关联的主机，执行删除操作
-                # Django会自动处理级联删除(因为在模型中使用了CASCADE)
+                # Django自动处理级联删除(模型使用了CASCADE)
                 node.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
                 

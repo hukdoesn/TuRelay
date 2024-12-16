@@ -5,7 +5,7 @@ import json
 
 class CommandAlertSerializer(serializers.ModelSerializer):
     hosts = serializers.ListField(child=serializers.CharField(), required=False)
-    alert_contacts = serializers.CharField(required=False)  # 改为 CharField
+    alert_contacts = serializers.CharField(required=False)
     command_rule = serializers.ListField(child=serializers.CharField(), required=False)
     host_names = serializers.SerializerMethodField()
     alert_contact_names = serializers.SerializerMethodField()
@@ -28,7 +28,7 @@ class CommandAlertSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['hosts'] = instance.hosts.split(',') if instance.hosts else []
-        representation['alert_contacts'] = instance.alert_contacts  # 直接返回字符串
+        representation['alert_contacts'] = instance.alert_contacts
         representation['command_rule'] = json.loads(instance.command_rule) if instance.command_rule else []
         return representation
 
@@ -36,7 +36,6 @@ class CommandAlertSerializer(serializers.ModelSerializer):
         hosts = validated_data.pop('hosts', [])
         validated_data['hosts'] = ','.join(str(host) for host in hosts)
         
-        # alert_contacts 已经是字符串，不需要处理
         
         command_rules = validated_data.get('command_rule', [])
         validated_data['command_rule'] = json.dumps(command_rules)
@@ -48,7 +47,6 @@ class CommandAlertSerializer(serializers.ModelSerializer):
             hosts = validated_data.pop('hosts')
             validated_data['hosts'] = ','.join(str(host) for host in hosts)
         
-        # alert_contacts 已经是字符串，不需要处理
         
         if 'command_rule' in validated_data:
             command_rules = validated_data['command_rule']
@@ -167,4 +165,4 @@ class AlertContactList(APIView):
         """
         alert_contacts = AlertContact.objects.all()
         data = [{'id': contact.id, 'name': contact.name} for contact in alert_contacts]
-        return Response({"results": data}, status=status.HTTP_200_OK)  # 将数据包装在 results 字段中
+        return Response({"results": data}, status=status.HTTP_200_OK)

@@ -9,7 +9,7 @@ from .host import HostView, CredentialSelectionView, TestConnectionView, NodeSel
 from .consumers import SSHConsumer
 from .terminal_tree import get_tree_structure
 from .file_management import FileListView, FileUploadView, FileDownloadView, FileDownloadContentView
-from .rdp_consumers import GuacamoleConsumer
+# from .rdp_consumers import GuacamoleConsumer
 from .command_log import CommandLogView
 from .alert_contacts import AlertContactView
 from .command_alert import AlertContactList,HostListView, CommandAlertView
