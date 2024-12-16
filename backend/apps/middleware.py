@@ -11,7 +11,7 @@ class TokenAuthenticationMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        exempt_paths = ['/api/login/', '/api/logout/']
+        exempt_paths = ['/api/login/', '/api/logout/', '/api/mfa/bind/']
         
         if request.path not in exempt_paths:
             auth_header = request.headers.get('Authorization')

@@ -650,7 +650,7 @@ const handleTestConnection = async () => {
     }
 
     try {
-        const response = await axios.post('/api/hosts/test_connection/', {
+        const response = await axios.post('/api/hosts/test-connection/', {
             host_id: currentHost.value?.id || null,  // 如果是编辑，使用当前记录的ID，否则为 null
             ip_address: form.network, //来自正确表格的IP地址
             port: form.port,          //    表格的端口

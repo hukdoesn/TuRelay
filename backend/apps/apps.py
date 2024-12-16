@@ -19,5 +19,5 @@ class AppsConfig(AppConfig):
             HostMonitorTask.monitor_hosts,
             'host_monitor',
             '主机连接探测',
-            10
+            60
         )
