@@ -56,7 +56,9 @@
           <!-- 终端容器 -->
           <div v-for="tab in tabs" :key="tab.key" v-show="tab.key === activeTabKey" class="terminal-container">
             <!-- SSH 终端 -->
-            <div v-if="tab.connectionType === 'ssh'" :ref="setTerminalRef(tab.key)" class="full-terminal"></div>
+            <div v-if="tab.connectionType === 'ssh'" :ref="setTerminalRef(tab.key)" class="full-terminal"
+               @data="handleTerminalInput">
+            </div>
             <!-- RDP 终端 -->
             <div v-else-if="tab.connectionType === 'rdp'" class="full-terminal">
               <WebrdsTerminal :hostId="originalHostIds[tab.key]" />
@@ -327,9 +329,7 @@ const initializeTerminal = async (uniqueTabKey) => {
   fitAddons[uniqueTabKey] = fitAddon;
 
   terminal.onData((data) => {
-    if (sockets[uniqueTabKey]) {
-      sockets[uniqueTabKey].send(data);
-    }
+    handleCommand(data);
   });
 
   const token = localStorage.getItem('accessToken');
@@ -445,7 +445,7 @@ const addTabWithUniqueName = (title, hostId, connectionType) => {
   let baseTitle = title;
   let index = 0;
 
-  // 确保标签名一
+  // 确保标签名唯一
   while (tabs.value.find((tab) => tab.title === title)) {
     index += 1;
     title = `${baseTitle}(${index})`;
@@ -897,6 +897,92 @@ const formatSize = (bytes) => {
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${units[i]}`;
+};
+
+// 命令处理相关的响应式变量
+const commandBuffer = ref('');     // 存储当前输入的命令缓冲
+const isInShellPrompt = ref(false); // 标记是否在shell提示符状态
+const isInEditor = ref(false);     // 标记是否在编辑器(vi/vim)模式
+const lastCommand = ref('');       // 存储最后执行的完整命令
+
+/**
+ * 处理终端命令输入
+ * 1. 捕获回车键,获取当前行完整命令并发送到后端记录
+ * 2. 处理编辑器模式下的命令
+ * 3. 发送数据到WebSocket执行命令
+ * @param {string} data - 终端输入的数据
+ */
+const handleCommand = (data) => {
+  // 在编辑器模式下不处理命令记录
+  if (isInEditor.value) {
+    return;
+  }
+
+  // 处理回车键 - 只在按下回车时记录命令
+  if (data === '\r' || data === '\n') {
+    // 获取终端当前行的完整内容,包含所有补全和修改的内容
+    const currentLine = terminals[activeTabKey.value].buffer.active.getLine(
+      terminals[activeTabKey.value].buffer.active.baseY + 
+      terminals[activeTabKey.value].buffer.active.cursorY
+    );
+    
+    if (currentLine) {
+      // 获取完整的命令文本并去除前后空格
+      const fullCommand = currentLine.translateToString(true);
+      if (fullCommand.trim()) {
+        // 通过WebSocket发送完整命令记录到后端
+        if (sockets[activeTabKey.value]) {
+          sockets[activeTabKey.value].send(JSON.stringify({
+            type: 'command',
+            command: fullCommand.trim()
+          }));
+        }
+      }
+    }
+  }
+
+  // 发送数据到WebSocket进行实际的命令执行
+  if (sockets[activeTabKey.value]) {
+    sockets[activeTabKey.value].send(data);
+  }
+};
+
+/**
+ * 处理终端返回的数据
+ * 1. 检测shell提示符
+ * 2. 检测编辑器模式的进入和退出
+ * @param {string} data - 终端返回的数据
+ */
+const handleTerminalData = (data) => {
+  // 使用正则表达式检测shell提示符
+  const shellPromptRegex = /[^@]+@[^:]+:[^\$#]*[#$]\s?$/;
+  if (shellPromptRegex.test(data)) {
+    isInShellPrompt.value = true;
+  }
+
+  // 检测是否进入编辑器模式(vi/vim)
+  if (lastCommand.value.startsWith('vi ') || lastCommand.value.startsWith('vim ')) {
+    isInEditor.value = true;
+  }
+
+  // 检测是否退出编辑器模式
+  if (isInEditor.value && (data.includes('exit') || data.includes(':q'))) {
+    isInEditor.value = false;
+  }
+};
+
+/**
+ * 处理终端输入事件
+ * 1. 调用命令处理函数
+ * 2. 发送数据到WebSocket
+ * @param {string} data - 终端输入的数据
+ */
+const handleTerminalInput = (data) => {
+  handleCommand(data);
+  // 发送数据到WebSocket
+  if (sockets[activeTabKey.value]) {
+    sockets[activeTabKey.value].send(data);
+  }
 };
 </script>
 

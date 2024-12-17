@@ -18,29 +18,40 @@ logger = logging.getLogger('log')
 
 class SSHConsumer(AsyncWebsocketConsumer):
     """
-    SSHConsumer 处理 WebSocket 连接，以使用 Paramiko 根据存储在数据库中的主机凭据建立 SSH 会话。
+    SSH WebSocket 消费者类
+    
+    主要功能:
+    1. 建立和管理 SSH 连接
+    2. 处理 WebSocket 消息
+    3. 记录命令执行日志
+    4. 检测命令告警
+    5. 管理会话超时
     """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # 初始化属性
-        self.last_input_char = None  # 记录上一次输入的字符
-        self.command_buffer = ''
-        self.is_command_executed = False  # 标记是否执行了命令
-        self.in_shell_prompt = False  # 标记是否在 shell 提示符
-        self.in_editor = False  # 标记是否在编辑器中
-        self.in_history_search = False  # 标记是否在历史搜索模式
-        self.history_search_buffer = ''  # 历史搜索缓冲区
-        self.actual_command = ''  # 存储实际要执行的命令
-        self.in_escape_sequence = False  # 标记是否在处理转义序列
-        self.escape_buffer = ''  # 存储转义序列
-        self.last_activity = None  # 记录最后活动时间
-        self.timeout_task = None   # 存储超时检查任务
-        self.TIMEOUT_SECONDS = 3600  # 设置60分钟超时 (60秒 * 60)
-
-        # 定义一个正则表达式来匹配 shell 提示符
-        self.shell_prompt_regex = re.compile(r'[^@]+@[^:]+:[^\$#]*[#$]\s?$')
+        # 命令处理相关组件
+        self.command_handler = CommandHandler()      # 命令处理器
+        self.shell_detector = ShellPromptDetector()  # Shell提示符检测器
+        
+        # 命令状态标记
+        self.last_input_char = None        # 最后输入的字符
+        self.command_buffer = ''           # 命令缓冲区
+        self.is_command_executed = False   # 命令是否已执行
+        self.in_shell_prompt = False       # 是否在shell提示符状态
+        self.in_editor = False             # 是否在编辑器模式
+        self.in_history_search = False     # 是否在历史搜索模式
+        self.history_search_buffer = ''    # 历史搜索缓冲区
+        self.actual_command = ''           # 实际要执行的命令
+        
+        # 转义序列处理
+        self.in_escape_sequence = False    # 是否在处理转义序列
+        self.escape_buffer = ''            # 转义序列缓冲区
+        
+        # 会话管理
+        self.last_activity = None          # 最后活动时间
+        self.timeout_task = None           # 超时检查任务
+        self.TIMEOUT_SECONDS = 3600        # 超时时间(1小时)
 
     async def connect(self):
         # 从 URL 中获取主机 ID
@@ -110,159 +121,142 @@ class SSHConsumer(AsyncWebsocketConsumer):
         logger.info(f"WebSocket 连接已断开 (close_code={close_code})")
 
     async def receive(self, text_data):
+        """
+        处理接收到的WebSocket消息
+        
+        1. 命令记录消息
+        2. 终端大小调整消息
+        3. 普通文本输入
+        
+        Args:
+            text_data: WebSocket消息内容
+        """
         # 更新最后活动时间
         self.last_activity = datetime.datetime.now()
         
-        # 处理从 WebSocket 接收到的数据
         try:
-            data = json.loads(text_data)
-            if isinstance(data, dict) and 'cols' in data and 'rows' in data:
-                # 调整终端大小
-                self.ssh_channel.resize_pty(width=data['cols'], height=data['rows'])
-            elif hasattr(self, 'ssh_channel'):
-                # 将客户端输入的数据发送到 SSH 通道
-                self.ssh_channel.send(text_data)
+            # 尝试解析JSON数据
+            try:
+                data = json.loads(text_data)
+                if isinstance(data, dict):
+                    if 'type' in data and data['type'] == 'command':
+                        # 处理命令记录
+                        await self.handle_command_record(data['command'])
+                        return
+                    elif 'cols' in data and 'rows' in data:
+                        # 处理终端大小调整
+                        self.ssh_channel.resize_pty(width=data['cols'], height=data['rows'])
+                        return
+            except json.JSONDecodeError:
+                pass
 
-                # 更新命令缓冲区
-                await self.update_command_buffer(text_data)
-
-                # 记录最后一个输入的字符
-                if text_data:
-                    self.last_input_char = text_data[-1]
-        except (json.JSONDecodeError, TypeError):
-            # 如果数据不是 JSON 或不能迭代，视为普通的命令输入
+            # 处理普通文本输入
             if hasattr(self, 'ssh_channel'):
                 self.ssh_channel.send(text_data)
 
-                # 更新命令缓冲区
-                await self.update_command_buffer(text_data)
+        except Exception as e:
+            logger.error(f"处理WebSocket数据时出错: {str(e)}")
+            await self.close()
 
-                # 记录最后一个输入的字符
-                if text_data:
-                    self.last_input_char = text_data[-1]
-
-    async def update_command_buffer(self, data):
+    async def handle_command_record(self, command):
         """
-        更新命令缓冲区，处理用户输入的数据，包括特殊键。
+        处理命令记录
+        
+        1. 清理命令文本
+        2. 记录到数据库
+        3. 检查命令告警
+        4. 处理编辑器模式
+        
+        Args:
+            command: 原始命令文本
         """
-        for char in data:
-            if not self.in_shell_prompt:
-                logger.debug(f"未检测到 shell 提示符,跳过命令记录")
-                continue
-
+        try:
+            # 检查是否在编辑器中
             if self.in_editor:
-                logger.debug(f"在编辑器中,跳过命令记录")
-                continue
+                return
 
+            # 清理命令
+            clean_command = self.command_handler.clean_command(command)
+            if clean_command:
+                # 记录命令到数据库
+                await self.save_command_log(clean_command)
+                # 检查命令告警
+                await self.check_command_alert(clean_command)
+
+                # 检查是否进入编辑器
+                if clean_command.startswith(('vi ', 'vim ')):
+                    self.in_editor = True
+                    logger.debug(f"进入编辑器模式: {clean_command}")
+
+        except Exception as e:
+            logger.error(f"记录命令时出错: {str(e)}")
+
+    async def process_input(self, data):
+        """处理输入数据"""
+        if self.in_editor:
+            return
+
+        for char in data:
             # 处理特殊按键
             char_code = ord(char)
             
-            # 处理 Ctrl+C (ASCII 0x03)
+            # 处理 Ctrl+C
             if char_code == 3:
-                logger.debug("检测到 Ctrl+C，清空命令缓冲区")
                 self.command_buffer = ''
                 self.actual_command = ''
                 self.in_history_search = False
                 self.history_search_buffer = ''
                 continue
 
-            # 处理 Ctrl+R (ASCII 0x12)
-            if char_code == 18:
-                logger.debug("检测到 Ctrl+R，进入历史搜索模式")
-                self.in_history_search = True
-                self.history_search_buffer = ''
-                continue
-
-            # 处理方向键和其他转义序列
-            if char == '\x1b':  # ESC
-                self.in_escape_sequence = True
-                self.escape_buffer = char
-                continue
-                
-            if self.in_escape_sequence:
-                self.escape_buffer += char
-                # 检查是否是完整的转义序列
-                if self.escape_buffer == '\x1b[A':  # 上方向键
-                    logger.debug("检测到上方向键")
-                    self.in_escape_sequence = False
-                    self.escape_buffer = ''
-                    continue
-                elif self.escape_buffer == '\x1b[B':  # 下方向键
-                    logger.debug("检测到下方向键")
-                    self.in_escape_sequence = False
-                    self.escape_buffer = ''
-                    continue
-                elif len(self.escape_buffer) >= 3:  # 其他转义序列
-                    self.in_escape_sequence = False
-                    self.escape_buffer = ''
-                continue
-
             # 处理回车键
             if char in ('\r', '\n'):
-                if self.actual_command: 
+                if self.actual_command:
                     self.command_buffer = self.actual_command
-                    self.actual_command = ''  # 重置实际命令
-                
-                if self.command_buffer.strip():  # 只有当命令不为空时才记录
-                    # 清命令中的提示符和搜索前缀
-                    clean_command = re.sub(r'^\[.*?\]#\s*', '', self.command_buffer.strip())
-                    clean_command = re.sub(r'^.*\(reverse-i-search\).*?: ', '', clean_command)
-                    if clean_command:  # 确保清理后的命令不为空
-                        logger.info(f"检测到命令执行: {clean_command}")
-                        self.command_buffer = clean_command
-                        await self.save_command_log()
-                        await self.check_command_alert()
-                
+                    self.actual_command = ''
+
+                if self.command_buffer.strip():
+                    clean_command = self.command_handler.clean_command(self.command_buffer)
+                    if clean_command:
+                        await self.save_command_log(clean_command)
+                        await self.check_command_alert(clean_command)
+
                 self.command_buffer = ''
                 self.in_shell_prompt = False
                 self.in_history_search = False
                 self.history_search_buffer = ''
                 continue
 
-            # 处理退格键
+            # 处理其他输入
+            if not self.in_shell_prompt:
+                continue
+
+            # 更新命令缓冲区
             if char == '\x7f':  # Backspace
                 if self.in_history_search:
                     self.history_search_buffer = self.history_search_buffer[:-1]
                 else:
                     self.command_buffer = self.command_buffer[:-1]
-                continue
-
-            # 处理Tab键
-            if char_code == 9:
-                logger.debug("检测到 Tab 键,等待自动补全")
-                continue
-
-            # 处理普通字符输入
-            if self.in_history_search:
-                self.history_search_buffer += char
             else:
-                self.command_buffer += char
+                if self.in_history_search:
+                    self.history_search_buffer += char
+                else:
+                    self.command_buffer += char
 
-    async def save_command_log(self):
+    async def save_command_log(self, command):
         """
         保存执行的命令到 CommandLog 表中。
         """
-        command = self.command_buffer.strip()
-        if command:
-            if command.startswith('vi ') or command.startswith('vim '):
-                self.in_editor = True
-                command_to_save = command
-                logger.info(f"进入编辑器模式: {command_to_save}")
-            else:
-                command_to_save = command
+        await sync_to_async(CommandLog.objects.create)(
+            username=self.username,
+            command=command,
+            hosts=self.host.name,
+            network=self.host.network,
+            credential=self.credential.name,
+            create_time=datetime.datetime.now()
+        )
+        logger.info(f'命令已记录: 用户={self.username}, 主机={self.host.name}, 命令={command}')
 
-            await sync_to_async(CommandLog.objects.create)(
-                username=self.username,
-                command=command_to_save,
-                hosts=self.host.name,
-                network=self.host.network,
-                credential=self.credential.name,
-                create_time=datetime.datetime.now()
-            )
-            logger.info(f'命令已记录: 用户={self.username}, 主机={self.host.name}, 命令={command_to_save}')
-
-    async def check_command_alert(self):
-        command = self.command_buffer.strip()
+    async def check_command_alert(self, command):
         if command:
             logger.debug(f"开始检查命令告警: 用户={self.username}, 主机={self.host.name}, 命令={command}")
             alert_result = await check_command_alert(self.host.id, command, self.username)
@@ -332,7 +326,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
             await self.send_text_data(f'SSH 错误: {str(e)}\n')
             await self.close()
         except Exception as e:
-            logger.error(f'意外错误: {str(e)} (机ID={self.host_id})')
+            logger.error(f'意外错误: {str(e)} (主机ID={self.host_id})')
             await self.send_text_data(f'意外错误: {str(e)}\n')
             await self.close()
 
@@ -364,7 +358,7 @@ class SSHConsumer(AsyncWebsocketConsumer):
                             buffer = buffer[-4096:]
                             
                         # 检测 shell 提示符
-                        if self.shell_prompt_regex.search(buffer):
+                        if self.shell_detector.detect_prompt(text):
                             self.in_shell_prompt = True
                             buffer = ''
                             if self.in_editor:
@@ -465,3 +459,77 @@ class SSHConsumer(AsyncWebsocketConsumer):
             pass
         except Exception as e:
             logger.error(f"超时检查任务出错: {str(e)}")
+
+class CommandHandler:
+    """
+    命令处理器类
+    1. 清理命令文本
+    2. 移除ANSI转义序列
+    3. 移除shell提示符
+    """
+    
+    def __init__(self):
+        # Shell提示符正则表达式
+        self.shell_prompt_regex = re.compile(r'[^@]+@[^:]+:[^\$#]*[#$]\s?$')
+
+    def clean_command(self, command):
+        """
+        清理命令文本
+        1. 移除ANSI转义序列
+        2. 移除各种shell提示符
+        3. 移除前后空白字符
+        
+        Args:
+            command: 原始命令文本
+            
+        Returns:
+            清理后的命令文本
+        """
+        # 移除ANSI转义序列
+        ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+        clean_cmd = ansi_escape.sub('', command)
+        
+        # 移除shell提示符
+        clean_cmd = re.sub(r'^\[.*?\]#\s*', '', clean_cmd)                # 移除方括号类型提示符
+        clean_cmd = re.sub(r'^.*\(reverse-i-search\).*?: ', '', clean_cmd) # 移除历史搜索提示符
+        clean_cmd = re.sub(r'^.*?[@:].*?[#$]\s*', '', clean_cmd)          # 移除常见的shell提示符格式
+        
+        # 移除前后空白字符
+        clean_cmd = clean_cmd.strip()
+        
+        return clean_cmd
+
+class ShellPromptDetector:
+    """
+    Shell提示符检测器类
+    1. 检测shell提示符
+    2. 管理检测缓冲区
+    """
+    
+    def __init__(self):
+        # Shell提示符匹配模式
+        self.prompt_pattern = re.compile(r'[^@]+@[^:]+:[^\$#]*[#$]\s?$')
+        self.buffer = ''  # 检测缓冲区
+
+    def detect_prompt(self, data):
+        """
+        检测shell提示符
+        
+        Args:
+            data: 要检测的文本数据
+            
+        Returns:
+            bool: 是否检测到提示符
+        """
+        # 更新缓冲区
+        self.buffer += data
+        # 保持缓冲区大小在合理范围
+        if len(self.buffer) > 4096:
+            self.buffer = self.buffer[-4096:]
+        
+        # 检查是否匹配提示符模式
+        return bool(self.prompt_pattern.search(self.buffer))
+
+    def reset(self):
+        """重置检测缓冲区"""
+        self.buffer = ''
