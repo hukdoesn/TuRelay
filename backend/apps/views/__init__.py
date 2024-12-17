@@ -17,4 +17,5 @@ from .asset_nodes import AssetNodesView
 from .mfa_auth import MFAUtil
 from .dashboard import dashboard_statistics, login_statistics
 from .host_monitor import HostMonitorTask
+from .alert_history import AlertHistoryLogView
 # from .session import SessionManager

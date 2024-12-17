@@ -106,6 +106,9 @@
         <a-menu-item key="/logs-management/operation-logs">
           <router-link to="/logs-management/operation-logs">操作日志</router-link>
         </a-menu-item>
+        <a-menu-item key="/logs-management/alert-history">
+          <router-link to="/logs-management/alert-history">告警历史</router-link>
+        </a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="/settings">
         <template #title>

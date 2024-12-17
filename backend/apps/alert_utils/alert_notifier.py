@@ -1,7 +1,7 @@
 import requests
 import logging
 import json
-from apps.models import AlertContact, CommandAlert, Host
+from apps.models import AlertContact, CommandAlert, Host, AlertHistoryLog
 from asgiref.sync import sync_to_async
 
 logger = logging.getLogger('log')
@@ -69,6 +69,14 @@ def send_alert_notification(command_alert_id, command, username, hostname):
         alert_contact_ids = command_alert.alert_contacts.split(',')
         alert_contacts = AlertContact.objects.filter(id__in=alert_contact_ids)
 
+        # 记录告警历史
+        alert_contact_names = [contact.name for contact in alert_contacts]
+        AlertHistoryLog.objects.create(
+            alert_name=f"{command_alert.name} - {username}@{hostname}",
+            alert_rule=command_alert.command_rule,
+            alert_contacts=','.join(alert_contact_names),
+        )
+        
         for contact in alert_contacts:
             webhook_url = contact.webhook
             notify_type = contact.notify_type

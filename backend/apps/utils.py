@@ -17,7 +17,7 @@ from django.conf import settings
 from apps.models import (
     User, UserLock, Token, Role, Permission, RolePermission, 
     LoginLog, OperationLog, Credential, DomainMonitor, 
-    Host, Node, CommandLog, AlertContact, CommandAlert
+    Host, Node, CommandLog, AlertContact, CommandAlert, AlertHistoryLog
 )
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.permissions import IsAuthenticated

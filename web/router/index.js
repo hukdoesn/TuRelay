@@ -240,7 +240,15 @@ const router = createRouter({
           meta: { 
             requiresAuth: true, 
             breadcrumbName: '操作日志' 
-          } 
+          },
+        },
+        { 
+          path: '/logs-management/alert-history', 
+          component: () => import('@/components/LogsManagement/AlertHistoryLogs.vue'), 
+          meta: { 
+            requiresAuth: true, 
+            breadcrumbName: '告警历史' 
+          },
         },
         { 
           path: '/settings/auth-settings', 

@@ -294,4 +294,19 @@ class SystemSettings(models.Model):
     class Meta:
         db_table = 't_system_settings'
 
+class AlertHistoryLog(models.Model):
+    """
+    告警历史记录模型，记录触发的告警信息
+    """
+    alert_name = models.CharField(max_length=150, verbose_name="告警名称")
+    alert_rule = models.TextField(verbose_name="告警规则")
+    alert_contacts = models.TextField(verbose_name="告警联系人")
+    alert_time = models.DateTimeField(auto_now_add=True, verbose_name="告警时间")
+
+    class Meta:
+        db_table = 't_alert_history_log'  # 指定数据库表名为 t_alert_history_log
+
+    def __str__(self):
+        return f"{self.alert_name} - {self.alert_time}"
+
 

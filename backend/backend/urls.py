@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import LoginView, MFABindView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView, dashboard_statistics, login_statistics, LogoutView, FileDownloadContentView
+from apps.views import LoginView, MFABindView, UserListView, RolesPermissionsView, CreateUserView, UserUpdateView, LoginLogView, UserDetailView, OperationLogView, LockRecordView, CredentialView, DomainMonitorView, HostView, CredentialSelectionView, TestConnectionView, NodeSelectionView, get_tree_structure,FileListView, FileUploadView, FileDownloadView, CommandLogView, AlertContactView, CommandAlertView, AlertContactList, HostListView, AssetNodesView, dashboard_statistics, login_statistics, LogoutView, FileDownloadContentView, AlertHistoryLogView
 from apps.views.system_settings import SystemSettingsView
 
 urlpatterns = [
@@ -56,4 +56,5 @@ urlpatterns = [
     path('api/dashboard/login_statistics/<str:days>/', login_statistics, name='login-statistics'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
     path('api/terminal/download_file/<str:transfer_id>/', FileDownloadContentView.as_view()),
+    path('api/alert_history_logs/', AlertHistoryLogView.as_view(), name='alert-history-logs'),
 ]
