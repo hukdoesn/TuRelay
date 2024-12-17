@@ -185,6 +185,7 @@ const selectedRefreshInterval = ref('');  // 用于存储已选择的刷新间�
 let refreshTimer = null;  // 定时器，用于定时刷新页面
 
 const isRefreshing = ref(false); // 控制刷新图标旋转
+const currentMonitor = ref(null); // 当前编辑的监控对象
 
 // 处理下拉菜单点击事件，设置刷新间隔并显示选择的值
 const handleMenuClick = ({ key }) => {
@@ -289,13 +290,13 @@ const showCreateModal = () => {
 
 // 显示编辑模态框并填充表单数据
 const showEditModal = (record) => {
-        isEditModalVisible.value = true;
-        currentMonitor.value = record;
-        editForm.name = record.name;
-        editForm.domain = record.domain;
-        editForm.enable = record.enable;
-        editForm.monitor_frequency = record.monitor_frequency.toString();
-        editForm.alert = record.alert;
+    isEditModalVisible.value = true;
+    currentMonitor.value = record;
+    editForm.name = record.name;
+    editForm.domain = record.domain;
+    editForm.enable = record.enable;
+    editForm.monitor_frequency = record.monitor_frequency.toString();
+    editForm.alert = record.alert;
 };
 
 // 重置新建表单的数据
@@ -358,7 +359,13 @@ const handleEditOk = () => {
         editFormRef.value.validate().then(async () => {
             try {
                 const token = localStorage.getItem('accessToken');
-                const response = await axios.put(`/api/monitor_domains/${currentMonitor.value.id}/update/`, editForm, {
+                // 发送请求前处理域名格式
+                const formData = { ...editForm };
+                if (!formData.domain.startsWith('https://')) {
+                    formData.domain = `https://${formData.domain}`;
+                }
+                
+                const response = await axios.put(`/api/monitor_domains/${currentMonitor.value.id}/update/`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -617,12 +624,6 @@ const validateDomain = async (rule, value) => {
     // 如果以 http:// 开头，抛出错误
     if (value.toLowerCase().startsWith('http://')) {
         throw new Error('不支持 HTTP 协议，请使用 HTTPS 或直接输入域名');
-    }
-    
-    // 如果不是以 https:// 开头，也不是纯域名格式，抛出错误
-    const domainRegex = /^(https:\/\/)?[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](\.[a-zA-Z]{2,})+$/;
-    if (!domainRegex.test(value)) {
-        throw new Error('请输入有效的域名格式');
     }
 };
 </script>
