@@ -96,7 +96,7 @@ class LoginView(APIView):
                 browser_info=browser_info,
                 os_info=os_info
             )
-            return JsonResponse({'status': 'account_locked', 'message': '账号已被锁定'}, status=403)
+            return JsonResponse({'status': 'account_locked', 'message': '账号已被锁定'}, status=423)
 
         # 比较输入的密码与数据库中的密码
         if not check_password(password, user.password):
@@ -121,7 +121,7 @@ class LoginView(APIView):
                     browser_info=browser_info,
                     os_info=os_info
                 )
-                return JsonResponse({'status': 'account_locked', 'message': '账号已被锁定'}, status=403)
+                return JsonResponse({'status': 'account_locked', 'message': '账号已被锁定'}, status=423)
 
             # 记录密码错误日志
             LoginLog.objects.create(

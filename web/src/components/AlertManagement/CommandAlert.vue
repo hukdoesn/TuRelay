@@ -428,8 +428,10 @@ const handleCreateOk = async () => {
         fetchCommandAlerts()
         resetCreateForm()
     } catch (error) {
-        message.error('新建命令告警规则失败')
-        console.error('Error creating command alert:', error)
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+          message.error('新建命令告警规则失败')
+        }
     }
 }
 
@@ -471,8 +473,10 @@ const handleEditOk = async () => {
         editModalVisible.value = false
         fetchCommandAlerts()
     } catch (error) {
-        message.error('编辑命令告警规则失败')
-        console.error('Error editing command alert:', error)
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+          message.error('编辑命令告警规则失败')
+        }
     }
 }
 
@@ -494,8 +498,10 @@ const handleDelete = async (id) => {
         message.success('删除命令告警规则成功')
         fetchCommandAlerts()
     } catch (error) {
-        message.error('删除命令告警规则失败')
-        console.error('Error deleting command alert:', error)
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+          message.error('删除命令告警规则失败')
+        }
     }
 }
 
@@ -515,8 +521,10 @@ const handleSwitchChange = async (checked, record) => {
         record.is_active = checked;
         message.success(`${record.name} 告警状态已更新`);
     } catch (error) {
-        message.error('更新告警状态失败');
-        console.error('Error updating alert status:', error);
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+          message.error('更新告警状态失败');
+        }
     } finally {
         record.switchLoading = false;
     }

@@ -205,7 +205,10 @@ const handleSubmit = async () => {
     // 重新获取设置以更新用户列表
     await getSystemSettings();
   } catch (error) {
-    message.error('保存设置失败');
+    // 只有在不是403错误时才显示错误消息
+    if (!error.response || error.response.status !== 403) {
+      message.error('保存设置失败');
+    }
   }
 };
 

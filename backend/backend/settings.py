@@ -56,7 +56,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware', # 消息中间件，用于cookie和session的消息标签
     'django.middleware.clickjacking.XFrameOptionsMiddleware', # 防点击劫持
     'apps.middleware_log.OperationLogMiddleware',
-    'apps.middleware.TokenAuthenticationMiddleware',  # 添加 Token 认证中间件
+    'apps.middleware.TokenAuthenticationMiddleware',  # Token 认证中间件
+    'apps.middleware.PermissionMiddleware',  # 权限控制中间件，必须在 TokenAuthenticationMiddleware 之后
 ]
 
 # 项目的URL配置路径
@@ -143,7 +144,7 @@ USE_TZ = False
 STATIC_URL = 'static/'
 APPEND_SLASH=False
 
-# 默认的自动���段类型，Django 3.2后默认为BigAutoField
+# 默认的自动段类型，Django 3.2后默认为BigAutoField
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = False

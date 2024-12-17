@@ -120,7 +120,6 @@ import axios from 'axios'
 import { message, Tag, Badge, Modal, Dropdown, Menu, Popconfirm, MenuItem } from 'ant-design-vue'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
-import { showPermissionWarning, checkPermission } from '@/components/Global/PermissonWarning.vue'
 
 // 获取 router 实例
 const router = useRouter()
@@ -359,7 +358,6 @@ const fetchUsers = async () => {
     } catch (error) {
         // 获取用户列表失败的提示
         message.error('获取用户列表失败')
-        console.error('Error fetching users:', error)
     }
 }
 
@@ -377,7 +375,6 @@ const fetchRolesAndPermissions = async () => {
         rolesPermissions.value = response.data.roles_permission  // 保存 roles_permission 数据
     } catch (error) {
         message.error('获取角色和权限数据失败')
-        console.error('Error fetching roles and permissions:', error)
     }
 }
 
@@ -400,29 +397,29 @@ const handleCreateUserOk = async () => {
         console.error('表单验证错误:', validationError);
         return; // 如果验证失败，则提前返回
     }
-    checkPermission(async () => {
-        try {
-            const token = localStorage.getItem('accessToken');
-            const formData = {
-                ...createUserForm,
-                permissions: Array.isArray(createUserForm.permissions) ? createUserForm.permissions : [createUserForm.permissions]
-            };
+    try {
+        const token = localStorage.getItem('accessToken');
+        const formData = {
+            ...createUserForm,
+            permissions: Array.isArray(createUserForm.permissions) ? createUserForm.permissions : [createUserForm.permissions]
+        };
 
-            // 发送POST请求以创建新用户
-            await axios.post('/api/users/create/', formData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`  // 添加Bearer前缀
-                }
-            });
+        // 发送POST请求以创建新用户
+        await axios.post('/api/users/create/', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`  // 添加Bearer前缀
+            }
+        });
 
-            message.success('新建用户成功');
-            createUserModalVisible.value = false;
-            fetchUsers();  // 重新获取用户列表
-        } catch (error) {
+        message.success('新建用户成功');
+        createUserModalVisible.value = false;
+        fetchUsers();  // 重新获取用户列表
+    } catch (error) {
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
             message.error('新建用户失败');
-            console.error('Error creating user:', error);
         }
-    });
+    }
 };
 
 // 新建用户取消处理函数
@@ -479,22 +476,22 @@ const showEditModal = (record) => {
 };
 // 删除用户
 const handleDeleteUser = async (username) => {
-    checkPermission(async () => {
-        try {
-            const token = localStorage.getItem('accessToken')  // 从localStorage获取Token
-            await axios.delete(`/api/users/${username}/delete/`, {  // 发送DELETE请求
-                headers: {
-                    'Authorization': token,  // 在请求头中包含Token
-                }
-            })
-            message.success(`用户 ${username} 删除成功`)
-            fetchUsers()  // 重新获取用户列表
-        } catch (error) {
+    try {
+        const token = localStorage.getItem('accessToken')  // 从localStorage获取Token
+        await axios.delete(`/api/users/${username}/delete/`, {  // 发送DELETE请求
+            headers: {
+                'Authorization': token,  // 在请求头中包含Token
+            }
+        })
+        message.success(`用户 ${username} 删除成功`)
+        fetchUsers()  // 重新获取用户列表
+    } catch (error) {
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
             message.error(`删除用户 ${username} 失败`)
-            console.error('Error deleting user:', error)
         }
-    })
-}
+    }
+};
 
 // 查看详情
 const viewDetails = (record) => {
@@ -510,28 +507,28 @@ const showResetPasswordModal = (record) => {
 
 // 重置密码确认处理函数
 const handleResetPasswordOk = async () => {
-    checkPermission(async () => {
-        try {
-            const token = localStorage.getItem('accessToken')  // 从localStorage获取Token
-            // 发送POST请求重置密码
-            await axios.post(`/api/users/${resetPasswordForm.username}/reset_password/`, {
-                new_password: resetPasswordForm.newPassword
-            }, {
-                headers: {
-                    'Authorization': token  // 在请求头中包含Token
-                }
-            })
-            message.success(`用户 ${resetPasswordForm.username} 密码重置成功，请重新登录`)
-            resetPasswordModalVisible.value = false
-            // 清除localStorage中的所有信息
-            localStorage.clear();
-            router.push('/login');
-        } catch (error) {
+    try {
+        const token = localStorage.getItem('accessToken')  // 从localStorage获取Token
+        // 发送POST请求重置密码
+        await axios.post(`/api/users/${resetPasswordForm.username}/reset_password/`, {
+            new_password: resetPasswordForm.newPassword
+        }, {
+            headers: {
+                'Authorization': token  // 在请求头中包含Token
+            }
+        })
+        message.success(`用户 ${resetPasswordForm.username} 密码重置成功，请重新登录`)
+        resetPasswordModalVisible.value = false
+        // 清除localStorage中的所有信息
+        localStorage.clear();
+        router.push('/login');
+    } catch (error) {
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
             message.error(`重置用户 ${resetPasswordForm.username} 密码失败`)
-            console.error('Error resetting password:', error)
         }
-    })
-}
+    }
+};
 
 // 重置密码取消处理函数
 const handleResetPasswordCancel = () => {
@@ -545,68 +542,68 @@ const resetPassword = (record) => {
 
 // 解除锁定
 const toggleUserStatus = async (record) => {
-    checkPermission(async () => {
-        try {
-            const token = localStorage.getItem('accessToken');
-            const currentUsername = localStorage.getItem('name'); // 从 localStorage 获取当前用户名
-            const newStatus = record.status ? 0 : 1;
-            await axios.patch(`/api/users/${record.username}/lock/`, { status: newStatus }, {
-                headers: {
-                    'Authorization': token
-                }
-            });
-            const statusText = newStatus ? '禁用' : '启用';
-            message.success(`用户 ${record.username} 已${statusText}`);
-
-            // 如果禁用当前用户，清除 token 并重定向到登录页面
-            if (newStatus) {
-                if (record.username === currentUsername) { // 设有一个变量存储当前用户名
-                    localStorage.removeItem('accessToken');
-                    router.push('/login');
-                    return;
-                }
+    try {
+        const token = localStorage.getItem('accessToken');
+        const currentUsername = localStorage.getItem('name'); // 从 localStorage 获取当前用户名
+        const newStatus = record.status ? 0 : 1;
+        await axios.patch(`/api/users/${record.username}/lock/`, { status: newStatus }, {
+            headers: {
+                'Authorization': token
             }
-            fetchUsers();
-        } catch (error) {
-            message.error(`更改用户 ${record.username} 状态失败`);
-            console.error('Error toggling user status:', error);
+        });
+        const statusText = newStatus ? '禁用' : '启用';
+        message.success(`用户 ${record.username} 已${statusText}`);
+
+        // 如果禁用当前用户，清除 token 并重定向到登录页面
+        if (newStatus) {
+            if (record.username === currentUsername) { // 设有一个变量存储当前用户名
+                localStorage.removeItem('accessToken');
+                router.push('/login');
+                return;
+            }
         }
-    })
+        fetchUsers();
+    } catch (error) {
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+            message.error(`更改用户 ${record.username} 状态失败`);
+        }
+    }
 };
 
 // 编辑对话框确定
 const handleEditOk = async () => {
-    checkPermission(async () => {
-        try {
-            const token = localStorage.getItem('accessToken');
-            // 构建更新数据
-            const updateData = {
-                username: editForm.username,
-                email: editForm.email,
-                name: editForm.name,
-                mobile: editForm.mobile,
-                role: editForm.role,
-                permissions: Array.isArray(editForm.permissions) ? editForm.permissions : [editForm.permissions],
-                mfa_level: editForm.mfa_level  // 确保包含 mfa_level
-            };
+    try {
+        const token = localStorage.getItem('accessToken');
+        // 构建更新数据
+        const updateData = {
+            username: editForm.username,
+            email: editForm.email,
+            name: editForm.name,
+            mobile: editForm.mobile,
+            role: editForm.role,
+            permissions: Array.isArray(editForm.permissions) ? editForm.permissions : [editForm.permissions],
+            mfa_level: editForm.mfa_level  // 确保包含 mfa_level
+        };
 
-            // 发送更新请求
-            const response = await axios.put(`/api/users/${editForm.username}/update/`, updateData, {
-                headers: {
-                    'Authorization': token
-                }
-            });
-
-            if (response.status === 200) {
-                message.success('用户信息更新成功');
-                editModalVisible.value = false;
-                fetchUsers();  // 重新获取用户列表
+        // 发送更新请求
+        const response = await axios.put(`/api/users/${editForm.username}/update/`, updateData, {
+            headers: {
+                'Authorization': token
             }
-        } catch (error) {
-            message.error('用户信息更新失败');
-            console.error('Error updating user:', error);
+        });
+
+        if (response.status === 200) {
+            message.success('用户信息更新成功');
+            editModalVisible.value = false;
+            fetchUsers();  // 重新获取用户列表
         }
-    });
+    } catch (error) {
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+            message.error('用户信息更新失败');
+        }
+    }
 };
 
 // 编辑对话框取消

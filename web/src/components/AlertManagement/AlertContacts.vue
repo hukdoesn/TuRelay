@@ -280,8 +280,10 @@ const handleCreateOk = async () => {
         fetchAlertContacts()
         resetCreateForm()
     } catch (error) {
-        message.error('新建告警联系人失败')
-        console.error('Error creating alert contact:', error)
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+          message.error('新建告警联系人失败')
+        }
     }
 }
 
@@ -314,8 +316,10 @@ const handleEditOk = async () => {
         editModalVisible.value = false
         fetchAlertContacts()
     } catch (error) {
-        message.error('编辑告警联系人失败')
-        console.error('Error editing alert contact:', error)
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+          message.error('编辑告警联系人失败')
+        }
     }
 }
 
@@ -338,8 +342,10 @@ const handleDelete = async (name) => {
         message.success('删除告警联系人成功')
         fetchAlertContacts()
     } catch (error) {
-        message.error('删除告警联系人失败')
-        console.error('Error deleting alert contact:', error)
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+          message.error('删除告警联系人失败')
+        }
     }
 }
 onMounted(() => {

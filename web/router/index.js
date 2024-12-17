@@ -38,8 +38,15 @@ axios.interceptors.response.use(
                     router.push('/login');
                     break;
                 case 403:
-                    message.error('账号被锁定，请联系管理员');
+                    // 权限不足
+                    message.error('只读用户禁止增加、删除、修改等操作');
+                    break;
+                case 423:
+                    // 账户锁定
+                    message.error('账号已被锁定，请联系管理员');
+                    // 清除本地存储
                     localStorage.clear();
+                    // 跳转到登录页
                     router.push('/login');
                     break;
                 default:

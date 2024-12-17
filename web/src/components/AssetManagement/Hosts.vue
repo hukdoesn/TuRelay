@@ -172,7 +172,6 @@
 import { ref, reactive, onMounted, h } from 'vue'
 import { message, Tag, Modal, Popconfirm, Badge } from 'ant-design-vue';
 import axios from 'axios';  // 引入axios用于请求后端API
-import { showPermissionWarning, checkPermission } from '@/components/Global/PermissonWarning.vue'
 import IconFont from '@/icons'
 import CreateCredentialModal from '@/components/UserManagement/module/CreateCredentialModal.vue' // 引入创建凭据模态框组件
 import NodeTree from './module/NodeTree.vue';
@@ -392,26 +391,26 @@ const resetEditForm = () => {
 };
 
 // 新建主机的提交处理函数
-const handleCreateOk = () => {
-    checkPermission(() => {
-        createFormRef.value.validate().then(async () => {
-            try {
-                const token = localStorage.getItem('accessToken');
-                await axios.post('/api/hosts/create/', createForm, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                message.success('主机创建成功');
-                isCreateModalVisible.value = false;
-                fetchHosts(); // 重新加载主机列表
-            } catch (error) {
-                message.error('主机创建失败');
-            }
-        }).catch((error) => {
-            message.error('请检查表单是否填写正确');
-            console.log('验证失败:', error);
-        });
+const handleCreateOk = async () => {
+    createFormRef.value.validate().then(async () => {
+        try {
+            const token = localStorage.getItem('accessToken');
+            await axios.post('/api/hosts/create/', createForm, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            message.success('主机创建成功');
+            isCreateModalVisible.value = false;
+            fetchHosts(); // 重新加载主机列表
+        } catch (error) {
+            message.error('主机创建失败');
+        }
+    }).catch((error) => {
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+           message.error('请检查表单是否填写正确');
+        }
     });
 };
 
@@ -419,34 +418,34 @@ const handleCreateOk = () => {
 const currentHost = ref(null);
 
 // 编辑主机的交处理函数
-const handleEditOk = () => {
-    checkPermission(() => {
-        editFormRef.value.validate().then(async () => {
-            try {
-                const token = localStorage.getItem('accessToken');
+const handleEditOk = async () => {
+    editFormRef.value.validate().then(async () => {
+        try {
+            const token = localStorage.getItem('accessToken');
 
-                // 确保 account_type 是凭据的 ID
-                const formData = { ...editForm };
-                
-                // 如果需要，打印看看发送的数据
-                console.log('Sending data:', formData);
+            // 确保 account_type 是凭据的 ID
+            const formData = { ...editForm };
+            
+            // 如果需要，打印看看发送的数据
+            console.log('Sending data:', formData);
 
-                await axios.put(`/api/hosts/${currentHost.value.id}/update/`, formData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                message.success('主机更新成功');
-                isEditModalVisible.value = false;
-                fetchHosts(); // 重新加载主机列表
-            } catch (error) {
-                message.error('主机更新失败');
-                console.error('Update failed:', error.response ? error.response.data : error.message);
-            }
-        }).catch((error) => {
-            message.error('请检查表单是否填写正确');
-            console.log('验证失败:', error);
-        });
+            await axios.put(`/api/hosts/${currentHost.value.id}/update/`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            message.success('主机更新成功');
+            isEditModalVisible.value = false;
+            fetchHosts(); // 重新加载主机列表
+        } catch (error) {
+            message.error('主机更新失败');
+            console.error('Update failed:', error.response ? error.response.data : error.message);
+        }
+    }).catch((error) => {
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+           message.error('请检查表单是否填写正确');
+        }
     });
 };
 
@@ -614,24 +613,25 @@ const fetchHosts = async () => {
 
 // 删除主机
 const handleDeleteHost = async (id) => {
-    checkPermission(async () => {
-        try {
-            // 获取存储在localStorage中的Token
-            const token = localStorage.getItem('accessToken');
+    try {
+        // 获取存储在localStorage中的Token
+        const token = localStorage.getItem('accessToken');
 
-            // 发送DELETE请求到后端以删除主机
-            const response = await axios.delete(`/api/hosts/${id}/delete/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,  // 在请求头中包含Token
-                },
-            });
-            message.success('主机删除成功');
-            fetchHosts();  // 重新加载主机列表
-        } catch (error) {
-            // 处理请求错误
-            message.error('主机删除失败');
+        // 发送DELETE请求到后端以删除主机
+        const response = await axios.delete(`/api/hosts/${id}/delete/`, {
+            headers: {
+                Authorization: `Bearer ${token}`,  // 在请求头中包含Token
+            },
+        });
+        message.success('主机删除成功');
+        fetchHosts();  // 重新加载主机列表
+    } catch (error) {
+        // 处理请求错误
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+           message.error('主机删除失败');
         }
-    })
+    }
 };
 
 const handleTestConnection = async () => {

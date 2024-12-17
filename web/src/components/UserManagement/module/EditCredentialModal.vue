@@ -72,7 +72,6 @@
 import { ref, reactive, defineExpose, defineEmits } from 'vue';
 import { message } from 'ant-design-vue'
 import axios from 'axios'
-import { showPermissionWarning, checkPermission } from '@/components/Global/PermissonWarning.vue'
 
 // 定义 emit 事件
 const emit = defineEmits(['refresh']);
@@ -137,38 +136,39 @@ const handleFileUpload = (file) => {
 };
 
 // 处理模态框的确定按钮点击事件
-const handleOk = () => {
-    checkPermission(() => {
-        // 验证表单数据
-        formRef.value.validate().then(async () => {
-            try {
-                // 从localStorage获取JWT Token
-                const token = localStorage.getItem('accessToken')
-                // 发送PUT请求更新凭据
-                await axios.put(`/api/credentials/${form.id}/update/`, form, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                // 显示成功消息
-                message.success('凭据更新成功')
-                // 关闭模态框
-                isVisible.value = false
-                // 重置表单
-                resetForm()
-                // 通知父组件刷新凭据列表
-                emit('refresh');
-            } catch (error) {
-                // 显示错误消息
+const handleOk = async () => {
+    // 验证表单数据
+    formRef.value.validate().then(async () => {
+        try {
+            // 从localStorage获取JWT Token
+            const token = localStorage.getItem('accessToken')
+            // 发送PUT请求更新凭据
+            await axios.put(`/api/credentials/${form.id}/update/`, form, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            // 显示成功消息
+            message.success('凭据更新成功')
+            // 关闭模态框
+            isVisible.value = false
+            // 重置表单
+            resetForm()
+            // 通知父组件刷新凭据列表
+            emit('refresh');
+        } catch (error) {
+            // 显示错误消息
+            // 只有在不是403错误时才显示错误消息
+            if (!error.response || error.response.status !== 403) {
                 message.error('凭据更新失败')
             }
-        }).catch((error) => {
-            // 显示表单验证失败的消息
-            message.error('请检查表单是否填写正确')
-            console.log('验证失败:', error)
-        })
+        }
+    }).catch((error) => {
+        // 显示表单验证失败的消息
+        message.error('请检查表单是否填写正确')
+        console.log('验证失败:', error)
     })
-}
+};
 
 // 处理模态框的取消按钮点击事件
 const handleCancel = () => {

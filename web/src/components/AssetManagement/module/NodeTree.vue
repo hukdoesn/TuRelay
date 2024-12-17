@@ -304,10 +304,16 @@ const handleDeleteNode = async () => {
           if (errorMessage) {
             message.error(errorMessage);
           } else {
-            message.error('删除节点失败');
+            // 只有在不是403错误时才显示错误消息
+            if (!error.response || error.response.status !== 403) {
+              message.error('删除节点失败');
+            }
           }
         } else {
-          message.error('删除节点失败');
+          // 只有在不是403错误时才显示错误消息
+          if (!error.response || error.response.status !== 403) {
+            message.error('删除节点失败');
+          }
         }
       }
     }
@@ -379,8 +385,10 @@ const handleInputConfirm = async () => {
     addingParentNode.value = null; // 重置保存的父节点信息
     
   } catch (error) {
-    console.error('操作失败:', error);
-    message.error(error.response?.data?.error || '操作失败');
+      // 只有在不是403错误时才显示错误消息
+      if (!error.response || error.response.status !== 403) {
+          message.error(error.response?.data?.error || '操作失败');
+      }
   } finally {
     setTimeout(() => {
       isProcessing.value = false;

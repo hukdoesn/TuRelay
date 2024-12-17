@@ -187,7 +187,10 @@ const handleDeleteCredentials = async (id) => {
         fetchCredentials();  // 重新加载凭据列表
     } catch (error) {
         // 处理请求错误
-        message.error('凭据删除失败');
+        // 只有在不是403错误时才显示错误消息
+        if (!error.response || error.response.status !== 403) {
+            message.error('凭据删除失败');
+        }
     }
 };
 

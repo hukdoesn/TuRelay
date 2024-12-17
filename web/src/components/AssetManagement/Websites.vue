@@ -261,17 +261,6 @@ const handleButtonClick = async () => {
     }
 };
 
-// 权限检查函数
-const checkPermission = (callback) => {
-    const token = localStorage.getItem('accessToken');
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    if (payload.is_read_only) {
-        showPermissionWarning();
-    } else {
-        callback();
-    }
-};
-
 // 启用监控开关的变化处理函数
 const onEnableChange = (checked) => {
     // 无需更改频率；只需处理启用/禁用状态
@@ -319,73 +308,75 @@ const resetEditForm = () => {
 
 // 新建监控提交处理函数
 const handleCreateOk = () => {
-    checkPermission(() => {
-        createFormRef.value.validate().then(async () => {
-            try {
-                const token = localStorage.getItem('accessToken');
-                // 发送请求前处理域名格式
-                const formData = { ...createForm };
-                if (!formData.domain.startsWith('https://')) {
-                    formData.domain = `https://${formData.domain}`;
-                }
-                
-                const response = await axios.post('/api/monitor_domains/create/', formData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                
-                message.success('监控创建成功');
-                isCreateModalVisible.value = false;
-                fetchMonitors();
-            } catch (error) {
-                // 简化错误处理，针对SSL证书错误提供友好提示
-                if (error.response?.data?.error?.domain?.[0]?.includes('SSL证书验证失败')) {
-                    message.error('SSL证书验证失败，请检查证书是否已过期');
-                } else {
-                    message.error('监控创建失败，请检查输入是否正确');
+    createFormRef.value.validate().then(async () => {
+        try {
+            const token = localStorage.getItem('accessToken');
+            // 发送请求前处理域名格式
+            const formData = { ...createForm };
+            if (!formData.domain.startsWith('https://')) {
+                formData.domain = `https://${formData.domain}`;
+            }
+            
+            const response = await axios.post('/api/monitor_domains/create/', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            
+            message.success('监控创建成功');
+            isCreateModalVisible.value = false;
+            fetchMonitors();
+        } catch (error) {
+            // 针对SSL证书错误
+            if (error.response?.data?.error?.domain?.[0]?.includes('SSL证书验证失败')) {
+                message.error('SSL证书验证失败，请检查证书是否已过期');
+            } else {
+                // 只有在不是403错误时才显示错误消息
+                if (!error.response || error.response.status !== 403) {
+                message.error('监控创建失败，请检查输入是否正确');
                 }
             }
-        }).catch((error) => {
-            message.error('请检查表单是否填写正确');
-            console.log('验证失败:', error);
-        });
+        }
+    }).catch((error) => {
+        message.error('请检查表单是否填写正确');
+        console.log('验证失败:', error);
     });
 };
 
 // 编辑监控的提交处理函数
 const handleEditOk = () => {
-    checkPermission(() => {
-        editFormRef.value.validate().then(async () => {
-            try {
-                const token = localStorage.getItem('accessToken');
-                // 发送请求前处理域名格式
-                const formData = { ...editForm };
-                if (!formData.domain.startsWith('https://')) {
-                    formData.domain = `https://${formData.domain}`;
-                }
-                
-                const response = await axios.put(`/api/monitor_domains/${currentMonitor.value.id}/update/`, formData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                
-                message.success('监控更新成功');
-                isEditModalVisible.value = false;
-                fetchMonitors();
-            } catch (error) {
-                // 简化错误处理，针对SSL证书错误提供友好提示
-                if (error.response?.data?.error?.domain?.[0]?.includes('SSL证书验证失败')) {
-                    message.error('SSL证书验证失败，请检查证书是否已过期');
-                } else {
-                    message.error('监控更新失败，请检查输入是否正确');
+    editFormRef.value.validate().then(async () => {
+        try {
+            const token = localStorage.getItem('accessToken');
+            // 发送请求前处理域名格式
+            const formData = { ...editForm };
+            if (!formData.domain.startsWith('https://')) {
+                formData.domain = `https://${formData.domain}`;
+            }
+            
+            const response = await axios.put(`/api/monitor_domains/${currentMonitor.value.id}/update/`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            
+            message.success('监控更新成功');
+            isEditModalVisible.value = false;
+            fetchMonitors();
+        } catch (error) {
+            // 针对SSL证书错误
+            if (error.response?.data?.error?.domain?.[0]?.includes('SSL证书验证失败')) {
+                message.error('SSL证书验证失败，请检查证书是否已过期');
+            } else {
+                // 只有在不是403错误时才显示错误消息
+                if (!error.response || error.response.status !== 403) {
+                message.error('监控更新失败，请检查输入是否正确');
                 }
             }
-        }).catch((error) => {
-            message.error('请检查表单是否填写正确');
-            console.log('验证失败:', error);
-        });
+        }
+    }).catch((error) => {
+        message.error('请检查表单是否填写正确');
+        console.log('验证失败:', error);
     });
 };
 
@@ -563,7 +554,6 @@ const fetchMonitors = async () => {
 
 // 删除监控
 const handleDeleteMonitor = async (id) => {
-    checkPermission(async () => {
         try {
             // 获取存储在localStorage中的Token
             const token = localStorage.getItem('accessToken');
@@ -578,9 +568,11 @@ const handleDeleteMonitor = async (id) => {
             fetchMonitors();  // 重新加载监控列表
         } catch (error) {
             // 处理请求错误
+            // 只有在不是403错误时才显示错误消息
+            if (!error.response || error.response.status !== 403) {
             message.error('监控删除失败');
+            }
         }
-    })
 };
 
 // 处理表格分页和排序变

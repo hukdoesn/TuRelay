@@ -143,11 +143,11 @@ export default {
         const errorMessages = {
           400: '无效的凭据',
           401: error.response.data.status === 'mfa_invalid' ? 'MFA验证码错误' : '密码错误',
+          423: '账号被锁定，请联系管理员',
           403: error.response.data.status === 'ip_not_allowed' ? 'IP不在白名单中' :
                error.response.data.status === 'ip_blocked' ? 'IP在黑名单中' :
-               '账号被锁定，请联系管理员',
+               '权限不足',
           404: '找不到用户',
-          423: '账号被锁定'
         };
         message.error(errorMessages[error.response.status] || '登录请求失败');
       } else {
