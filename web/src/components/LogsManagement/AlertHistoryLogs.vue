@@ -1,8 +1,8 @@
 <template>
     <div class="content_table">
         <div class="input_tools">
-            <a-input class="input_item" v-model:value="searchAlertName" addonBefore="告警名称" placeholder="请输入告警名称" />
-            <a-input class="input_item" v-model:value="searchAlertContacts" addonBefore="告警联系人" placeholder="请输入告警联系人" />
+            <a-input class="input_item" v-model:value="searchUsername" addonBefore="执行用户" placeholder="请输入执行用户" />
+            <a-input class="input_item" v-model:value="searchHostname" addonBefore="执行主机" placeholder="请输入执行主机" />
         </div>
         <div class="button_tools">
             <a-button @click="resetFilters" class="button_font">重置</a-button>
@@ -32,8 +32,8 @@ import axios from 'axios';
 import IconFont from '@/icons'
 
 // 搜索条件
-const searchAlertName = ref('')
-const searchAlertContacts = ref('')
+const searchUsername = ref('')
+const searchHostname = ref('')
 
 // 表格数据
 const data = ref([])
@@ -55,7 +55,7 @@ const columns = [
     {
         title: '编号',
         dataIndex: 'id',
-        width: 100,
+        width: 80,
         showSorterTooltip: false,
         sorter: (a, b) => a.id - b.id,
         customRender: ({ text }) => h('div', {
@@ -63,33 +63,37 @@ const columns = [
         }, text)
     },
     {
-        title: '告警名称',
-        dataIndex: 'alert_name',
-        width: 200,
+        title: '执行用户',
+        dataIndex: 'username',
+        width: 120,
     },
     {
-        title: '告警规则',
-        dataIndex: 'alert_rule',
-        width: 300,
+        title: '执行主机',
+        dataIndex: 'hostname',
+        width: 150,
+    },
+    {
+        title: '匹配类型',
+        dataIndex: 'match_type',
+        width: 100,
+        customRender: ({ text }) => h(Tag, {
+            color: text === '精准匹配' ? 'rgba(22, 119, 255, 0.8)' : 'rgba(56,158,13,0.8)'
+        }, text)
+    },
+    {
+        title: '执行命令',
+        dataIndex: 'command',
+        width: 250,
         ellipsis: true,
     },
     {
-        title: '告警联系人',
-        dataIndex: 'alert_contacts',
-        width: 200,
-        customRender: ({ text }) => {
-            const contacts = text.split(',');
-            return h('div', contacts.map(contact => 
-                h(Tag, {
-                    color: 'blue',
-                    style: 'margin: 2px'
-                }, contact.trim())
-            ));
-        }
+        title: '触发规则',
+        dataIndex: 'alert_rule',
+        width: 150,
     },
     {
-        title: '告警时间',
-        dataIndex: 'alert_time',
+        title: '创建时间',
+        dataIndex: 'create_time',
         width: 180,
     }
 ]
@@ -103,17 +107,14 @@ const fetchAlertLogs = async () => {
                 'Authorization': token
             },
             params: {
-                alert_name: searchAlertName.value,
-                alert_contacts: searchAlertContacts.value,
+                username: searchUsername.value,
+                hostname: searchHostname.value,
                 page: paginationOptions.current,
                 page_size: paginationOptions.pageSize,
             }
         })
         
-        data.value = response.data.results.map((log, index) => ({
-            ...log,
-            id: index + 1,
-        }))
+        data.value = response.data.results
         paginationOptions.total = response.data.pagination.total_items
     } catch (error) {
         message.error('获取告警历史记录失败')
@@ -130,8 +131,8 @@ const handleTableChange = (pagination) => {
 
 // 重置搜索条件
 const resetFilters = () => {
-    searchAlertName.value = ''
-    searchAlertContacts.value = ''
+    searchUsername.value = ''
+    searchHostname.value = ''
     paginationOptions.current = 1
     fetchAlertLogs()
 }

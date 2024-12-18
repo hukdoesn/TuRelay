@@ -298,15 +298,19 @@ class AlertHistoryLog(models.Model):
     """
     告警历史记录模型，记录触发的告警信息
     """
-    alert_name = models.CharField(max_length=150, verbose_name="告警名称")
-    alert_rule = models.TextField(verbose_name="告警规则")
-    alert_contacts = models.TextField(verbose_name="告警联系人")
-    alert_time = models.DateTimeField(auto_now_add=True, verbose_name="告警时间")
+    id = models.AutoField(primary_key=True, verbose_name="编号")
+    username = models.CharField(null=True, blank=True, max_length=150, verbose_name="执行用户")
+    hostname = models.CharField(null=True, blank=True, max_length=150, verbose_name="执行主机")
+    match_type = models.CharField(null=True, blank=True, max_length=20, verbose_name="匹配类型")  # 精准匹配/模糊匹配
+    command = models.TextField(null=True, blank=True, verbose_name="执行命令")
+    alert_rule = models.CharField(null=True, blank=True, max_length=150, verbose_name="触发规则")
+    create_time = models.DateTimeField(null=True, blank=True, auto_now_add=True, verbose_name="创建时间")
 
     class Meta:
-        db_table = 't_alert_history_log'  # 指定数据库表名为 t_alert_history_log
+        db_table = 't_alert_history_log'
+        ordering = ['-create_time']
 
     def __str__(self):
-        return f"{self.alert_name} - {self.alert_time}"
+        return f"{self.username} - {self.hostname} - {self.alert_rule}"
 
 

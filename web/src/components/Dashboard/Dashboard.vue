@@ -141,8 +141,41 @@ const loginColumns = [
   }
 ]
 
+// 最近告警记录表格列定义
+const alertColumns = [
+  {
+    title: '执行用户',
+    dataIndex: 'username',
+    key: 'username',
+    width: '20%'
+  },
+  {
+    title: '执行主机',
+    dataIndex: 'hostname',
+    key: 'hostname',
+    width: '20%'
+  },
+  {
+    title: '执行命令',
+    dataIndex: 'command',
+    key: 'command',
+    width: '35%',
+    ellipsis: true  // 文字过长时显示省略号
+  },
+  {
+    title: '告警时间',
+    dataIndex: 'create_time',
+    key: 'create_time',
+    width: '25%'
+  }
+]
+
+
 // 最近登录数据
 const recentLogins = ref([])
+
+// 最近告警数据
+const recentAlerts = ref([])
 
 // 添加日期范围选择的响应式变量
 const dateRange = ref('7')
@@ -417,7 +450,8 @@ const fetchDashboardData = async () => {
     initHostChart(statsResponse.data.hostTypes)
     initWebsiteChart(statsResponse.data.websiteStatus)  // 初始化网站连通性图表
     initLoginChart(loginStatsResponse.data)
-    recentLogins.value = statsResponse.data.recentLogins
+    recentLogins.value = statsResponse.data.recentLogins    // 登陆失败记录
+    recentAlerts.value = statsResponse.data.recentAlerts    // 历史告警记录
   } catch (error) {
     console.error('获取仪表盘数据失败:', error)
     // 使用模拟数据用于展示

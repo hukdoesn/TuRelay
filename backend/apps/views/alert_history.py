@@ -9,19 +9,19 @@ class AlertHistoryLogView(APIView):
 
     def get(self, request):
         # 获取所有告警历史记录并按时间倒序排序
-        alert_logs = AlertHistoryLog.objects.all().order_by('-alert_time')
+        alert_logs = AlertHistoryLog.objects.all()
         
         # 获取分页和筛选参数
         page = request.GET.get('page', 1)
         page_size = request.GET.get('page_size', 10)
-        alert_name = request.GET.get('alert_name', '')
-        alert_contacts = request.GET.get('alert_contacts', '')
+        username = request.GET.get('username', '')
+        hostname = request.GET.get('hostname', '')
         
         # 应用筛选条件
-        if alert_name:
-            alert_logs = alert_logs.filter(alert_name__icontains=alert_name)
-        if alert_contacts:
-            alert_logs = alert_logs.filter(alert_contacts__icontains=alert_contacts)
+        if username:
+            alert_logs = alert_logs.filter(username__icontains=username)
+        if hostname:
+            alert_logs = alert_logs.filter(hostname__icontains=hostname)
 
         # 分页处理
         paginator = Paginator(alert_logs, page_size)
@@ -32,10 +32,12 @@ class AlertHistoryLogView(APIView):
         for log in current_page_data:
             data.append({
                 'id': log.id,
-                'alert_name': log.alert_name,
+                'username': log.username,
+                'hostname': log.hostname,
+                'match_type': log.match_type,
+                'command': log.command,
                 'alert_rule': log.alert_rule,
-                'alert_contacts': log.alert_contacts,
-                'alert_time': log.alert_time.strftime('%Y-%m-%d %H:%M:%S'),
+                'create_time': log.create_time.strftime('%Y-%m-%d %H:%M:%S'),
             })
         
         # 构建分页信息

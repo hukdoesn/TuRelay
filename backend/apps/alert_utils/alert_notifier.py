@@ -17,7 +17,7 @@ def get_dingtalk_message(username, hostname, host_ip, command, command_alert):
 - 🖥️ 执行主机：**{hostname}** (IP: {host_ip})
 - 🔍 匹配类型：**{'精准匹配' if command_alert.match_type == 'exact' else '模糊匹配'}**
 - 🛠️ 执行命令：`{command}`
-- 🚫 是否阻止：**{'是' if command_alert.is_active else '否'}**
+- 🚫 是否告警：**{'是' if command_alert.is_active else '否'}**
 - ⚠️ 触发规则：**{command_alert.name}**
   - 规则详情：`{command_alert.command_rule}`
 
@@ -35,7 +35,7 @@ def get_wecom_message(username, hostname, host_ip, command, command_alert):
 > 🖥️ 执行主机：<font color="">{hostname}</font> (IP: {host_ip})
 > 🔍 匹配类型：<font color="">{'精准匹配' if command_alert.match_type == 'exact' else '模糊匹配'}</font>
 > 🛠️ 执行命令：<font color="info">{command}</font>
-> 🚫 是否阻止：{'是' if command_alert.is_active else '否'}
+> 🚫 是否告警：{'是' if command_alert.is_active else '否'}
 > ⚠️ 触发规则：<font color="">{command_alert.name}</font>
     > 规则详情：<font color="">{command_alert.command_rule}</font>
 
@@ -53,7 +53,7 @@ def get_feishu_message(username, hostname, host_ip, command, command_alert):
 - 🖥️ 执行主机：<font color=''>{hostname}</font> (IP: {host_ip})
 - 🔍 匹配类型：<font color=''>{'精准匹配' if command_alert.match_type == 'exact' else '模糊匹配'}</font>
 - 🛠️ 执行命令：<font color='red'>{command}</font>
-- 🚫 是否阻止：{'是' if command_alert.is_active else '否'}
+- 🚫 是否告警：{'是' if command_alert.is_active else '否'}
 - ⚠️ 触发规则：<font color=''>{command_alert.name}</font>
     - 规则详情：{command_alert.command_rule}
     
@@ -70,11 +70,12 @@ def send_alert_notification(command_alert_id, command, username, hostname):
         alert_contacts = AlertContact.objects.filter(id__in=alert_contact_ids)
 
         # 记录告警历史
-        alert_contact_names = [contact.name for contact in alert_contacts]
         AlertHistoryLog.objects.create(
-            alert_name=f"{command_alert.name} - {username}@{hostname}",
-            alert_rule=command_alert.command_rule,
-            alert_contacts=','.join(alert_contact_names),
+            username=username,
+            hostname=hostname,
+            match_type='精准匹配' if command_alert.match_type == 'exact' else '模糊匹配',
+            command=command,
+            alert_rule=command_alert.name,
         )
         
         for contact in alert_contacts:

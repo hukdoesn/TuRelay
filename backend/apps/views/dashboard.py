@@ -16,7 +16,8 @@ from ..models import (
     UserLock,
     LoginLog,
     DomainMonitor,
-    Token
+    Token,
+    AlertHistoryLog
 )
 # from apps.utils.session import session_manager
 from apps.utils import session_manager
@@ -95,6 +96,29 @@ def dashboard_statistics(request):
                 record['login_time'] = record['login_time'].strftime('%Y-%m-%d %H:%M:%S')
             if not record['reason']:
                 record['reason'] = '未知原因'  # 如果reason为空，显示默认值
+                
+        # 获取最近告警记录
+        recent_alerts = AlertHistoryLog.objects.order_by(
+            '-create_time'
+        )[:5].values(
+            'username',    # 执行用户
+            'hostname',    # 执行主机
+            'command',     # 执行命令
+            'create_time'   # 执行时间
+        )
+        # 处理可能的空值
+        for alert in recent_alerts:
+            if not alert['username']:
+                alert['username'] = '未知用户'
+            if not alert['hostname']:
+                alert['hostname'] = '未知主机'
+            if not alert['command']:
+                alert['command'] = '未知命令'
+            # 格式化时间
+            if alert['create_time']:
+                alert['create_time'] = alert['create_time'].strftime('%Y-%m-%d %H:%M:%S')
+            else:
+                alert['create_time'] = '未知时间'
         
         # 添加网站连通性统计
         website_status = {
@@ -106,7 +130,8 @@ def dashboard_statistics(request):
             'statistics': statistics,
             'hostTypes': host_types,
             'loginStats': login_stats,
-            'recentLogins': list(recent_logins),
+            'recentLogins': list(recent_logins),  # 添加最近失败登陆记录
+            'recentAlerts': list(recent_alerts),  # 添加最近告警记录
             'websiteStatus': website_status  # 添加网站连通性数据
         })
         
