@@ -510,22 +510,27 @@ const handleResetPasswordOk = async () => {
     try {
         const token = localStorage.getItem('accessToken')  // 从localStorage获取Token
         // 发送POST请求重置密码
-        await axios.post(`/api/users/${resetPasswordForm.username}/reset_password/`, {
+        const response = await axios.post(`/api/users/${resetPasswordForm.username}/reset_password/`, {
             new_password: resetPasswordForm.newPassword
         }, {
             headers: {
                 'Authorization': token  // 在请求头中包含Token
             }
-        })
-        message.success(`用户 ${resetPasswordForm.username} 密码重置成功，请重新登录`)
-        resetPasswordModalVisible.value = false
-        // 清除localStorage中的所有信息
-        localStorage.clear();
-        router.push('/login');
+        });
+
+        if (response.data.is_self_update) {
+            message.success('密码修改成功，请重新登录');
+            resetPasswordModalVisible.value = false;
+            localStorage.clear();
+            router.push('/login');
+        } else {
+            message.success(`用户 ${resetPasswordForm.username} 密码重置成功`);
+            resetPasswordModalVisible.value = false;
+        }
     } catch (error) {
         // 只有在不是403错误时才显示错误消息
         if (!error.response || error.response.status !== 403) {
-            message.error(`重置用户 ${resetPasswordForm.username} 密码失败`)
+            message.error(`重置用户 ${resetPasswordForm.username} 密码失败`);
         }
     }
 };

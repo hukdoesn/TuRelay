@@ -153,13 +153,13 @@ const alertColumns = [
     title: '执行主机',
     dataIndex: 'hostname',
     key: 'hostname',
-    width: '20%'
+    width: '25%'
   },
   {
     title: '执行命令',
     dataIndex: 'command',
     key: 'command',
-    width: '35%',
+    width: '30%',
     ellipsis: true  // 文字过长时显示省略号
   },
   {

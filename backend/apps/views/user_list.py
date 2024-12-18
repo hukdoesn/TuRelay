@@ -1,8 +1,9 @@
-from apps.utils import APIView, Response, User, UserLock, status, Paginator, EmptyPage, PageNotAnInteger, CustomTokenAuthentication, IsAuthenticated, Role, Permission, RolePermission, user_has_view_permission
+from apps.utils import APIView, Response, User, UserLock, status, Paginator, EmptyPage, PageNotAnInteger, CustomTokenAuthentication, IsAuthenticated, Role, Permission, RolePermission, user_has_view_permission, Token
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.forms.models import model_to_dict
+# from django.contrib.auth.models import Token
 
 # 用户创建序列化器，用于验证创建用户的请求数据
 class UserCreateSerializer(serializers.Serializer):
@@ -143,12 +144,19 @@ class UserDetailView(APIView):
     authentication_classes = [CustomTokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, username):
+    def get(self, request, username=None):
         """
         处理GET请求，返回用户详细信息
+        如果提供了username参数，则通过username查找
+        如果没有提供username，则返回当前登录用户的信息
         """
         try:
-            user = User.objects.get(username=username)
+            if username:
+                user = User.objects.get(username=username)
+            else:
+                # 获取当前登录用户
+                user = request.user
+                
             role_permissions = RolePermission.objects.filter(user=user)
             role_display = role_permissions[0].role.role_name if role_permissions.exists() else "无角色"
             description = role_permissions[0].role.description if role_permissions.exists() else ""
@@ -227,26 +235,43 @@ class UserDetailView(APIView):
 
     def post(self, request, username=None):
         """
-        处理POST请求，用于创建新用户或重置密码
-        """
-        if username:
-            return self.reset_password(request, username)
-        else:
-            return self.create_user(request)
-
-    def reset_password(self, request, username):
-        """
-        处理重置密码的请求
+        处理POST请求，用于重置密码
+        如果提供了username参数，则重置指定用户的密码
+        如果没有提供username，则重置当前登录用户的密码
         """
         try:
-            user = User.objects.get(username=username)
-            serializer = ResetPasswordSerializer(data=request.data)
-            if serializer.is_valid():
-                new_password = serializer.validated_data.get('new_password')
-                user.password = make_password(new_password)
-                user.save()
-                return Response(model_to_dict(user), status=status.HTTP_200_OK)  # 返回完整的用户信息
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if username:
+                target_user = User.objects.get(username=username)
+            else:
+                # 获取当前登录用户
+                target_user = request.user
+
+            # 验证新密码
+            new_password = request.data.get('new_password')
+            if not new_password:
+                return Response({"detail": "必须提供新密码"}, status=status.HTTP_400_BAD_REQUEST)
+            if len(new_password) < 6:
+                return Response({"detail": "密码长度不能小于6个字符"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # 更新密码
+            target_user.password = make_password(new_password)
+            target_user.save()
+
+            # 清除目标用户的所有token和会话
+            from apps.utils import session_manager
+            tokens = Token.objects.filter(user=target_user)
+            for token in tokens:
+                # 删除Redis中的会话
+                session_manager.remove_session(token.token)
+                # 删除数据库中的token
+                token.delete()
+
+            # 如果是用户修改自己的密码，返回特殊标记
+            is_self_update = target_user == request.user
+            return Response({
+                "detail": "密码重置成功",
+                "is_self_update": is_self_update
+            }, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({"detail": "用户未找到"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:

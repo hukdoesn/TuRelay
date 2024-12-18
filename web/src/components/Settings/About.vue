@@ -1,119 +1,152 @@
 <template>
-  <div class="about-container">
-    <!-- 项目介绍部分重新设计 -->
-    <div class="project-intro">
-      <!-- Logo和版本信息区域 -->
-      <div class="brand-section">
-        <div class="brand-info">
-          <h1 class="brand-title">Tu Relay</h1>
-          <div class="brand-subtitle">翻斗花园有棵树，我叫图图你记住。</div>
-        </div>
-        <div class="version-badges">
-          <div class="version-badge">
-            <span class="badge-label">当前版本</span>
-            <span class="badge-value">1.0.0</span>
+  <div class="page-container">
+    <div class="about-container">
+      <!-- 个人资料卡片 -->
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar-wrapper">
+            <img class="avatar" src="@/assets/img/me.png" alt="头像" />
+            <div class="avatar-decoration">
+              <span class="emoji">✨</span>
+              <span class="emoji">🎨</span>
+            </div>
           </div>
-          <div class="version-badge">
-            <span class="badge-label">更新时间</span>
-            <span class="badge-value">{{ formatDate(latestUpdate) }}</span>
+          <div class="profile-info">
+            <div class="name-wrapper">
+              <h1 class="name">胡图图不涂涂</h1>
+              <span class="emoji-tag">🎯</span>
+            </div>
+            <p class="bio">生活不易，猫猫叹气 <span class="emoji">✨</span></p>
+            <div class="social-links">
+              <a href="https://github.com/hukdoesn/TuRelay" target="_blank" class="social-link github">
+                <img src="@/assets/svg/github.svg" alt="GitHub" class="icon" />
+                <span class="social-text">开源项目</span>
+              </a>
+              <a href="https://ext4.cn/" class="social-link blog">
+                <img src="@/assets/svg/blog.svg" alt="Blog" class="icon" />
+                <span class="social-text">技术博客</span>
+              </a>
+              <div class="social-link wechat" @click="toggleQR">
+                <img src="@/assets/svg/wechat.svg" alt="WeChat" class="icon" />
+                <span class="social-text">一起交流</span>
+              </div>
+              <div class="social-link donate" @click="toggleDonate">
+                <img src="@/assets/svg/donate.svg" alt="打赏" class="icon" />
+                <span class="social-text">请我喝咖啡</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 项目描述 -->
-      <div class="project-description">
-        <p class="description-text">
-          TuRelay 是一款专注于简化运维工作流程的现代化运维堡垒机平台。通过直观的界面设计和强大的功能集成，
-          为俺图图提供高效、安全、可靠的一站式解决方案。
-          <!-- 翻斗花园有棵树，我叫图图你记住。 -->
-        </p>
-        <div class="feature-tags">
-          <a-tag color="cyan">简单高效</a-tag>
-          <a-tag color="blue">安全可靠</a-tag>
-          <a-tag color="geekblue">功能丰富</a-tag>
-          <a-tag color="purple">持续更新</a-tag>
+      <!-- 更新日志时间轴 -->
+      <div class="timeline-section">
+        <div class="section-header">
+          <div class="header-left">
+            <h2>更新日志</h2>
+            <span class="update-count">共 {{ updates.length }} 个版本</span>
+          </div>
+          <a-radio-group v-model:value="timelineMode" button-style="solid" size="small">
+            <a-radio-button value="all">全部</a-radio-button>
+            <a-radio-button value="feature">功能</a-radio-button>
+            <a-radio-button value="security">安全</a-radio-button>
+            <a-radio-button value="bugfix">修复</a-radio-button>
+            <a-radio-button value="optimization">优化</a-radio-button>
+          </a-radio-group>
         </div>
-      </div>
 
-      <!-- 社交链接部分保持不变 -->
-      <div class="social-links">
-        <a href="https://ext4.cn" target="_blank" class="badge-link">
-          <img alt="Blog" src="https://img.shields.io/badge/博客-1890ff?style=flat-square&logo=Blogger&logoColor=white" />
-        </a>
-        <a href="https://github.com/hukdoesn" target="_blank" class="badge-link">
-          <img alt="GitHub" src="https://img.shields.io/badge/GitHub-2a3947?style=flat-square&logo=GitHub&logoColor=white" />
-        </a>
-        <a href="https://www.ext4.cn" target="_blank" class="badge-link">
-          <img alt="Documentation" src="https://img.shields.io/badge/官网-36cfc9?style=flat-square&logo=ReadtheDocs&logoColor=white" />
-        </a>
-        <a href="https://gitee.com/your-gitee" target="_blank" class="badge-link">
-          <img alt="Gitee" src="https://img.shields.io/badge/Gitee-28404e?style=flat-square&logo=Gitee&logoColor=white" />
-        </a>
+        <div class="timeline-wrapper">
+          <a-timeline>
+            <a-timeline-item v-for="(item, index) in filteredUpdates" :key="index">
+              <template #dot>
+                <div :class="['custom-dot', item.type]">
+                  <component :is="getIcon(item.type)" />
+                </div>
+              </template>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <span class="version">{{ item.version }}</span>
+                  <span class="date">{{ formatDate(item.date) }}</span>
+                  <a-tag :color="getTagColor(item.type)">{{ getTypeText(item.type) }}</a-tag>
+                </div>
+                <div class="timeline-title">{{ item.title }}</div>
+                <div class="timeline-description">
+                  <ul>
+                    <li v-for="(detail, dIndex) in item.details" :key="dIndex">{{ detail }}</li>
+                  </ul>
+                </div>
+              </div>
+            </a-timeline-item>
+          </a-timeline>
+        </div>
       </div>
     </div>
 
-    <!-- 更新日志 -->
-    <div class="update-section">
-      <div class="section-header">
-        <div class="header-left">
-          <h2>更新日志</h2>
-          <span class="update-count">共 {{ updates.length }} 个版本</span>
-        </div>
-        <a-radio-group v-model:value="timelineMode" button-style="solid" size="small">
-          <a-radio-button value="all">全部</a-radio-button>
-          <a-radio-button value="feature">功能</a-radio-button>
-          <a-radio-button value="security">安全</a-radio-button>
-          <a-radio-button value="bugfix">修复</a-radio-button>
-          <a-radio-button value="optimization">优化</a-radio-button>
-        </a-radio-group>
+    <!-- 微信二维码弹窗 -->
+    <div v-if="showQR" class="modal" @click.self="toggleQR">
+      <div class="modal-container">
+        <img :src="wechatQR" alt="微信二维码" />
+        <p class="modal-tip">扫码加我微信 <span class="emoji">👻</span></p>
       </div>
+    </div>
 
-      <div class="timeline-wrapper">
-        <a-timeline>
-          <a-timeline-item v-for="(item, index) in filteredUpdates" :key="index">
-            <template #dot>
-              <div :class="['custom-dot', item.type]">
-                <component :is="getIcon(item.type)" />
-              </div>
-            </template>
-            <div class="timeline-content">
-              <div class="timeline-header">
-                <span class="version">{{ item.version }}</span>
-                <span class="date">{{ formatDate(item.date) }}</span>
-                <a-tag :color="getTagColor(item.type)">{{ getTypeText(item.type) }}</a-tag>
-              </div>
-              <div class="timeline-title">{{ item.title }}</div>
-              <div class="timeline-description">
-                <ul>
-                  <li v-for="(detail, dIndex) in item.details" :key="dIndex">{{ detail }}</li>
-                </ul>
-              </div>
-            </div>
-          </a-timeline-item>
-        </a-timeline>
+    <!-- 打赏弹窗 -->
+    <div v-if="showDonate" class="modal" @click.self="toggleDonate">
+      <div class="modal-container donate-container">
+        <div class="donate-header">
+          <h3>请我喝杯咖啡 <span class="emoji">☕️</span></h3>
+          <p class="donate-desc">谢谢你的支持哦 <span class="emoji"></span></p>
+        </div>
+        <div class="donate-types">
+          <div 
+            class="donate-type" 
+            :class="{ active: donateType === 'wechat' }"
+            @click="setDonateType('wechat')"
+          >
+            <img src="@/assets/svg/wechat.svg" alt="微信支付" class="donate-icon" />
+            <span>微信支付</span>
+          </div>
+          <div 
+            class="donate-type"
+            :class="{ active: donateType === 'alipay' }"
+            @click="setDonateType('alipay')"
+          >
+            <img src="@/assets/svg/alipay.svg" alt="支付宝" class="donate-icon" />
+            <span>支付宝</span>
+          </div>
+        </div>
+        <div class="donate-qr">
+          <img 
+            :src="donateType === 'wechat' ? '/src/assets/img/wechat-pay.png' : '/src/assets/img/alipay-pay.png'"
+            :alt="donateType === 'wechat' ? '微信支付' : '支付宝支付'"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import dayjs from 'dayjs';
+import { ref, computed } from 'vue'
+import dayjs from 'dayjs'
 import {
   BugOutlined,
   RocketOutlined,
   ToolOutlined,
   SafetyCertificateOutlined,
-} from '@ant-design/icons-vue';
+} from '@ant-design/icons-vue'
 
-const latestUpdate = ref('2024-11-12');
-const timelineMode = ref('all');
+const showQR = ref(false)
+const showDonate = ref(false)
+const wechatQR = '/src/assets/img/wechat.png'
+const donateType = ref('wechat')
+const timelineMode = ref('all')
 
-// 更新记录
+// 更新记录数据
 const updates = ref([
-{
+  {
     version: 'v1.0.0',
-    date: '2024-11-12',
+    date: '2024-03-20',
     type: 'feature',
     title: '新增功能',
     details: [
@@ -123,52 +156,9 @@ const updates = ref([
       '开启水印功能',
     ]
   },
-{
-    version: 'v1.0.0',
-    date: '2024-11-12',
-    type: 'feature',
-    title: '新增功能',
-    details: [
-      '主机管理详情页面',
-      '用户列表详情页面',
-      '站点管理详情页面',
-      '更新日志时间轴页面',
-    ]
-  },
   {
     version: 'v1.0.0',
-    date: '2024-11-12',
-    type: 'bugfix',
-    title: 'Bug修复更新',
-    details: [
-      '修复锁定记录last_attemp_time字段空值显示错误',
-    ]
-  },
-  {
-    version: 'v1.0.0',
-    date: '2024-11-12',
-    type: 'optimization',
-    title: '性能优化',
-    details: [
-      '优化数据库查询性能',
-      '改进前端组件加载速度',
-      '优化WebSocket连接管理'
-    ]
-  },
-  {
-    version: 'v1.0.2',
-    date: '2024-03-18',
-    type: 'bugfix',
-    title: 'Bug修复更新',
-    details: [
-      '修复文件上传问题',
-      '解决WebTerminal连接稳定性问题',
-      '修复部分UI显示异常'
-    ]
-  },
-  {
-    version: 'v1.0.1',
-    date: '2024-03-17',
+    date: '2024-03-19',
     type: 'security',
     title: '安全性更新',
     details: [
@@ -179,31 +169,40 @@ const updates = ref([
   },
   {
     version: 'v1.0.0',
-    date: '2024-03-16',
-    type: 'feature',
-    title: '首个正式版本发布',
+    date: '2024-03-18',
+    type: 'bugfix',
+    title: 'Bug修复更新',
     details: [
-      '完整的用户认证和权限管理系统',
-      '主机资产管理功能',
-      '站点监控功能',
-      'WebTerminal 终端支持',
-      '告警系统集成'
+      '修复文件上传问题',
+      '解决WebTerminal连接稳定性问题',
+      '修复部分UI显示异常'
+    ]
+  },
+  {
+    version: 'v1.0.0',
+    date: '2024-03-17',
+    type: 'optimization',
+    title: '性能优化',
+    details: [
+      '优化数据库查询性能',
+      '改进前端组件加载速度',
+      '优化WebSocket连接管理'
     ]
   }
-]);
+])
 
 // 按类型筛选更新记录
 const filteredUpdates = computed(() => {
   if (timelineMode.value === 'all') {
-    return sortedUpdates.value;
+    return sortedUpdates.value
   }
-  return sortedUpdates.value.filter(update => update.type === timelineMode.value);
-});
+  return sortedUpdates.value.filter(update => update.type === timelineMode.value)
+})
 
 // 按日期倒序排序
 const sortedUpdates = computed(() => {
-  return [...updates.value].sort((a, b) => new Date(b.date) - new Date(a.date));
-});
+  return [...updates.value].sort((a, b) => new Date(b.date) - new Date(a.date))
+})
 
 const getIcon = (type) => {
   const icons = {
@@ -211,19 +210,19 @@ const getIcon = (type) => {
     security: SafetyCertificateOutlined,
     bugfix: BugOutlined,
     optimization: ToolOutlined
-  };
-  return icons[type];
-};
+  }
+  return icons[type]
+}
 
 const getTagColor = (type) => {
   const colors = {
-    feature: 'blue',
-    security: 'green',
-    bugfix: 'red',
-    optimization: 'purple'
-  };
-  return colors[type];
-};
+    feature: 'rgba(24,144,255,0.8)',
+    security: 'rgba(82,196,26,0.8)',
+    bugfix: 'rgba(255,77,79,0.8)',
+    optimization: 'rgba(47,84,235,0.8)'
+  }
+  return colors[type]
+}
 
 const getTypeText = (type) => {
   const texts = {
@@ -231,150 +230,271 @@ const getTypeText = (type) => {
     security: '安全更新',
     bugfix: '问题修复',
     optimization: '优化'
-  };
-  return texts[type];
-};
+  }
+  return texts[type]
+}
 
 const formatDate = (date) => {
-  return dayjs(date).format('YYYY-MM-DD');
-};
+  return dayjs(date).format('YYYY-MM-DD')
+}
+
+const toggleQR = () => {
+  showQR.value = !showQR.value
+  showDonate.value = false
+}
+
+const toggleDonate = () => {
+  showDonate.value = !showDonate.value
+  showQR.value = false
+}
+
+const setDonateType = (type) => {
+  donateType.value = type
+}
 </script>
 
 <style scoped>
+.page-container {
+  width: 100%;
+}
+
 .about-container {
-  padding: 24px;
-  background: #fff;
+  max-width: auto;
+  margin: 0 0 0 30px;  /* 添加左边距 */
+  padding: 2rem;
 }
 
-.project-intro {
-  margin-bottom: 40px;
-  padding: 32px;
-  border-radius: 8px;
-  background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+.profile-card {
+  background: var(--vp-c-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.brand-section {
+.profile-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 32px;
-  padding-bottom: 32px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  align-items: center;
+  gap: 2.5rem;
 }
 
-.brand-info {
-  flex: 1;
+.avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
 }
 
-.brand-title {
-  font-size: 3.2em;
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+.avatar-decoration {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  display: flex;
+  gap: 4px;
+}
+
+.profile-info {
+  text-align: left;
+}
+
+.name-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.name {
+  font-size: 1.4rem;
   font-weight: 600;
   margin: 0;
-  background: linear-gradient(45deg, #1890ff, #36cfc9);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: -1px;
+  color: var(--vp-c-text-1);
 }
 
-.brand-subtitle {
-  font-size: 1.2em;
-  color: #8c8c8c;
-  margin-top: 8px;
-  letter-spacing: 1px;
+.emoji-tag {
+  font-size: 1.2rem;
 }
 
-.version-badges {
+.bio {
+  font-size: 1rem;
+  color: var(--vp-c-text-2);
+  margin: 0.5rem 0 1rem;
   display: flex;
-  gap: 16px;
-  padding-top: 8px;
-}
-
-.version-badge {
-  background: rgba(24, 144, 255, 0.1);
-  padding: 12px 20px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  min-width: 120px;
+  gap: 0.5rem;
 }
 
-.badge-label {
-  font-size: 0.85em;
-  color: #8c8c8c;
-  margin-bottom: 4px;
-}
-
-.badge-value {
+.emoji {
   font-size: 1.1em;
-  color: #1890ff;
-  font-weight: 500;
-}
-
-.project-description {
-  margin-bottom: 32px;
-}
-
-.description-text {
-  font-size: 1.1em;
-  line-height: 1.8;
-  color: #595959;
-  margin-bottom: 20px;
-  max-width: 900px;
-}
-
-.feature-tags {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.feature-tags :deep(.ant-tag) {
-  padding: 4px 12px;
-  font-size: 0.9em;
-  border: none;
-  border-radius: 4px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .social-links {
   display: flex;
-  gap: 12px;
-  margin-top: 24px;
-  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.social-link {
+  display: flex;
   align-items: center;
-}
-
-.badge-link {
-  transition: all 0.3s ease;
+  color: var(--vp-c-text-2);
+  transition: all 0.3s;
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
   text-decoration: none;
-  position: relative;
+  background: var(--vp-c-bg-soft);
 }
 
-.badge-link:hover {
+.social-link:hover {
+  color: var(--vp-c-text-1);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ebebeb;
 }
 
-.badge-link img {
-  height: 20px;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+.icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.4rem;
 }
 
-.badge-link:hover img {
-  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+.social-text {
+  font-size: 0.9rem;
 }
 
-.update-section {
-  margin-bottom: 40px;
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.modal-container img {
+  max-width: 300px;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.modal-tip {
+  text-align: center;
+  margin: 1rem 0 0;
+  color: var(--vp-c-text-2);
+  font-size: 0.9rem;
+}
+
+.donate-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.donate-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.donate-header h3 {
+  margin: 0;
+  color: var(--vp-c-text-1);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.donate-desc {
+  margin: 0.5rem 0 0;
+  color: var(--vp-c-text-2);
+  font-size: 0.9rem;
+}
+
+.donate-types {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.donate-type {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--vp-c-bg-soft);
+  transition: all 0.3s;
+}
+
+.donate-type:hover {
+  transform: translateY(-2px);
+  background-color: #f5f5f5;
+}
+
+.donate-type.active {
+  background: #f0f0f0;
+  border: 1px solid var(--vp-c-text-2);
+}
+
+.donate-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.5rem;
+}
+
+.donate-qr {
+  background: var(--vp-c-bg-soft);
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.donate-qr img {
+  max-width: 280px;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+.timeline-section {
+  background: var(--vp-c-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  margin-top: 2rem;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 2rem;
 }
 
 .header-left {
@@ -485,30 +605,37 @@ const formatDate = (date) => {
   display: none;
 }
 
-/* 响应式设计 */
 @media (max-width: 768px) {
-  .brand-section {
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .version-badges {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .brand-title {
-    font-size: 2.5em;
-  }
-
   .section-header {
     flex-direction: column;
     gap: 16px;
   }
   
-  .intro-header {
+  .timeline-content {
+    margin-left: 8px;
+    padding: 12px;
+  }
+  
+  .timeline-header {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-header {
     flex-direction: column;
-    align-items: flex-start;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .profile-info {
+    text-align: center;
+  }
+  .name-wrapper {
+    justify-content: center;
+  }
+  .social-links {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
 </style>
