@@ -82,7 +82,7 @@ class DomainMonitorTask:
                 cert_info = DomainMonitorTask.check_ssl_certificate(normalized_domain)
                 domain_obj.tls_version = cert_info['tls_version']
                 domain_obj.certificate_days = cert_info['days_remaining']
-                logger.info(f"域名 {normalized_domain} SSL证书检查通过，剩余 {cert_info['days_remaining']} 天")
+                # logger.info(f"域名 {normalized_domain} SSL证书检查通过，剩余 {cert_info['days_remaining']} 天")
             except (ssl.SSLError, ssl.CertificateError) as ssl_error:
                 domain_obj.connectivity = False
                 domain_obj.tls_version = "N/A"
@@ -100,11 +100,11 @@ class DomainMonitorTask:
                 domain_obj.time_consumption = response.elapsed.total_seconds()
                 domain_obj.http_version = str(response.raw.version / 10)
 
-                if domain_obj.redirection:
-                    logger.info(f"域名 {normalized_domain} 重定向到 {response.url}")
+                # if domain_obj.redirection:
+                #     logger.info(f"域名 {normalized_domain} 重定向到 {response.url}")
                 
                 domain_obj.save()
-                logger.info(f"域名 {normalized_domain} 监控成功，状态码: {response.status_code}")
+                # logger.info(f"域名 {normalized_domain} 监控成功，状态码: {response.status_code}")
                 
             except requests.exceptions.SSLError as ssl_err:
                 domain_obj.connectivity = False

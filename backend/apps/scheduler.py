@@ -8,8 +8,13 @@ import redis
 
 logger = logging.getLogger('apscheduler')
 
-# Initialize Redis connection
-redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
+# 初始化Redis连接
+redis_client = redis.StrictRedis(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    password=settings.REDIS_PASSWORD if settings.REDIS_PASSWORD else None,
+    db=settings.REDIS_DB
+)
 
 def check_redis_connection():
     """
@@ -23,10 +28,15 @@ def check_redis_connection():
         logger.error("无法连接到 Redis")
         return False
 
-# Define Scheduler
+# 定义调度器
 scheduler = BackgroundScheduler(
     jobstores={
-        'default': RedisJobStore(host='localhost', port=6379, db=0),
+        'default': RedisJobStore(
+            host=settings.REDIS_HOST,
+            port=settings.REDIS_PORT,
+            password=settings.REDIS_PASSWORD if settings.REDIS_PASSWORD else None,
+            db=settings.REDIS_DB
+        ),
     },
     executors={
         'default': ThreadPoolExecutor(20),

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  turelay:
+    build: .
+    container_name: turelay
+    ports:
+      - "8100:8100"
+      - "8080:8080"
+    networks:
+      - turelay_net
+    volumes:
+      - ./backend:/app/backend
+      - ./web:/app/web
+      - /app/web/node_modules
+      - /app/backend/migrations
+
+networks:
+  turelay_net:
+    name: turelay_net
+    driver: bridge 

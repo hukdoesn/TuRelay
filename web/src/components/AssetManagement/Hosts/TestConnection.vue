@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const handleTestConnection = async (hostId, ipAddress, port, credentialId) => {
   try {
-    const response = await axios.post('/api/hosts/test-connection/', {
+    const response = await axios.post('/api/hosts/test_connection/', {
       host_id: hostId,
       ip_address: ipAddress,
       port: port,

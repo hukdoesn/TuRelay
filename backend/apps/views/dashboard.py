@@ -35,7 +35,7 @@ def dashboard_statistics(request):
         statistics = {
             'hostCount': Host.objects.count(),
             'userCount': User.objects.count(),
-            'alertCount': CommandAlert.objects.count(),
+            'alertCount': AlertHistoryLog.objects.count(),
             'lockedUserCount': UserLock.objects.filter(lock_count__gt=0).count(),
             'onlineSessionCount': online_sessions,
             'failedLoginCount': LoginLog.objects.filter(login_status=False).count(),

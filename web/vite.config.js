@@ -12,6 +12,14 @@ export default defineConfig({
   },
   server: {
     port: 8080,
-    host: '0.0.0.0',
+    host: true,
+    strictPort: true,
+    cors: true,
+    allowedHosts: [
+      '0.0.0.0',
+      'localhost',
+      '127.0.0.1',
+      'admin.ext4.cn'
+    ]
   }
 })

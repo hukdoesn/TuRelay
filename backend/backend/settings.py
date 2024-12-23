@@ -4,6 +4,11 @@ import logging
 import time
 import datetime
 from datetime import timedelta
+import configparser
+
+# 读取配置文件
+config = configparser.ConfigParser()
+config.read(str(Path(__file__).resolve().parent.parent / 'conf' / 'config.txt'))
 
 # 设置基础目录，通常用于构建项目内的其他路径，如静态文件、数据库文件等
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,14 +20,7 @@ SECRET_KEY = 'django-insecure-aq1$o05s3&m=0)yq-j1z_7xu7nk)0v_dp9^(9b9048n&1!^e+^
 DEBUG = True
 
 # 允许的主机名列表，对于公开的生产环境需要设置具体的域名或IP地址
-ALLOWED_HOSTS = ['172.17.103.22', 'localhost', '192.168.5.31', '192.168.222.86', '127.0.0.1']  # 添加允许的主机名
-
-# Guacamole 服务器配置
-GUACAMOLE_URL = 'http://172.17.103.22:8081/guacamole'  # Guacamole 服务器的 URL，需根据实际情况修改
-GUACAMOLE_USERNAME = 'guacadmin'  # Guacamole 管理员用户名，默认是 'guacadmin'
-GUACAMOLE_PASSWORD = 'guacadmin'  # Guacamole 管理员密码，默认是 'guacadmin'
-
-
+ALLOWED_HOSTS = ['admin.ext4.cn', 'localhost', '127.0.0.1', '172.17.103.22']
 
 # Django 应用配置，包括Django自身和第三方应用
 INSTALLED_APPS = [
@@ -41,9 +39,6 @@ INSTALLED_APPS = [
     'channels',     # 添加支持WebSocket的频道
     'channels_redis',
 ]
-
-GUACD_HOST = '172.17.103.106'
-GUACD_PORT = 4822
 
 # Django 中间件配置，处理请求和响应的钩子框架
 MIDDLEWARE = [
@@ -90,7 +85,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [(config.get('redis', 'host'), config.getint('redis', 'port'))],
         },
     },
 }
@@ -149,26 +144,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
-    'http://172.17.103.22:8080',
+    'https://admin.ext4.cn',
     'http://localhost:8080',
     'http://127.0.0.1:8080',
-    'http://192.168.5.82:8080',
-    'http://192.168.5.31:8080',
-    'http://192.168.5.13:8081',
-    'http://192.168.222.86:8080',
-    'http://192.168.0.104:8080'
+    'http://172.17.103.22:8080'
 ]
 CSRF_TRUSTED_ORIGINS = [
-    'http://172.17.103.22:8080',
-    'http://localhost:8080', 
+    'https://admin.ext4.cn',
+    'http://localhost:8080',
     'http://127.0.0.1:8080',
-    'http://172.17.102.34:8080',
-    'http://192.168.5.82:8080',
-    'http://192.168.5.31:8080',
-    'http://192.168.5.13:8081',
-    'http://192.168.222.86:8080',
-    'http://192.168.0.104:8080'
-    ]
+    'http://172.17.103.22:8080'
+]
 
 # 日志配置，用于应用程序的日志管理
 cur_path = os.path.dirname(os.path.realpath(__file__))
@@ -189,111 +175,57 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '[{asctime}] {levelname} {message}',
+            'format': '[{asctime}] {levelname} {module} {message}',
             'style': '{',
             'datefmt': '%Y-%m-%d %H:%M:%S'
-        },
-    },
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
+        }
     },
     'handlers': {
         'console': {
             'level': 'INFO',
-            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'verbose'
         },
-        'default': {
-            'level': 'INFO',  # 日志级别: DEBUG < INFO < WARNING < ERROR < CRITICAL，只记录大于等于INFO级别的日志
-            'class': 'logging.handlers.TimedRotatingFileHandler',  # 处理器类型：按时间切割的日志文件处理器
-            'filename': os.path.join(log_path, 'all.log'),  # 日志文件路径：指定日志文件的存储位置和名称
-            'formatter': 'verbose',  # 日志格式：使用verbose格式器，包含详细的日志信息
-            'when': 'midnight',  # 切割时机：在午夜0点进行日志切割
-            'interval': 1,  # 切割间隔：每1个时间单位（由when参数决定，这里是1天）进行一次切割
-            'backupCount': 30,  # 备份数量：保留最近30个日志文件，超过将被删除
-            'encoding': 'utf-8',  # 文件编码：使用UTF-8编码保存日志文件
-            'atTime': datetime.time(0, 0),  # 具体切割时间：指定在0点0分进行日志切割
-        },
-        'error_file': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(log_path, 'error.log'),
-            'formatter': 'verbose',
-            'when': 'midnight',
-            'interval': 1,
-            'backupCount': 30,
+        'file': {
+            'level': 'INFO',        # 日志级别，只记录大于等于INFO级别的日志
+            'class': 'logging.handlers.TimedRotatingFileHandler',       # 处理器类型按时间切割日志文件
+            'filename': os.path.join(log_path, 'turelay.log'),      # 日志文件路径
+            'formatter': 'verbose',     # 日志格式
+            'when': 'midnight',     # 0点切割
+            'interval': 1,      # 切割间隔
+            'backupCount': 15,      # 备份天数，超过的文件将被删除
             'encoding': 'utf-8',
-            'atTime': datetime.time(0, 0),
-        },
-        'django_file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(log_path, 'django.log'),
-            'formatter': 'verbose',
-            'when': 'midnight',
-            'interval': 1,
-            'backupCount': 30,
-            'encoding': 'utf-8',
-            'atTime': datetime.time(0, 0),
-        },
-        'apps_file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(log_path, 'apps.log'),
-            'formatter': 'verbose',
-            'when': 'midnight',
-            'interval': 1,
-            'backupCount': 30,
-            'encoding': 'utf-8',
-            'atTime': datetime.time(0, 0),
-        },
-        'db_file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(log_path, 'db.log'),
-            'formatter': 'verbose',
-            'when': 'midnight',
-            'interval': 1,
-            'backupCount': 30,
-            'encoding': 'utf-8',
-            'atTime': datetime.time(0, 0),
+            'atTime': datetime.time(0, 0),      # 指定在0点0分进行日志切割
         }
     },
     'loggers': {
         '': {  # 根记录器，捕获所有日志
-            'handlers': ['console', 'default', 'error_file'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': True,
         },
         'django': {
-            'handlers': ['console', 'django_file', 'error_file'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
         },
         'django.request': {
-            'handlers': ['error_file'],
+            'handlers': ['console', 'file'],
             'level': 'ERROR',
             'propagate': False,
         },
         'django.db.backends': {
-            'handlers': ['db_file'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
         },
         'apscheduler': {
-            'handlers': ['console', 'default'],
+            'handlers': ['console', 'file'],
             'level': 'WARNING',
             'propagate': False,
         },
         'apps': {
-            'handlers': ['console', 'apps_file', 'error_file'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
         }
@@ -301,9 +233,12 @@ LOGGING = {
 }
 
 # Redis配置
-REDIS_HOST = '127.0.0.1'
-REDIS_PORT = 6379
-REDIS_SESSION_DB = 1  # 使用db 1存储会话信息，与channels使用的db 0区分开
+REDIS_HOST = config.get('redis', 'host')
+REDIS_PORT = config.getint('redis', 'port')
+REDIS_PASSWORD = config.get('redis', 'password')
+REDIS_DB = config.getint('redis', 'db')
+REDIS_SESSION_DB = config.getint('redis', 'session_db')
+REDIS_CHANNEL_LAYER_DB = config.getint('redis', 'channel_layer_db')
 
 # Token相关配置
 TOKEN_EXPIRE_MINUTES = 120  # token有效期2小时 (120分钟)

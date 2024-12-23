@@ -1,16 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+
+# Django
+*.log
+*.pot
+*.pyc
+/backend/*/migrations/
+**/migrations/
+db.sqlite3
+
 # Logs
-logs
+logs/
+**/logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-/backend/log/error*.log
-/backend/log/info*.log
+/backend/logs/
+/backend/log/
+backend/logs/*
+backend/log/*
 
-
-node_modules
+# Node
+node_modules/
+**/node_modules/
 dist
 dist-ssr
 *.local

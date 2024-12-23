@@ -11,11 +11,11 @@ class AppsConfig(AppConfig):
         # 启动调度器
         start_scheduler()
         
-        # 添加主机监控任务（每10秒执行一次）
+        # 添加主机监控任务（5分钟执行一次）
         add_task(
             HostMonitorTask,
             HostMonitorTask.monitor_hosts,
             'host_monitor',
             '主机连接探测',
-            60
+            300
         )
