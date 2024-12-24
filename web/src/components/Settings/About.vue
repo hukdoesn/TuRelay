@@ -5,7 +5,7 @@
       <div class="profile-card">
         <div class="profile-header">
           <div class="avatar-wrapper">
-            <img class="avatar" src="@/assets/img/me.png" alt="头像" />
+            <img class="avatar" src="https://cdn.ext4.cn/me.png" alt="头像" />
             <div class="avatar-decoration">
               <span class="emoji">✨</span>
               <span class="emoji">🎨</span>
@@ -26,9 +26,13 @@
                 <img src="@/assets/svg/blog.svg" alt="Blog" class="icon" />
                 <span class="social-text">技术博客</span>
               </a>
+              <a href="https://www.ext4.cn" target="_blank" class="social-link github">
+                <img src="@/assets/svg/web.svg" alt="guanwang" class="icon" />
+                <span class="social-text">官网</span>
+              </a>
               <div class="social-link wechat" @click="toggleQR">
                 <img src="@/assets/svg/wechat.svg" alt="WeChat" class="icon" />
-                <span class="social-text">一起交流</span>
+                <span class="social-text">交流群</span>
               </div>
               <div class="social-link donate" @click="toggleDonate">
                 <img src="@/assets/svg/donate.svg" alt="打赏" class="icon" />
@@ -117,7 +121,7 @@
         </div>
         <div class="donate-qr">
           <img 
-            :src="donateType === 'wechat' ? '/src/assets/img/wechat-pay.png' : '/src/assets/img/alipay-pay.png'"
+            :src="donateType === 'wechat' ? 'https://cdn.ext4.cn/wechat-pay.png' : 'https://cdn.ext4.cn/alipay-pay.png'"
             :alt="donateType === 'wechat' ? '微信支付' : '支付宝支付'"
           />
         </div>
@@ -138,7 +142,7 @@ import {
 
 const showQR = ref(false)
 const showDonate = ref(false)
-const wechatQR = '/src/assets/img/wechat.png'
+const wechatQR = 'https://cdn.ext4.cn/wechat.png'
 const donateType = ref('wechat')
 const timelineMode = ref('all')
 
@@ -146,47 +150,38 @@ const timelineMode = ref('all')
 const updates = ref([
   {
     version: 'v1.0.0',
-    date: '2024-03-20',
+    date: '2024-12-24',
     type: 'feature',
     title: '新增功能',
     details: [
-      '安全设置页面',
-      'MFA多因素全局控制功能',
-      'IP登陆限制：IP白名单、IP黑名单',
-      '开启水印功能',
+      '无',
     ]
   },
   {
     version: 'v1.0.0',
-    date: '2024-03-19',
+    date: '2024-12-24',
     type: 'security',
     title: '安全性更新',
     details: [
-      '增强密码策略',
-      '添加双因素认证支持',
-      '改进会话管理'
+      '无',
     ]
   },
   {
     version: 'v1.0.0',
-    date: '2024-03-18',
+    date: '2024-12-24',
     type: 'bugfix',
     title: 'Bug修复更新',
     details: [
-      '修复文件上传问题',
-      '解决WebTerminal连接稳定性问题',
-      '修复部分UI显示异常'
+      '无'
     ]
   },
   {
     version: 'v1.0.0',
-    date: '2024-03-17',
+    date: '2024-12-24',
     type: 'optimization',
     title: '性能优化',
     details: [
-      '优化数据库查询性能',
-      '改进前端组件加载速度',
-      '优化WebSocket连接管理'
+      '无'
     ]
   }
 ])

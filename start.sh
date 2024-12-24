@@ -2,7 +2,7 @@
 
 # 启动前端服务
 cd /app/web
-PORT=8080 npm run dev &
+PORT=8080 npm run prod &
 
 # 启动后端服务
 cd /app/backend
