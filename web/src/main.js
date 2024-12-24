@@ -9,8 +9,7 @@ import './assets/css/global.css';
 import dayjs from 'dayjs';
 
 // 配置 axios
-axios.defaults.baseURL = 'https://admin.ext4.cn'; // 使用域名访问后端
-axios.defaults.baseURL = 'http://172.17.103.22:8100';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 // 其他全局配置，例如超时时间、请求头等
 axios.defaults.timeout = 10000;
@@ -22,7 +21,7 @@ const app = createApp(App);
 app.config.globalProperties.$axios = axios;
 
 // 定义 WebSocket 服务器地址为全局属性
-app.config.globalProperties.$wsServerAddress = 'ws://172.17.103.22:8100';
+app.config.globalProperties.$wsServerAddress = import.meta.env.VITE_WS_URL;
 
 // 将 dayjs 添加到 Vue 实例的全局属性中
 app.config.globalProperties.$dayjs = dayjs;

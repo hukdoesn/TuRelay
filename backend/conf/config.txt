@@ -3,13 +3,16 @@
 database = turelay
 user = root
 password = 1234567xx
+#password = Vm7vqd#CZ7H
 host = localhost
+#host = 172.16.0.3
 port = 3306
 
 
 ################################# Redis 配置 ##################################
 [redis]
 host = localhost
+#host = 172.16.0.3
 port = 6379
 password = 
 db = 0

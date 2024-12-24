@@ -60,9 +60,6 @@
                @data="handleTerminalInput">
             </div>
             <!-- RDP 终端 -->
-            <div v-else-if="tab.connectionType === 'rdp'" class="full-terminal">
-              <WebrdsTerminal :hostId="originalHostIds[tab.key]" />
-            </div>
           </div>
         </a-layout-content>
       </a-layout>
@@ -149,7 +146,6 @@ import { DownOutlined, CaretLeftOutlined, DeleteOutlined } from '@ant-design/ico
 import axios from 'axios';
 import IconFont from '@/icons';
 import { useRoute } from 'vue-router';
-import WebrdsTerminal from './WebrdpTerminal.vue'; // 引入新的 WebrdsTerminal 组件
 import { WebglAddon } from 'xterm-addon-webgl';
 import { SearchAddon } from 'xterm-addon-search';
 import { useRouter } from 'vue-router';  // 引入 useRouter
