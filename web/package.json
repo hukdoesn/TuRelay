@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite --mode development",
     "prod": "vite --mode production",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:dev": "vite build --mode development",
+    "build:prod": "vite build --mode production",
+    "build": "vite build --mode production"
   },
   "dependencies": {
     "@ant-design-vue/use": "^0.0.1-alpha.10",

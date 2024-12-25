@@ -6,12 +6,15 @@
     <!-- 常规登录表单 -->
     <form v-if="!showMFABind && !showMFAVerify" @submit.prevent="submitForm">
       <div class="form-group">
-        <input type="text" placeholder="用户名" v-model="username" required>
+        <input type="text" placeholder="用户名" v-model="username" required :disabled="loading">
       </div>
       <div class="form-group">
-        <input type="password" placeholder="密码" v-model="password" required>
+        <input type="password" placeholder="密码" v-model="password" required :disabled="loading">
       </div>
-      <button type="submit" :disabled="!canSubmit" :class="{ 'active': canSubmit }">登录</button>
+      <button type="submit" :disabled="!canSubmit || loading" :class="{ 'active': canSubmit && !loading }">
+        <span v-if="!loading">登录</span>
+        <span v-else>登录中...</span>
+      </button>
     </form>
 
     <!-- MFA绑定界面 -->
@@ -23,9 +26,12 @@
       <p class="mfa-tip">请使用Google Authenticator扫描二维码</p>
       <form @submit.prevent="handleMFABind">
         <div class="form-group">
-          <input type="text" placeholder="请输入验证码" v-model="otpCode" required>
+          <input type="text" placeholder="请输入验证码" v-model="otpCode" required :disabled="loading">
         </div>
-        <button type="submit" class="active">确认绑定</button>
+        <button type="submit" :disabled="loading" class="active">
+          <span v-if="!loading">确认绑定</span>
+          <span v-else>绑定中...</span>
+        </button>
       </form>
     </div>
 
@@ -35,9 +41,12 @@
       <p class="mfa-tip">请输入Google Authenticator中的验证码</p>
       <form @submit.prevent="handleMFAVerify">
         <div class="form-group">
-          <input type="text" placeholder="验证码" v-model="otpCode" required>
+          <input type="text" placeholder="验证码" v-model="otpCode" required :disabled="loading">
         </div>
-        <button type="submit" class="active">验证</button>
+        <button type="submit" :disabled="loading" class="active">
+          <span v-if="!loading">验证</span>
+          <span v-else>验证中...</span>
+        </button>
       </form>
     </div>
   </div>
@@ -61,6 +70,8 @@ export default {
       showMFAVerify: false,
       qrCode: '',
       secretKey: '',
+      loading: false,
+      lastRequestTime: 0,
     };
   },
   computed: {
@@ -70,6 +81,17 @@ export default {
   },
   methods: {
     async submitForm() {
+      // 防抖：限制请求频率
+      const now = Date.now();
+      if (now - this.lastRequestTime < 1000) { // 1秒内不允许重复请求
+        message.warning('请勿频繁点击登录按钮');
+        return;
+      }
+      this.lastRequestTime = now;
+
+      if (this.loading) return;
+      this.loading = true;
+
       try {
         const response = await axios.post('api/login/', {
           username: this.username,
@@ -84,16 +106,21 @@ export default {
           } else {
             this.showMFAVerify = true;
           }
+          this.loading = false;
           return;
         }
 
-        this.handleLoginSuccess(response.data);
+        await this.handleLoginSuccess(response.data);
       } catch (error) {
         this.handleLoginError(error);
+        this.loading = false;
       }
     },
 
     async handleMFABind() {
+      if (this.loading) return;
+      this.loading = true;
+
       try {
         const response = await axios.post('api/mfa/bind/', {
           username: this.username,
@@ -109,10 +136,15 @@ export default {
         }
       } catch (error) {
         message.error('MFA绑定失败');
+      } finally {
+        this.loading = false;
       }
     },
 
     async handleMFAVerify() {
+      if (this.loading) return;
+      this.loading = true;
+
       try {
         const response = await axios.post('api/login/', {
           username: this.username,
@@ -120,13 +152,14 @@ export default {
           otp_code: this.otpCode
         });
 
-        this.handleLoginSuccess(response.data);
+        await this.handleLoginSuccess(response.data);
       } catch (error) {
         this.handleLoginError(error);
+        this.loading = false;
       }
     },
 
-    handleLoginSuccess(data) {
+    async handleLoginSuccess(data) {
       localStorage.setItem('accessToken', data.access_token);
       localStorage.setItem('refreshToken', data.refresh_token);
       localStorage.setItem('name', data.name);
@@ -135,7 +168,16 @@ export default {
       localStorage.setItem('sessionTimeout', data.session_expiry);
       localStorage.setItem('watermarkEnabled', data.watermark_enabled);
 
-      this.$router.push('/home');
+      // 预加载Dashboard组件
+      try {
+        await this.$router.push({
+          path: '/home',
+          replace: true
+        });
+      } catch (error) {
+        console.error('路由跳转失败:', error);
+        this.loading = false;
+      }
     },
 
     handleLoginError(error) {
@@ -170,7 +212,6 @@ export default {
 
 .logo {
   font-size: 80px;
-  /* 控制图标的大小 */
   margin-bottom: 20px;
 }
 
@@ -202,6 +243,12 @@ input[type="text"]::placeholder,
 input[type="password"]::placeholder {
   font-size: 14px;
   color: #aaa;
+}
+
+input[type="text"]:disabled,
+input[type="password"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 button {

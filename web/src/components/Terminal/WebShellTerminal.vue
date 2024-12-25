@@ -1086,7 +1086,7 @@ const handleTerminalInput = (data) => {
 }
 
 /* 标签样式 */
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag) {
+:deep(.ant-tag) {
   margin-inline-end: 5px;
   border-radius: 2px;
   border: none;
@@ -1155,12 +1155,12 @@ const handleTerminalInput = (data) => {
   font-size: 12px;
 }
 
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tree .ant-tree-indent-unit) {
+:deep(.ant-tree .ant-tree-indent-unit) {
   width: 20px !important;
 }
 
 /* tab标签页间距 */
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag) {
+:deep(.ant-tag) {
   margin-inline-end: 5px;
   border-radius: 2px;
   border: none;
@@ -1170,16 +1170,16 @@ const handleTerminalInput = (data) => {
 }
 
 /* tree 样式 */
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tree) {
+:deep(.ant-tree) {
   color: rgba(255, 255, 255);
   background: #191C20;
 }
 
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-layout .ant-layout-sider) {
+:deep(.ant-layout .ant-layout-sider) {
   background: #191C20;
 }
 
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-layout .ant-layout-sider-trigger) {
+:deep(.ant-layout .ant-layout-sider-trigger) {
   background: #191C20;
 }
 
@@ -1231,17 +1231,17 @@ const handleTerminalInput = (data) => {
 }
 
 /* 标悬停tab，tab icon图标颜色更改为白色 */
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag.inactive-tab:hover .ant-tag-close-icon) {
+:deep(.ant-tag.inactive-tab:hover .ant-tag-close-icon) {
   color: #FFFFFF !important;
 }
 
 /* 活跃tab icon图标（白色）*/
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag.active-tab .ant-tag-close-icon) {
+:deep(.ant-tag.active-tab .ant-tag-close-icon) {
   color: #ffffff !important;
 }
 
 /* 不活跃tab icon图标（白色降低透明度） */
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-tag.inactive-tab .ant-tag-close-icon) {
+:deep(.ant-tag.inactive-tab .ant-tag-close-icon) {
   color: #FFFFFF66 !important;
 }
 
@@ -1256,22 +1256,22 @@ const handleTerminalInput = (data) => {
 }
 
 /* 新连接button */
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-btn) {
+:deep(.ant-btn) {
   color: #FFFFFF66;
 }
 
 /* 悬浮重新连接文字颜色 */
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-btn:hover) {
+:deep(.ant-btn:hover) {
   color: #FFFFFF;
 }
 
 /* 悬浮重新连接背景颜色 */
-:deep(:where(.css-dev-only-do-not-override-17yhhjv).ant-btn:hover) {
+:deep(.ant-btn:hover) {
   background-color: #1e2023;
 }
 
 /* logo左边距 */
-:where(.css-dev-only-do-not-override-17yhhjv).ant-layout .ant-layout-header {
+.ant-layout .ant-layout-header {
   padding-inline: 8px !important;
 }
 

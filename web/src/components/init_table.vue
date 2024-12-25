@@ -67,7 +67,7 @@ const handleTableChange = (pagination) => {
 }
 </script>
 
-<style>
+<style scoped>
 .content_table,
 .button_create {
     display: flex;

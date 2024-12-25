@@ -92,8 +92,30 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import * as echarts from 'echarts'
+import * as echarts from 'echarts/core';
+import {
+  PieChart,
+  LineChart
+} from 'echarts/charts';
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  GridComponent
+} from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
 import axios from 'axios'
+
+// 注册必需的组件
+echarts.use([
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  GridComponent,
+  PieChart,
+  LineChart,
+  CanvasRenderer
+]);
 
 // 统计数据
 const statistics = ref({
