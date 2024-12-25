@@ -18,7 +18,15 @@ class LoginView(APIView):
         username = data.get('username')  # 获取请求中的用户名
         password = data.get('password')  # 获取请求中的密码
         otp_code = data.get('otp_code')  # 获取OTP验证码
-        client_ip = request.META.get('REMOTE_ADDR')  # 获取客户端 IP 地址
+
+        # 获取真实客户端IP
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            # 如果有X-Forwarded-For头，取第一个IP（真实客户端IP）
+            client_ip = x_forwarded_for.split(',')[0].strip()
+        else:
+            # 如果没有，则尝试获取X-Real-IP
+            client_ip = request.META.get('HTTP_X_REAL_IP', request.META.get('REMOTE_ADDR'))
 
         user_agent_string = request.META.get('HTTP_USER_AGENT')  # 获取浏览器信息
         user_agent = parse(user_agent_string)

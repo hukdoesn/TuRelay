@@ -46,7 +46,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware', # 管理网站的会话
     'corsheaders.middleware.CorsMiddleware',        # 将 CorsMiddleware 添加到中间件列表，用于处理跨域请求
     'django.middleware.common.CommonMiddleware', # 管理各种通用任务
-    # 'django.middleware.csrf.CsrfViewMiddleware', # 管理跨站请求伪造保护
     'django.contrib.auth.middleware.AuthenticationMiddleware', # 用于用户认证
     'django.contrib.messages.middleware.MessageMiddleware', # 消息中间件，用于cookie和session的消息标签
     'django.middleware.clickjacking.XFrameOptionsMiddleware', # 防点击劫持
@@ -141,6 +140,14 @@ APPEND_SLASH=False
 
 # 默认的自动段类型，Django 3.2后默认为BigAutoField
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 代理设置
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# 设置可信任的代理头部
+ALLOWED_PROXY_IPS = ['127.0.0.1', '172.20.0.1', '172.17.103.22']
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [

@@ -58,10 +58,10 @@
         </a-menu-item>
       </a-sub-menu>
       <a-menu-item key="/web-terminal">
-        <router-link to="/web-terminal">
+        <a :href="webTerminalUrl" target="_blank">
           <IconFont type="icon-terminal-fill" :style="{ fontSize: '16px' }" />
           <span>web终端</span>
-        </router-link>
+        </a>
       </a-menu-item>
       <a-menu-item key="/ci-cd-system">
         <router-link to="/ci-cd-system">
@@ -132,7 +132,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {
   UserOutlined,
@@ -147,6 +147,10 @@ const selectedKeys = ref([]);
 const openKeys = ref([]);
 const route = useRoute();
 const router = useRouter();
+
+const webTerminalUrl = computed(() => {
+  return `${window.location.origin}${router.resolve('/web-terminal').href}`;
+});
 
 const JumpToHome = () => {
   router.push('/dashboard');

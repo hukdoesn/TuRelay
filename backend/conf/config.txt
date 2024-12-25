@@ -2,14 +2,13 @@
 [client]
 database = turelay
 user = root
-password = 1234567xx
+password = xxxxxx
 host = localhost
 port = 3306
 
 
 ################################# Redis 配置 ##################################
 [redis]
-# 修改IP
 host = localhost
 port = 6379
 password = 
