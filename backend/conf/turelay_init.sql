@@ -375,7 +375,7 @@ CREATE TABLE `t_user` (
 -- Records of t_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_user` (`id`, `username`, `name`, `password`, `email`, `mobile`, `status`, `login_time`, `create_time`, `update_time`, `mfa_level`, `otp_secret_key`) VALUES (1, 'admin', 'Admin', 'pbkdf2_sha256$600000$s17MLssMUxQl04t6Es1HsJ$Ow8h2Zr/lflRTqJ6l8YiiSeegWS0ewWIpfD7uZwkZh0=', 'admin@example.com', '1234567890', 0, '2024-12-25 13:03:09.118481', '2024-07-12 16:19:39.000000', '2024-12-25 13:03:09.118651', 0, NULL);
+INSERT INTO `t_user` (`id`, `username`, `name`, `password`, `email`, `mobile`, `status`, `login_time`, `create_time`, `update_time`, `mfa_level`, `otp_secret_key`) VALUES (1, 'admin', 'Admin', 'pbkdf2_sha256$600000$oHrGCP0PXFDV7mZYvC9Ci1$ZdH0cnifW94GlsCVdHG9MUApvvbTLRCxzPxtncwNDBw=', 'admin@example.com', '1234567890', 0, '2024-12-25 13:03:09.118481', '2024-07-12 16:19:39.000000', '2024-12-25 13:03:09.118651', 0, NULL);
 COMMIT;
 
 -- ----------------------------
